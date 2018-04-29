@@ -17,7 +17,6 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         alwaysBounceVertical = true
         delegate = self
         dataSource = self
-        register(MusicCollectionViewCell.self, forCellWithReuseIdentifier: musicCellId)
         setupViews()
     }
     
