@@ -20,10 +20,12 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         return .lightContent
     }
     
-    lazy var searchBar: CustomSearchBar = {
-        let sb = CustomSearchBar(frame: .zero)
+    lazy var searchBar: PlatformSearchBar = {
+        let sb = PlatformSearchBar(frame: .zero)
         sb.translatesAutoresizingMaskIntoConstraints = false
-        sb.connectedVideoCollectionView = musicCollectionView
+        sb.handleSearchTextChanged = {
+            self.updateSearchResults()
+        }
         return sb
     }()
     
@@ -50,6 +52,21 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
             musicCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         
+    }
+    
+    func updateSearchResults() {
+        if let text = searchBar.text, !text.isEmpty {
+            MusicFetcher.fetchYoutube(apiKey: APIKeys.init().youtubeKey, keywords: text) { (youtubeVideos) -> Void in
+                if let youtubeVideos = youtubeVideos {
+                    DispatchQueue.main.async {
+                        self.musicCollectionView.musicArray = youtubeVideos
+                        DispatchQueue.main.async {
+                            self.musicCollectionView.reloadData()
+                        }
+                    }
+                }
+            }
+        }
     }
     
 }

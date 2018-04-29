@@ -30,6 +30,7 @@
 		3C6039B920957AD20001E3A4 /* SearchMusicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039B820957AD20001E3A4 /* SearchMusicCollectionView.swift */; };
 		3C6039BB20957C4F0001E3A4 /* TEMPSessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039BA20957C4F0001E3A4 /* TEMPSessionData.swift */; };
 		3C6039BD20957CAF0001E3A4 /* QueueMusicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039BC20957CAF0001E3A4 /* QueueMusicCollectionView.swift */; };
+		3CE21DF42095A7FF0019CA13 /* PlatformSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21DF32095A7FF0019CA13 /* PlatformSearchBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		3C6039B820957AD20001E3A4 /* SearchMusicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMusicCollectionView.swift; sourceTree = "<group>"; };
 		3C6039BA20957C4F0001E3A4 /* TEMPSessionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TEMPSessionData.swift; sourceTree = "<group>"; };
 		3C6039BC20957CAF0001E3A4 /* QueueMusicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueMusicCollectionView.swift; sourceTree = "<group>"; };
+		3CE21DF32095A7FF0019CA13 /* PlatformSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformSearchBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,7 +187,7 @@
 		3C6039A3209538E50001E3A4 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				3C6039AA20953D720001E3A4 /* CustomSearchBar.swift */,
+				3CE21DF22095A7BF0019CA13 /* Search Bars */,
 				3C6039B52095733E0001E3A4 /* Music Collection View */,
 				3C6039A6209539100001E3A4 /* Cells */,
 			);
@@ -227,6 +229,15 @@
 				3C6039BC20957CAF0001E3A4 /* QueueMusicCollectionView.swift */,
 			);
 			path = "Music Collection View";
+			sourceTree = "<group>";
+		};
+		3CE21DF22095A7BF0019CA13 /* Search Bars */ = {
+			isa = PBXGroup;
+			children = (
+				3C6039AA20953D720001E3A4 /* CustomSearchBar.swift */,
+				3CE21DF32095A7FF0019CA13 /* PlatformSearchBar.swift */,
+			);
+			path = "Search Bars";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,6 +385,7 @@
 				3C603996209530740001E3A4 /* QueueTabController.swift in Sources */,
 				3C60396020952F3E0001E3A4 /* AppDelegate.swift in Sources */,
 				3C6039BB20957C4F0001E3A4 /* TEMPSessionData.swift in Sources */,
+				3CE21DF42095A7FF0019CA13 /* PlatformSearchBar.swift in Sources */,
 				3C6039A2209535310001E3A4 /* APIKeys.swift in Sources */,
 				3C60396820952F3E0001E3A4 /* BandiNew.xcdatamodeld in Sources */,
 				3C6039982095307F0001E3A4 /* LinkTabController.swift in Sources */,

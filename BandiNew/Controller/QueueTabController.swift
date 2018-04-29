@@ -28,7 +28,9 @@ class QueueTabController: UIViewController {
     lazy var searchBar: CustomSearchBar = {
         let sb = CustomSearchBar(frame: .zero)
         sb.translatesAutoresizingMaskIntoConstraints = false
-        sb.connectedVideoCollectionView = musicCollectionView
+        sb.handleSearchTextChanged = {
+            self.updateSearchResults()
+        }
         return sb
     }()
     
@@ -56,6 +58,17 @@ class QueueTabController: UIViewController {
             musicCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         
+    }
+    
+    func updateSearchResults() {
+        if let text = searchBar.text, !text.isEmpty {
+            self.musicCollectionView.musicArray = TEMPSessionData.queueMusic.filter({ (music) -> Bool in
+                return (music.title?.lowercased().contains(text.lowercased()))!
+            })
+        } else {
+            self.musicCollectionView.musicArray = TEMPSessionData.queueMusic
+        }
+        self.musicCollectionView.reloadData()
     }
     
 }
