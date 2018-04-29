@@ -15,6 +15,18 @@
 		3C60396D20952F400001E3A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C60396B20952F400001E3A4 /* LaunchScreen.storyboard */; };
 		3C60397820952F400001E3A4 /* BandiNewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60397720952F400001E3A4 /* BandiNewTests.swift */; };
 		3C60398320952F400001E3A4 /* BandiNewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60398220952F400001E3A4 /* BandiNewUITests.swift */; };
+		3C60399220952FFC0001E3A4 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60399120952FFC0001E3A4 /* TabBarController.swift */; };
+		3C6039942095305E0001E3A4 /* SearchTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039932095305E0001E3A4 /* SearchTabController.swift */; };
+		3C603996209530740001E3A4 /* QueueTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C603995209530740001E3A4 /* QueueTabController.swift */; };
+		3C6039982095307F0001E3A4 /* LinkTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039972095307F0001E3A4 /* LinkTabController.swift */; };
+		3C60399B209531EC0001E3A4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60399A209531EC0001E3A4 /* Constants.swift */; };
+		3C6039A0209534CA0001E3A4 /* MusicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60399F209534CA0001E3A4 /* MusicCollectionView.swift */; };
+		3C6039A2209535310001E3A4 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039A1209535310001E3A4 /* APIKeys.swift */; };
+		3C6039A9209539360001E3A4 /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039A8209539360001E3A4 /* BaseCollectionViewCell.swift */; };
+		3C6039AB20953D720001E3A4 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039AA20953D720001E3A4 /* CustomSearchBar.swift */; };
+		3C6039B0209543B70001E3A4 /* MusicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039AF209543B70001E3A4 /* MusicCollectionViewCell.swift */; };
+		3C6039B2209543F50001E3A4 /* MusicFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039B1209543F50001E3A4 /* MusicFetcher.swift */; };
+		3C6039B4209545330001E3A4 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039B3209545330001E3A4 /* Music.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +61,18 @@
 		3C60397E20952F400001E3A4 /* BandiNewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BandiNewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C60398220952F400001E3A4 /* BandiNewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandiNewUITests.swift; sourceTree = "<group>"; };
 		3C60398420952F400001E3A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3C60399120952FFC0001E3A4 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		3C6039932095305E0001E3A4 /* SearchTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTabController.swift; sourceTree = "<group>"; };
+		3C603995209530740001E3A4 /* QueueTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueTabController.swift; sourceTree = "<group>"; };
+		3C6039972095307F0001E3A4 /* LinkTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkTabController.swift; sourceTree = "<group>"; };
+		3C60399A209531EC0001E3A4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		3C60399F209534CA0001E3A4 /* MusicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicCollectionView.swift; sourceTree = "<group>"; };
+		3C6039A1209535310001E3A4 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
+		3C6039A8209539360001E3A4 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		3C6039AA20953D720001E3A4 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
+		3C6039AF209543B70001E3A4 /* MusicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicCollectionViewCell.swift; sourceTree = "<group>"; };
+		3C6039B1209543F50001E3A4 /* MusicFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicFetcher.swift; sourceTree = "<group>"; };
+		3C6039B3209545330001E3A4 /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +130,10 @@
 				3C60396B20952F400001E3A4 /* LaunchScreen.storyboard */,
 				3C60396E20952F400001E3A4 /* Info.plist */,
 				3C60396620952F3E0001E3A4 /* BandiNew.xcdatamodeld */,
+				3C6039AC209541E00001E3A4 /* Model */,
+				3C6039A3209538E50001E3A4 /* View */,
+				3C60399020952FCF0001E3A4 /* Controller */,
+				3C603999209531DC0001E3A4 /* Helpers */,
 			);
 			path = BandiNew;
 			sourceTree = "<group>";
@@ -126,6 +154,70 @@
 				3C60398420952F400001E3A4 /* Info.plist */,
 			);
 			path = BandiNewUITests;
+			sourceTree = "<group>";
+		};
+		3C60399020952FCF0001E3A4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3C60399120952FFC0001E3A4 /* TabBarController.swift */,
+				3C6039932095305E0001E3A4 /* SearchTabController.swift */,
+				3C603995209530740001E3A4 /* QueueTabController.swift */,
+				3C6039972095307F0001E3A4 /* LinkTabController.swift */,
+				3C60399C209534530001E3A4 /* Base */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3C603999209531DC0001E3A4 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				3C60399A209531EC0001E3A4 /* Constants.swift */,
+				3C6039A1209535310001E3A4 /* APIKeys.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		3C60399C209534530001E3A4 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		3C6039A3209538E50001E3A4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3C60399F209534CA0001E3A4 /* MusicCollectionView.swift */,
+				3C6039AA20953D720001E3A4 /* CustomSearchBar.swift */,
+				3C6039A6209539100001E3A4 /* Cells */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3C6039A6209539100001E3A4 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				3C6039AF209543B70001E3A4 /* MusicCollectionViewCell.swift */,
+				3C6039A72095391A0001E3A4 /* Base */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		3C6039A72095391A0001E3A4 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				3C6039A8209539360001E3A4 /* BaseCollectionViewCell.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		3C6039AC209541E00001E3A4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3C6039B1209543F50001E3A4 /* MusicFetcher.swift */,
+				3C6039B3209545330001E3A4 /* Music.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,9 +351,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C6039AB20953D720001E3A4 /* CustomSearchBar.swift in Sources */,
+				3C6039B2209543F50001E3A4 /* MusicFetcher.swift in Sources */,
+				3C6039B4209545330001E3A4 /* Music.swift in Sources */,
+				3C6039942095305E0001E3A4 /* SearchTabController.swift in Sources */,
 				3C60396220952F3E0001E3A4 /* ViewController.swift in Sources */,
+				3C6039A0209534CA0001E3A4 /* MusicCollectionView.swift in Sources */,
+				3C6039B0209543B70001E3A4 /* MusicCollectionViewCell.swift in Sources */,
+				3C60399220952FFC0001E3A4 /* TabBarController.swift in Sources */,
+				3C6039A9209539360001E3A4 /* BaseCollectionViewCell.swift in Sources */,
+				3C603996209530740001E3A4 /* QueueTabController.swift in Sources */,
 				3C60396020952F3E0001E3A4 /* AppDelegate.swift in Sources */,
+				3C6039A2209535310001E3A4 /* APIKeys.swift in Sources */,
 				3C60396820952F3E0001E3A4 /* BandiNew.xcdatamodeld in Sources */,
+				3C6039982095307F0001E3A4 /* LinkTabController.swift in Sources */,
+				3C60399B209531EC0001E3A4 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
