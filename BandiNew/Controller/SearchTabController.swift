@@ -27,9 +27,9 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         return sb
     }()
     
-    lazy var musicCollectionView: MusicCollectionView = {
+    lazy var musicCollectionView: SearchMusicCollectionView = {
         let layout = UICollectionViewFlowLayout()
-        let cv = MusicCollectionView(frame: view.frame, collectionViewLayout: layout)
+        let cv = SearchMusicCollectionView(frame: view.frame, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()

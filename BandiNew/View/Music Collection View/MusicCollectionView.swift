@@ -13,8 +13,8 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         
-        backgroundColor = .blue
-        
+        backgroundColor = UIColor(red: 0.06125, green: 0.06125, blue: 0.06125, alpha: 1)
+        alwaysBounceVertical = true
         delegate = self
         dataSource = self
         register(MusicCollectionViewCell.self, forCellWithReuseIdentifier: musicCellId)
@@ -29,7 +29,7 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = dequeueReusableCell(withReuseIdentifier: musicCellId, for: indexPath) as! MusicCollectionViewCell
-        cell.title = musicArray[indexPath.row].title
+        cell.music = musicArray[indexPath.row]
         return cell
     }
     
@@ -37,7 +37,11 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         guard let window = UIApplication.shared.keyWindow else {
             assert(false, "window missing")
         }
-        return CGSize(width: window.frame.width, height: 75)
+        return CGSize(width: window.frame.width, height: 90)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
     }
     
     required init?(coder aDecoder: NSCoder) {

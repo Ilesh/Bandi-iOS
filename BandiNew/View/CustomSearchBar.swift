@@ -21,10 +21,10 @@ class CustomSearchBar: UISearchBar, UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        MusicFetcher.loadImage(apiKey: APIKeys.init().youtubeKey, keywords: text!) { (image) -> Void in
-            if let image = image {
+        MusicFetcher.fetchYoutube(apiKey: APIKeys.init().youtubeKey, keywords: text!) { (youtubeVideos) -> Void in
+            if let youtubeVideos = youtubeVideos {
                 DispatchQueue.main.async {
-                    self.connectedVideoCollectionView?.musicArray = image
+                    self.connectedVideoCollectionView?.musicArray = youtubeVideos
                     DispatchQueue.main.async {
                         self.connectedVideoCollectionView?.reloadData()
                     }
