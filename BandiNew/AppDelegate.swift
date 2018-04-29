@@ -19,6 +19,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
+        let gradient = GradientAnimation()
+        gradient.frame = (window?.frame)!
+        window?.layer.addSublayer(gradient)
+        
         window?.rootViewController = TabBarController()
         
         return true

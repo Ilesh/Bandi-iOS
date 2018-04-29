@@ -21,10 +21,6 @@ class QueueTabController: UIViewController {
         self.musicCollectionView.reloadData()
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     lazy var searchBar: CustomSearchBar = {
         let sb = CustomSearchBar(frame: .zero)
         sb.translatesAutoresizingMaskIntoConstraints = false

@@ -31,7 +31,7 @@ class TabBarController: UITabBarController {
             tabViewControllers.append(item.vc)
         }
         
-        tabBar.barStyle = UIBarStyle.black
+        tabBar.barStyle = .black
         tabBar.unselectedItemTintColor = .lightGray
         tabBar.tintColor = Constants.Colors().primaryLightColor
         
@@ -40,6 +40,19 @@ class TabBarController: UITabBarController {
         
         viewControllers = tabViewControllers
         selectedIndex = 0
+    }
+    
+    func setTransparentTabBar(isSet: Bool) {
+        if isSet {
+            tabBar.barStyle = .default
+            tabBar.backgroundImage = UIImage()
+            tabBar.unselectedItemTintColor = .black
+        }
+        else {
+            tabBar.barStyle = .black
+            tabBar.backgroundImage = nil
+            tabBar.unselectedItemTintColor = .lightGray
+        }
     }
     
 }

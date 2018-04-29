@@ -13,15 +13,28 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         
-        backgroundColor = UIColor(red: 0.06125, green: 0.06125, blue: 0.06125, alpha: 1)
+        backgroundColor = .clear
         alwaysBounceVertical = true
         delegate = self
         dataSource = self
         register(MusicCollectionViewCell.self, forCellWithReuseIdentifier: musicCellId)
+        setupViews()
     }
     
     let musicCellId = "musicCellId"
     var musicArray: [Music] = []
+    
+    let blurView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+        let view = UIVisualEffectView(effect: blurEffect)
+        view.alpha = 0.90
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    func setupViews() {
+        backgroundView = blurView
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return musicArray.count
