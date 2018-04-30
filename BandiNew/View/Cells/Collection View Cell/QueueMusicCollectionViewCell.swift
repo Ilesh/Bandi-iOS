@@ -134,7 +134,12 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
                     self.contentView.frame = CGRect(x: -width, y: 0, width: width, height: height)
                     self.removelabel.frame = CGRect(x: -160, y: 0, width: 150, height: height)
                 }, completion: { completed in
-                    self.removeMusic?()
+                    UIView.transition(with: self, duration: 0.2, options: .transitionCrossDissolve, animations: {
+                        self.backgroundColor = #colorLiteral(red: 0.1254901961, green: 0.1254901961, blue: 0.1254901961, alpha: 1)
+                    }, completion: { completed in
+                        self.removeMusic?()
+                    })
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                         self.setNeedsLayout()
                         self.layoutIfNeeded()
