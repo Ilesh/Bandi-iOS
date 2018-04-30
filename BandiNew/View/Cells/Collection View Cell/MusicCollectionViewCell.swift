@@ -8,7 +8,9 @@
 
 import UIKit
 
-class MusicCollectionViewCell: BaseCollectionViewCell {
+class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelegate {
+    
+    var panRecognizer: UIPanGestureRecognizer?
     
     var music: Music? {
         didSet {
@@ -46,7 +48,23 @@ class MusicCollectionViewCell: BaseCollectionViewCell {
     }()
     
     override func setupViews() {
-        backgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1)
+        contentView.backgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1)
+        
+        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
+        panRecognizer?.delegate = self
+        addGestureRecognizer(panRecognizer!)
+    }
+    
+    @objc func onPan() {
+        // OVERRIDE
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return abs((panRecognizer!.velocity(in: panRecognizer!.view)).x) > abs((panRecognizer!.velocity(in: panRecognizer!.view)).y)
     }
     
 }

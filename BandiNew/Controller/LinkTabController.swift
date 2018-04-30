@@ -28,7 +28,7 @@ class LinkTabController: UIViewController {
     }()
     
     let linkButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .custom)
         button.setTitle("bandi.link", for: .normal)
         button.titleLabel?.font = UIFont(name: "Avenir-Medium", size: 20)
         button.titleLabel?.textColor = .white
@@ -36,6 +36,7 @@ class LinkTabController: UIViewController {
         button.backgroundColor = Constants.Colors().primaryColor
         button.clipsToBounds = true
         button.layer.cornerRadius = 25
+        button.adjustsImageWhenHighlighted = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -81,21 +82,21 @@ class LinkTabController: UIViewController {
         UIView.transition(with: linkButton, duration: 0.2, options: .transitionCrossDissolve, animations: {
             self.linkButton.backgroundColor = Constants.Colors().primaryDarkColor
             self.showButtonShadow(show: false)
-        }, completion: nil)
+        })
     }
     
     @objc func linkButtonTouchedUpOutside() {
         UIView.transition(with: linkButton, duration: 0.2, options: .transitionCrossDissolve, animations: {
             self.linkButton.backgroundColor = Constants.Colors().primaryColor
             self.showButtonShadow(show: true)
-        }, completion: nil)
+        })
     }
     
     @objc func linkButtonTouchedUpInside() {
         UIView.transition(with: linkButton, duration: 0.2, options: .transitionCrossDissolve, animations: {
             self.linkButton.backgroundColor = Constants.Colors().primaryColor
             self.showButtonShadow(show: true)
-        }, completion: nil)
+        })
         let activityVC = UIActivityViewController(activityItems: [linkButton.titleLabel!.text!], applicationActivities: nil)
         activityVC.popoverPresentationController?.sourceView = self.view
         self.present(activityVC, animated: true, completion: nil)

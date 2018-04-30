@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
+        window?.tintColor = Constants.Colors().primaryColor
         
         let gradient = GradientAnimation()
         gradient.frame = (window?.frame)!

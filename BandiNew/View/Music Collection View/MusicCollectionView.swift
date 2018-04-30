@@ -13,7 +13,7 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         
-        backgroundColor = .clear
+        backgroundColor = UIColor.black.withAlphaComponent(0.85)
         alwaysBounceVertical = true
         delegate = self
         dataSource = self
@@ -26,7 +26,7 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     let blurView: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
         let view = UIVisualEffectView(effect: blurEffect)
-        view.alpha = 0.90
+        view.alpha = 1
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

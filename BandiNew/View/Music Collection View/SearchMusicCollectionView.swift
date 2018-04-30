@@ -18,7 +18,7 @@ class SearchMusicCollectionView: MusicCollectionView {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = dequeueReusableCell(withReuseIdentifier: musicCellId, for: indexPath) as! SearchMusicCollectionViewCell
         cell.music = musicArray[indexPath.row]
-        cell.handleAddButtonTapped = {
+        cell.addMusic = {
             TEMPSessionData.queueMusic.append(cell.music!)
         }
         return cell

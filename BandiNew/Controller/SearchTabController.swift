@@ -21,6 +21,7 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         sb.handleDelayedSearchTextChanged = {
             self.updateSearchResults()
         }
+        sb.searchBar.tintColor = Constants.Colors().primaryColor
         sb.translatesAutoresizingMaskIntoConstraints = false
         return sb
     }()

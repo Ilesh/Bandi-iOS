@@ -18,7 +18,7 @@ class QueueMusicCollectionView: MusicCollectionView {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = dequeueReusableCell(withReuseIdentifier: musicCellId, for: indexPath) as! QueueMusicCollectionViewCell
         cell.music = musicArray[indexPath.row]
-        cell.handleRemoveButtonTapped = {
+        cell.removeMusic = {
             if let currentIndexPath = self.indexPath(for: cell) {
                 TEMPSessionData.queueMusic.remove(at: currentIndexPath.row)
                 self.musicArray.remove(at: currentIndexPath.row)

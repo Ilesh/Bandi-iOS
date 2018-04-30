@@ -60,6 +60,7 @@ class PlatformSearchView: UIView {
     }
     
     @objc func platformPickerButtonTapped() {
+        becomeFirstResponder()
         platformPickerPopup.showPopupMenu()
     }
     
