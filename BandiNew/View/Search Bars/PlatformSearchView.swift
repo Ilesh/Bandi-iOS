@@ -23,6 +23,7 @@ class PlatformSearchView: UIView {
         sb.handleSearchTextChanged = {
             self.handleDelayedSearchTextChanged?()
         }
+        sb.tintColor = Constants.Colors().primaryColor
         sb.translatesAutoresizingMaskIntoConstraints = false
         return sb
     }()
@@ -36,7 +37,6 @@ class PlatformSearchView: UIView {
     
     lazy var platformPickerPopup: PlatformPickerPopupView = {
         let popup = PlatformPickerPopupView(heightRatio: 0.5, title: "Where to search?")
-        
         return popup
     }()
     
@@ -60,9 +60,11 @@ class PlatformSearchView: UIView {
     }
     
     @objc func platformPickerButtonTapped() {
-        becomeFirstResponder()
+        endEditing(true)
         platformPickerPopup.showPopupMenu()
     }
+    
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

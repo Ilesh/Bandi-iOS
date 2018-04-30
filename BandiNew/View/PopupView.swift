@@ -21,7 +21,6 @@ class PopupView: NSObject {
             darkView.isHidden = true
         }
         
-        headerView.effect = UIBlurEffect(style: .dark)
         headerTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         headerTitle.textColor = .white
         
@@ -48,11 +47,11 @@ class PopupView: NSObject {
         return view
     }()
     
-    let headerView: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .light)
-        let view = UIVisualEffectView(effect: blurEffect)
-        view.translatesAutoresizingMaskIntoConstraints = false
+    let headerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = #colorLiteral(red: 0.09411764706, green: 0.09411764706, blue: 0.09411764706, alpha: 1)
         view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -65,7 +64,7 @@ class PopupView: NSObject {
     
     let headerTitle: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont(name: "AvenirNext", size: 10)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -75,7 +74,7 @@ class PopupView: NSObject {
         button.setTitle("Done", for: .normal)
         button.clipsToBounds = false
         button.backgroundColor = .clear
-        button.setTitleColor(Constants.Colors().secondaryColor, for: .normal)
+        button.setTitleColor(Constants.Colors().primaryColor, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = UIFont(name: "AvenirNext", size: 10)
         return button
@@ -90,9 +89,9 @@ class PopupView: NSObject {
         window.addSubview(darkView)
         window.addSubview(baseView)
         baseView.addSubview(headerView)
-        headerView.contentView.addSubview(headerTitle)
-        headerView.contentView.addSubview(headerBottomBorder)
-        headerView.contentView.addSubview(doneButton)
+        headerView.addSubview(headerTitle)
+        headerView.addSubview(headerBottomBorder)
+        headerView.addSubview(doneButton)
         
         NSLayoutConstraint.activate([
             darkView.topAnchor.constraint(equalTo: window.topAnchor),

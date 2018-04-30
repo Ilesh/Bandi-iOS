@@ -17,6 +17,13 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
     
     var removeMusic: (()->())?
     
+    let baseView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .yellow
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     let removeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .clear
@@ -40,10 +47,10 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
     override func setupViews() {
         super.setupViews()
         
-        addSubview(thumbnailImageView)
-        addSubview(artistLabel)
-        addSubview(titleLabel)
-        addSubview(removeButton)
+        contentView.addSubview(thumbnailImageView)
+        contentView.addSubview(artistLabel)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(removeButton)
         
         insertSubview(removelabel, belowSubview: contentView)
         
@@ -105,7 +112,7 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
                 let marginSwiped = abs(p.x) / (window.frame.width * 0.33)
                 self.backgroundColor = Constants.Colors().secondaryColor.withAlphaComponent(marginSwiped)
                 self.removelabel.textColor = UIColor.white.withAlphaComponent(marginSwiped)
-                self.contentView.frame = CGRect(x: p.x, y: 0, width: width, height: height);
+                self.contentView.frame = CGRect(x: p.x, y: 0, width: width, height: height)
                 self.removelabel.frame = CGRect(x: p.x + width + 10, y: 0, width: 150, height: height)
             }
         }
@@ -122,20 +129,16 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
         else if panRecognizer?.state == .ended || panRecognizer?.state == .cancelled {
             let width = self.contentView.frame.width
             let height = self.contentView.frame.height
-            if abs(p.x) > window.frame.width * 0.33 {
-                self.removeMusic?()
-                UIView.transition(with: self.contentView, duration: 0.1, options: .transitionCrossDissolve, animations: {
-                    self.contentView.backgroundColor = Constants.Colors().secondaryColor
-                }, completion: { completed in
-                    UIView.transition(with: self, duration: 0.2, options: .transitionCrossDissolve, animations: {
-                        self.contentView.backgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1)
-                    })
-                })
+            if p.x < 0 && abs(p.x) > window.frame.width * 0.33 {
                 UIView.animate(withDuration: 0.2, animations: {
-                    self.contentView.frame = CGRect(x: -width, y: 0, width: 0, height: height);
-                    self.removelabel.frame = CGRect(x: 0, y: 0, width: 150, height: height)
-                    self.setNeedsLayout()
-                    self.layoutIfNeeded()
+                    self.contentView.frame = CGRect(x: -width, y: 0, width: width, height: height)
+                    self.removelabel.frame = CGRect(x: -160, y: 0, width: 150, height: height)
+                }, completion: { completed in
+                    self.removeMusic?()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                        self.setNeedsLayout()
+                        self.layoutIfNeeded()
+                    })
                 })
             } else {
                 UIView.animate(withDuration: 0.2, animations: {

@@ -105,7 +105,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
                 let marginSwiped = abs(p.x) / (window.frame.width * 0.33)
                 self.backgroundColor = Constants.Colors().primaryColor.withAlphaComponent(marginSwiped)
                 self.addLabel.textColor = UIColor.white.withAlphaComponent(marginSwiped)
-                self.contentView.frame = CGRect(x: p.x, y: 0, width: width, height: height);
+                self.contentView.frame = CGRect(x: p.x, y: 0, width: width, height: height)
                 self.addLabel.frame = CGRect(x: p.x - addLabel.frame.size.width, y: 0, width: 100, height: height)
             }
         }
@@ -125,14 +125,14 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
                 UIView.transition(with: self.contentView, duration: 0.1, options: .transitionCrossDissolve, animations: {
                     self.contentView.backgroundColor = Constants.Colors().primaryColor
                 }, completion: { completed in
-                    UIView.transition(with: self, duration: 0.2, options: .transitionCrossDissolve, animations: {
+                    UIView.transition(with: self, duration: 0.3, options: .transitionCrossDissolve, animations: {
                         self.contentView.backgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1)
                     })
                 })
             }
             let width = self.contentView.frame.width
             let height = self.contentView.frame.height
-            UIView.animate(withDuration: 0.2, animations: {
+            UIView.animate(withDuration: 0.3, animations: {
                 self.contentView.frame = CGRect(x: 0, y: 0, width: width, height: height)
                 self.addLabel.frame = CGRect(x: 0 - self.addLabel.frame.size.width, y: 0, width: 100, height: height)
                 self.setNeedsLayout()

@@ -42,8 +42,8 @@ class LinkTabController: UIViewController {
     }()
     
     override func viewDidAppear(_ animated: Bool) {
-        let tabBarController = self.tabBarController as? TabBarController
-        tabBarController?.setTransparentTabBar(isSet: true)
+        //let tabBarController = self.tabBarController as? TabBarController
+        //tabBarController?.setTransparentTabBar(isSet: true)
         
         UIView.animate(withDuration: 3, delay: 0.1, options: [.repeat, .autoreverse, .allowUserInteraction], animations: {
             self.containingView.frame.origin = CGPoint(x: self.containingView.frame.origin.x,
@@ -52,8 +52,8 @@ class LinkTabController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        let tabBarController = self.tabBarController as? TabBarController
-        tabBarController?.setTransparentTabBar(isSet: false)
+        //let tabBarController = self.tabBarController as? TabBarController
+        //tabBarController?.setTransparentTabBar(isSet: false)
     }
     
     func setupViews() {
