@@ -1,5 +1,5 @@
 //
-//  PlatformSearchBar.swift
+//  DelayedSearchBar.swift
 //  BandiNew
 //
 //  Created by Siddha Tiwari on 4/29/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PlatformSearchBar: CustomSearchBar {
+class DelayedSearchbar: CustomSearchBar {
     
     override func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(searchBarTextChanged), object: nil)

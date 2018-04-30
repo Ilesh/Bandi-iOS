@@ -16,12 +16,12 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         setupViews()
     }
     
-    lazy var searchBar: PlatformSearchBar = {
-        let sb = PlatformSearchBar(frame: .zero)
-        sb.translatesAutoresizingMaskIntoConstraints = false
-        sb.handleSearchTextChanged = {
+    lazy var searchBar: PlatformSearchView = {
+        let sb = PlatformSearchView()
+        sb.handleDelayedSearchTextChanged = {
             self.updateSearchResults()
         }
+        sb.translatesAutoresizingMaskIntoConstraints = false
         return sb
     }()
     
@@ -51,7 +51,7 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
     }
     
     func updateSearchResults() {
-        if let text = searchBar.text, !text.isEmpty {
+        if let text = searchBar.searchBar.text, !text.isEmpty {
             MusicFetcher.fetchYoutube(apiKey: APIKeys.init().youtubeKey, keywords: text) { (youtubeVideos) -> Void in
                 if let youtubeVideos = youtubeVideos {
                     DispatchQueue.main.async {
