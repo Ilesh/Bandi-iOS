@@ -14,7 +14,9 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         
         let searchTabController = SearchTabController()
-        let queueTabController = QueueTabController()
+        
+        let queueTabController = CustomNavigationController(rootViewController: QueueTabController())
+        
         let linkTabController = LinkTabController()
         
         let vcData: [(vc: UIViewController, title: String)] = [

@@ -28,6 +28,7 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
+        iv.layer.cornerRadius = 5
         return iv
     }()
     
@@ -64,6 +65,7 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
     }
     
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        //return true
         return abs((panRecognizer!.velocity(in: panRecognizer!.view)).x) > abs((panRecognizer!.velocity(in: panRecognizer!.view)).y)
     }
     

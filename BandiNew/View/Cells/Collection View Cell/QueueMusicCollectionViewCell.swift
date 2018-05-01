@@ -14,7 +14,7 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
         super.init(frame: frame)
         backgroundColor = Constants.Colors().secondaryColor
     }
-    
+
     var removeMusic: (()->())?
     
     let baseView: UIView = {
@@ -27,10 +27,10 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
     let removeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .clear
-        if let image = UIImage(named: "minus-52")?.withRenderingMode(.alwaysTemplate) {
+        if let image = UIImage(named: "handle-60")?.withRenderingMode(.alwaysTemplate) {
             button.setImage(image, for: .normal)
         }
-        button.tintColor = Constants.Colors().secondaryColor
+        button.tintColor = .lightGray
         button.adjustsImageWhenHighlighted = false
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -62,40 +62,45 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
             
             titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
-            titleLabel.trailingAnchor.constraint(equalTo: removeButton.leadingAnchor, constant: -10),
+            titleLabel.trailingAnchor.constraint(equalTo: removeButton.leadingAnchor, constant: -13),
             titleLabel.heightAnchor.constraint(equalToConstant: 25),
             
             artistLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             artistLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
-            artistLabel.trailingAnchor.constraint(equalTo: removeButton.leadingAnchor, constant: -10),
+            artistLabel.trailingAnchor.constraint(equalTo: removeButton.leadingAnchor, constant: -13),
             artistLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -15),
             
             removeButton.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
             removeButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
-            removeButton.widthAnchor.constraint(equalToConstant: 25),
-            removeButton.heightAnchor.constraint(equalToConstant: 25)
+            removeButton.widthAnchor.constraint(equalToConstant: 22),
+            removeButton.heightAnchor.constraint(equalToConstant: 22)
             ])
         
-        removeButton.addTarget(self, action: #selector(removeButtonTapped), for: .touchUpInside)
-        removeButton.addTarget(self, action: #selector(removeButtonTouchUp), for: .touchUpInside)
-        removeButton.addTarget(self, action: #selector(removeButtonTouchUp), for: .touchUpOutside)
-        removeButton.addTarget(self, action: #selector(removeButtonTouchDown), for: .touchDown)
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(removeButtonLongGesture(_:)))
+        removeButton.addGestureRecognizer(longPressGesture)
     }
     
-    @objc func removeButtonTapped() {
-        removeMusic?()
-    }
-    
-    @objc func removeButtonTouchDown() {
-        UIView.transition(with: removeButton, duration: 0.2, options: .transitionCrossDissolve, animations: {
-            self.removeButton.tintColor = Constants.Colors().secondaryLightColor
-        })
-    }
-    
-    @objc func removeButtonTouchUp() {
-        UIView.transition(with: removeButton, duration: 0.2, options: .transitionCrossDissolve, animations: {
-            self.removeButton.tintColor = Constants.Colors().secondaryColor
-        })
+    @objc func removeButtonLongGesture(_ sender: UILongPressGestureRecognizer) {
+        if let parentCollectionView = self.superview as? QueueMusicCollectionView {
+            switch(sender.state) {
+                case .began:
+                    print(1)
+                    guard let selectedIndexPath = parentCollectionView.indexPathForItem(at: sender.location(in: parentCollectionView)) else {
+                        break
+                    }
+                    parentCollectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+                case .changed:
+                    print(2)
+                    let position = CGPoint(x: self.frame.width / 2, y: sender.location(in: parentCollectionView).y)
+                    parentCollectionView.updateInteractiveMovementTargetPosition(position)
+                case .ended:
+                    print(3)
+                    parentCollectionView.endInteractiveMovement()
+                default:
+                    parentCollectionView.cancelInteractiveMovement()
+            }
+        }
+
     }
     
     override func layoutSubviews() {

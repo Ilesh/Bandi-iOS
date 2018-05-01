@@ -12,7 +12,7 @@ class DelayedSearchbar: CustomSearchBar {
     
     override func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(searchBarTextChanged), object: nil)
-        self.perform(#selector(searchBarTextChanged), with: nil, afterDelay: 0.25)
+        self.perform(#selector(searchBarTextChanged), with: nil, afterDelay: 0.33)
     }
     
     @objc func searchBarTextChanged() {

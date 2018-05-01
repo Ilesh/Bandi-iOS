@@ -38,6 +38,7 @@
 		3CE21E04209694970019CA13 /* PlatformPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21E03209694970019CA13 /* PlatformPickerView.swift */; };
 		3CE21E06209698610019CA13 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21E05209698610019CA13 /* PopupView.swift */; };
 		3CE21E08209699780019CA13 /* PlatformPickerPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21E07209699780019CA13 /* PlatformPickerPopupView.swift */; };
+		3CEFAE2220970AF000F42C5B /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEFAE2120970AF000F42C5B /* CustomNavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 		3CE21E03209694970019CA13 /* PlatformPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformPickerView.swift; sourceTree = "<group>"; };
 		3CE21E05209698610019CA13 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
 		3CE21E07209699780019CA13 /* PlatformPickerPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformPickerPopupView.swift; sourceTree = "<group>"; };
+		3CEFAE2120970AF000F42C5B /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +187,7 @@
 				3C6039932095305E0001E3A4 /* SearchTabController.swift */,
 				3C603995209530740001E3A4 /* QueueTabController.swift */,
 				3C6039972095307F0001E3A4 /* LinkTabController.swift */,
+				3CEFAE2120970AF000F42C5B /* CustomNavigationController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -404,6 +407,7 @@
 				3CE21DFC209682E70019CA13 /* SearchMusicCollectionViewCell.swift in Sources */,
 				3CE21E04209694970019CA13 /* PlatformPickerView.swift in Sources */,
 				3C6039B0209543B70001E3A4 /* MusicCollectionViewCell.swift in Sources */,
+				3CEFAE2220970AF000F42C5B /* CustomNavigationController.swift in Sources */,
 				3C60399220952FFC0001E3A4 /* TabBarController.swift in Sources */,
 				3C6039BD20957CAF0001E3A4 /* QueueMusicCollectionView.swift in Sources */,
 				3CE21DFE209683120019CA13 /* QueueMusicCollectionViewCell.swift in Sources */,

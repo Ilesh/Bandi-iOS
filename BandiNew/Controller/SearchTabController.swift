@@ -16,6 +16,10 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         setupViews()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     lazy var searchBar: PlatformSearchView = {
         let sb = PlatformSearchView()
         sb.handleDelayedSearchTextChanged = {

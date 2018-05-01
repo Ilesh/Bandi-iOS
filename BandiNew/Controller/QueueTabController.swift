@@ -13,6 +13,11 @@ class QueueTabController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let navBar = navigationController {
+            navBar.navigationBar.prefersLargeTitles = false
+        }
+        
+        title = "Queue"
         setupViews()
     }
     
@@ -21,12 +26,15 @@ class QueueTabController: UIViewController {
         self.musicCollectionView.reloadData()
     }
     
+    var searchBarShownHeight: NSLayoutConstraint?
+    var searchBarHiddenHeight: NSLayoutConstraint?
+    
     lazy var searchBar: CustomSearchBar = {
         let sb = CustomSearchBar(frame: .zero)
-        sb.translatesAutoresizingMaskIntoConstraints = false
         sb.handleSearchTextChanged = {
             self.updateSearchResults()
         }
+        sb.translatesAutoresizingMaskIntoConstraints = false
         return sb
     }()
     
@@ -34,6 +42,10 @@ class QueueTabController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         let cv = QueueMusicCollectionView(frame: view.frame, collectionViewLayout: layout)
         cv.musicArray = TEMPSessionData.queueMusic
+        cv.handleScroll = { (isUp) -> () in
+            print(isUp)
+            self.showSearchBar(show: !isUp)
+        }
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
@@ -42,6 +54,9 @@ class QueueTabController: UIViewController {
         view.addSubview(searchBar)
         view.addSubview(musicCollectionView)
         
+        searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 50)
+        searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 0)
+
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -54,6 +69,14 @@ class QueueTabController: UIViewController {
             musicCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         
+    }
+    
+    func showSearchBar(show: Bool) {
+        searchBarShownHeight?.isActive = show
+        searchBarHiddenHeight?.isActive = !show
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.layoutIfNeeded()
+        })
     }
     
     func updateSearchResults() {

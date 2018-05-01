@@ -15,6 +15,10 @@ class LinkTabController: UIViewController {
         setupViews()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     let containingView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear

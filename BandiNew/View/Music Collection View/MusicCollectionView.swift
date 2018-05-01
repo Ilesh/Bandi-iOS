@@ -13,7 +13,7 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         
-        backgroundColor = UIColor.black.withAlphaComponent(0.85)
+        backgroundColor = UIColor.black.withAlphaComponent(0.90)
         alwaysBounceVertical = true
         delegate = self
         dataSource = self
@@ -49,7 +49,7 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         guard let window = UIApplication.shared.keyWindow else {
             assert(false, "window missing")
         }
-        return CGSize(width: window.frame.width, height: 90)
+        return CGSize(width: window.frame.width, height: 70)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
