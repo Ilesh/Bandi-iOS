@@ -21,9 +21,16 @@ class QueueTabController: UIViewController {
         setupViews()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.musicCollectionView.musicArray = TEMPSessionData.queueMusic
+    override func viewDidAppear(_ animated: Bool) {
         self.musicCollectionView.reloadData()
+        print(TEMPSessionData.queueMusic)
+        if TEMPSessionData.queueMusic.count == 0 && (searchBar.text?.isEmpty)! {
+            searchBarShownHeight?.isActive = false
+            searchBarHiddenHeight?.isActive = true
+            self.view.layoutIfNeeded()
+        }
+        updateSearchResults()
+        setCollectionBackground()
     }
     
     var searchBarShownHeight: NSLayoutConstraint?
@@ -43,8 +50,15 @@ class QueueTabController: UIViewController {
         let cv = QueueMusicCollectionView(frame: view.frame, collectionViewLayout: layout)
         cv.musicArray = TEMPSessionData.queueMusic
         cv.handleScroll = { (isUp) -> () in
-            print(isUp)
-            self.showSearchBar(show: !isUp)
+            if TEMPSessionData.queueMusic.count != 0 {
+                self.showSearchBar(show: !isUp)
+            }
+        }
+        cv.handleSwipeStarted = {
+            self.showSearchBar(show: false)
+        }
+        cv.handleMusicRemoved = {
+            self.setCollectionBackground()
         }
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
@@ -64,14 +78,28 @@ class QueueTabController: UIViewController {
             searchBar.heightAnchor.constraint(equalToConstant: 50),
             
             musicCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-            musicCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            musicCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             musicCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             musicCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         
+        musicCollectionView.reloadData()
+    }
+    
+    func setCollectionBackground() {
+        if TEMPSessionData.queueMusic.count == 0 {
+            self.musicCollectionView.showNoQueue()
+        } else {
+            if (searchBar.text?.isEmpty)! && self.musicCollectionView.musicArray.count == 0 {
+                self.musicCollectionView.showNoResults()
+            } else {
+                self.musicCollectionView.backgroundView = nil
+            }
+        }
     }
     
     func showSearchBar(show: Bool) {
+        self.searchBar.endEditing(!show)
         searchBarShownHeight?.isActive = show
         searchBarHiddenHeight?.isActive = !show
         UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
@@ -87,6 +115,7 @@ class QueueTabController: UIViewController {
         } else {
             self.musicCollectionView.musicArray = TEMPSessionData.queueMusic
         }
+        setCollectionBackground()
         self.musicCollectionView.reloadData()
     }
     

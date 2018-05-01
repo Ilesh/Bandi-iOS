@@ -14,7 +14,8 @@ class CustomSearchBar: UISearchBar, UISearchBarDelegate {
         super.init(frame: frame)
         
         delegate = self
-        barStyle = .blackTranslucent
+        barStyle = .blackOpaque
+        backgroundColor = .black
         tintColor = Constants.Colors().secondaryColor
         keyboardAppearance = .dark
         

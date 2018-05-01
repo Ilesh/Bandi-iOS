@@ -11,6 +11,7 @@ import UIKit
 class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelegate {
     
     var panRecognizer: UIPanGestureRecognizer?
+    var swipeStarted: (()->())?
     
     var music: Music? {
         didSet {
@@ -66,7 +67,11 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
     
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         //return true
-        return abs((panRecognizer!.velocity(in: panRecognizer!.view)).x) > abs((panRecognizer!.velocity(in: panRecognizer!.view)).y)
+        let doesBegin = abs((panRecognizer!.velocity(in: panRecognizer!.view)).x) > abs((panRecognizer!.velocity(in: panRecognizer!.view)).y)
+        if doesBegin {
+            swipeStarted?()
+        }
+        return doesBegin
     }
     
 }

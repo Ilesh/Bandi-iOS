@@ -15,40 +15,34 @@ class QueueMusicCollectionView: MusicCollectionView {
         register(QueueMusicCollectionViewCell.self, forCellWithReuseIdentifier: musicCellId)
     }
     
-    var handleScroll: ((_ isUp: Bool)->())?
-    var lastContentOffset: CGFloat = 0
-    var lastTranslation: CGFloat = 0
-    var scrolledUp = false
+    var handleMusicRemoved: (()->())?
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let translation = scrollView.panGestureRecognizer.translation(in: scrollView.superview!)
-        if (translation.y != lastTranslation) {
-            if (self.lastContentOffset > scrollView.contentOffset.y) {
-                if !scrolledUp {
-                    handleScroll?(true)
-                }
-                scrolledUp = true
-            }
-            else if (self.lastContentOffset < scrollView.contentOffset.y) {
-                if scrolledUp {
-                    handleScroll?(false)
-                }
-                scrolledUp = false
-            }
-        }
-        
-        self.lastTranslation = translation.y
-        self.lastContentOffset = scrollView.contentOffset.y
+    private let noResultsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No Results :("
+        label.textColor = .lightGray
+        label.font = UIFont.boldSystemFont(ofSize: 22)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let noQueueLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Nothing Queued :O"
+        label.textColor = .lightGray
+        label.font = UIFont.boldSystemFont(ofSize: 22)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    func showNoResults() {
+        backgroundView = noResultsLabel
     }
     
-    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        handleScroll?(true)
-        return true
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        let translation = scrollView.panGestureRecognizer.translation(in: scrollView.superview!)
-        handleScroll?(translation.y > 0)
+    func showNoQueue() {
+        backgroundView = noQueueLabel
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -59,7 +53,11 @@ class QueueMusicCollectionView: MusicCollectionView {
                 TEMPSessionData.queueMusic.remove(at: currentIndexPath.row)
                 self.musicArray.remove(at: currentIndexPath.row)
                 self.deleteItems(at: [currentIndexPath])
+                self.handleMusicRemoved?()
             }
+        }
+        cell.swipeStarted = {
+            self.handleSwipeStarted?()
         }
         return cell
     }

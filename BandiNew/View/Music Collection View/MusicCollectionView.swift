@@ -22,6 +22,12 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     
     let musicCellId = "musicCellId"
     var musicArray: [Music] = []
+    var lastContentOffset: CGFloat = 0
+    var lastTranslation: CGFloat = 0
+    var scrolledUp = false
+    
+    var handleScroll: ((_ isUp: Bool)->())?
+    var handleSwipeStarted: (()->())?
     
     let blurView: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
@@ -32,7 +38,38 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     }()
     
     func setupViews() {
-        backgroundView = blurView
+        
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let translation = scrollView.panGestureRecognizer.translation(in: scrollView.superview!)
+        if (translation.y != lastTranslation) {
+            if (self.lastContentOffset > scrollView.contentOffset.y) {
+                if !scrolledUp {
+                    handleScroll?(true)
+                }
+                scrolledUp = true
+            }
+            else if (self.lastContentOffset < scrollView.contentOffset.y) {
+                if scrolledUp {
+                    handleScroll?(false)
+                }
+                scrolledUp = false
+            }
+        }
+        
+        self.lastTranslation = translation.y
+        self.lastContentOffset = scrollView.contentOffset.y
+    }
+    
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        handleScroll?(true)
+        return true
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        let translation = scrollView.panGestureRecognizer.translation(in: scrollView.superview!)
+        handleScroll?(translation.y > 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

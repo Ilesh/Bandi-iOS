@@ -49,7 +49,7 @@ class LinkTabController: UIViewController {
         //let tabBarController = self.tabBarController as? TabBarController
         //tabBarController?.setTransparentTabBar(isSet: true)
         
-        UIView.animate(withDuration: 3, delay: 0.1, options: [.repeat, .autoreverse, .allowUserInteraction], animations: {
+        UIView.animate(withDuration: 3, delay: 0, options: [.repeat, .autoreverse, .allowUserInteraction], animations: {
             self.containingView.frame.origin = CGPoint(x: self.containingView.frame.origin.x,
                                                        y: self.containingView.frame.origin.y - 10)
         })

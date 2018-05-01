@@ -15,11 +15,39 @@ class SearchMusicCollectionView: MusicCollectionView {
         register(SearchMusicCollectionViewCell.self, forCellWithReuseIdentifier: musicCellId)
     }
     
+    private let noResultsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No Results :("
+        label.textColor = .lightGray
+        label.font = UIFont.boldSystemFont(ofSize: 22)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let loadingView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        view.startAnimating()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    func showNoResults() {
+        backgroundView = noResultsLabel
+    }
+    
+    func showLoading() {
+        backgroundView = loadingView
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = dequeueReusableCell(withReuseIdentifier: musicCellId, for: indexPath) as! SearchMusicCollectionViewCell
         cell.music = musicArray[indexPath.row]
         cell.addMusic = {
             TEMPSessionData.queueMusic.append(cell.music!)
+        }
+        cell.swipeStarted = {
+            self.handleSwipeStarted?()
         }
         return cell
     }

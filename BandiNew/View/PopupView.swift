@@ -21,12 +21,12 @@ class PopupView: NSObject {
             darkView.isHidden = true
         }
         
-        headerTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        headerTitle.font = UIFont.boldSystemFont(ofSize: 17)
         headerTitle.textColor = .white
         
         headerBottomBorder.backgroundColor = .black
         
-        doneButton.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         
         setupViews()
     }

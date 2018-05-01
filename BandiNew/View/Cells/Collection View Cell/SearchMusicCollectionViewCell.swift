@@ -32,7 +32,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
     let addLabel: UILabel = {
         let label = UILabel()
         label.text = "QUEUE"
-        label.font = UIFont(name: "Avenir-Heavy", size: 22)
+        label.font = UIFont(name: "Avenir-Heavy", size: 20)
         label.textColor = .white
         return label
     }()

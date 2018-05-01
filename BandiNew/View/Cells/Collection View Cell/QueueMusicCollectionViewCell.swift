@@ -39,7 +39,7 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
     let removelabel: UILabel = {
         let label = UILabel()
         label.text = "REMOVE"
-        label.font = UIFont(name: "Avenir-Heavy", size: 22)
+        label.font = UIFont(name: "Avenir-Heavy", size: 20)
         label.textColor = .white
         return label
     }()
@@ -84,17 +84,22 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
         if let parentCollectionView = self.superview as? QueueMusicCollectionView {
             switch(sender.state) {
                 case .began:
-                    print(1)
                     guard let selectedIndexPath = parentCollectionView.indexPathForItem(at: sender.location(in: parentCollectionView)) else {
                         break
                     }
                     parentCollectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+                    UIView.transition(with: self, duration: 0.2, options: .transitionCrossDissolve, animations: {
+                        self.contentView.backgroundColor = #colorLiteral(red: 0.1882352941, green: 0.1882352941, blue: 0.1882352941, alpha: 1)
+                        self.removeButton.tintColor = Constants.Colors().secondaryColor
+                    })
                 case .changed:
-                    print(2)
                     let position = CGPoint(x: self.frame.width / 2, y: sender.location(in: parentCollectionView).y)
                     parentCollectionView.updateInteractiveMovementTargetPosition(position)
                 case .ended:
-                    print(3)
+                    UIView.transition(with: self, duration: 0.2, options: .transitionCrossDissolve, animations: {
+                        self.contentView.backgroundColor = #colorLiteral(red: 0.1254901961, green: 0.1254901961, blue: 0.1254901961, alpha: 1)
+                        self.removeButton.tintColor = .lightGray
+                    })
                     parentCollectionView.endInteractiveMovement()
                 default:
                     parentCollectionView.cancelInteractiveMovement()

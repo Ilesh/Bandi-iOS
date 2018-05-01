@@ -13,7 +13,7 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let searchTabController = SearchTabController()
+        let searchTabController = CustomNavigationController(rootViewController: SearchTabController())
         
         let queueTabController = CustomNavigationController(rootViewController: QueueTabController())
         
@@ -54,6 +54,7 @@ class TabBarController: UITabBarController {
             tabBar.barStyle = .blackOpaque
             tabBar.barTintColor = .black
             tabBar.backgroundImage = nil
+            tabBar.backgroundColor = .black
             tabBar.unselectedItemTintColor = .lightGray
         }
     }
