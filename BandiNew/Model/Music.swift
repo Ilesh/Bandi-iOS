@@ -13,5 +13,6 @@ class Music: NSObject {
     var title: String?
     var artist: String?
     var thumbnailURLString: String?
+    var youtubeVideoID: String?
     
 }

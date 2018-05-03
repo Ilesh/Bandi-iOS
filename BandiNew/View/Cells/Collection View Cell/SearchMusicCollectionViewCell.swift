@@ -15,6 +15,20 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
         backgroundColor = Constants.Colors().primaryColor
     }
     
+    override var isSelected: Bool {
+        didSet {
+            if isSelected {
+                MusicFetcher.fetchYoutubeVideoUrl(address: APIKeys().serverAddress, videoID: (music?.youtubeVideoID)!, quality: "CHANGE THIS", handler: { (videoURL) in
+                    DispatchQueue.main.async {
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        let musicDetails = appDelegate.mainTabBarController.popupContent as! MusicDetailsController
+                        musicDetails.updateVideo(videoURLString: videoURL!)
+                    }
+                })
+            }
+        }
+    }
+    
     var addMusic: (() -> ())?
     
     let addButton: UIButton = {

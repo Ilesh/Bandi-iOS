@@ -15,7 +15,7 @@
 		3C60396D20952F400001E3A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C60396B20952F400001E3A4 /* LaunchScreen.storyboard */; };
 		3C60397820952F400001E3A4 /* BandiNewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60397720952F400001E3A4 /* BandiNewTests.swift */; };
 		3C60398320952F400001E3A4 /* BandiNewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60398220952F400001E3A4 /* BandiNewUITests.swift */; };
-		3C60399220952FFC0001E3A4 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60399120952FFC0001E3A4 /* TabBarController.swift */; };
+		3C60399220952FFC0001E3A4 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C60399120952FFC0001E3A4 /* CustomTabBarController.swift */; };
 		3C6039942095305E0001E3A4 /* SearchTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039932095305E0001E3A4 /* SearchTabController.swift */; };
 		3C603996209530740001E3A4 /* QueueTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C603995209530740001E3A4 /* QueueTabController.swift */; };
 		3C6039982095307F0001E3A4 /* LinkTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039972095307F0001E3A4 /* LinkTabController.swift */; };
@@ -30,6 +30,8 @@
 		3C6039B920957AD20001E3A4 /* SearchMusicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039B820957AD20001E3A4 /* SearchMusicCollectionView.swift */; };
 		3C6039BB20957C4F0001E3A4 /* TEMPSessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039BA20957C4F0001E3A4 /* TEMPSessionData.swift */; };
 		3C6039BD20957CAF0001E3A4 /* QueueMusicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039BC20957CAF0001E3A4 /* QueueMusicCollectionView.swift */; };
+		3C99F6E52099AAE400DFA6AE /* PullUpTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C99F6E42099AAE400DFA6AE /* PullUpTabBarView.swift */; };
+		3C99F6F0209B8BD600DFA6AE /* MusicDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */; };
 		3CE21DF82095AECD0019CA13 /* GradientAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21DF72095AECD0019CA13 /* GradientAnimation.swift */; };
 		3CE21DFC209682E70019CA13 /* SearchMusicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21DFB209682E70019CA13 /* SearchMusicCollectionViewCell.swift */; };
 		3CE21DFE209683120019CA13 /* QueueMusicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21DFD209683120019CA13 /* QueueMusicCollectionViewCell.swift */; };
@@ -39,6 +41,8 @@
 		3CE21E06209698610019CA13 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21E05209698610019CA13 /* PopupView.swift */; };
 		3CE21E08209699780019CA13 /* PlatformPickerPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21E07209699780019CA13 /* PlatformPickerPopupView.swift */; };
 		3CEFAE2220970AF000F42C5B /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEFAE2120970AF000F42C5B /* CustomNavigationController.swift */; };
+		3CEFAEA02099660700F42C5B /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CEFAE98209961E000F42C5B /* LNPopupController.framework */; };
+		D51C35FFD254772DB8884A33 /* Pods_BandiNew.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FCD3984B99920FF44AD8632 /* Pods_BandiNew.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +59,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3C60395B20952F3E0001E3A4;
 			remoteInfo = BandiNew;
+		};
+		3CEFAE97209961E000F42C5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3CEFAE6B209961E000F42C5B /* LNPopupController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 39DB52E51B5823330061C589;
+			remoteInfo = LNPopupController;
+		};
+		3CEFAE9B209961E000F42C5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3CEFAE40209961E000F42C5B /* LNPopupControllerExample.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 39277A041B58228000293F95;
+			remoteInfo = LNPopupControllerExample;
+		};
+		3CEFAE9D209961E000F42C5B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3CEFAE40209961E000F42C5B /* LNPopupControllerExample.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 39F611C81E9AD9E5002859BA;
+			remoteInfo = LNPopupControllerExampleUITests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -73,7 +98,7 @@
 		3C60397E20952F400001E3A4 /* BandiNewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BandiNewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C60398220952F400001E3A4 /* BandiNewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BandiNewUITests.swift; sourceTree = "<group>"; };
 		3C60398420952F400001E3A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3C60399120952FFC0001E3A4 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		3C60399120952FFC0001E3A4 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		3C6039932095305E0001E3A4 /* SearchTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTabController.swift; sourceTree = "<group>"; };
 		3C603995209530740001E3A4 /* QueueTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueTabController.swift; sourceTree = "<group>"; };
 		3C6039972095307F0001E3A4 /* LinkTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkTabController.swift; sourceTree = "<group>"; };
@@ -88,6 +113,8 @@
 		3C6039B820957AD20001E3A4 /* SearchMusicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMusicCollectionView.swift; sourceTree = "<group>"; };
 		3C6039BA20957C4F0001E3A4 /* TEMPSessionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TEMPSessionData.swift; sourceTree = "<group>"; };
 		3C6039BC20957CAF0001E3A4 /* QueueMusicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueMusicCollectionView.swift; sourceTree = "<group>"; };
+		3C99F6E42099AAE400DFA6AE /* PullUpTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullUpTabBarView.swift; sourceTree = "<group>"; };
+		3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicDetailsController.swift; sourceTree = "<group>"; };
 		3CE21DF72095AECD0019CA13 /* GradientAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientAnimation.swift; sourceTree = "<group>"; };
 		3CE21DFB209682E70019CA13 /* SearchMusicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMusicCollectionViewCell.swift; sourceTree = "<group>"; };
 		3CE21DFD209683120019CA13 /* QueueMusicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueMusicCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -97,6 +124,108 @@
 		3CE21E05209698610019CA13 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
 		3CE21E07209699780019CA13 /* PlatformPickerPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformPickerPopupView.swift; sourceTree = "<group>"; };
 		3CEFAE2120970AF000F42C5B /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
+		3CEFAE25209961DF00F42C5B /* releaseVersion.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = releaseVersion.sh; sourceTree = "<group>"; };
+		3CEFAE27209961DF00F42C5B /* open_modern_popup.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = open_modern_popup.gif; sourceTree = "<group>"; };
+		3CEFAE28209961DF00F42C5B /* close_modern_popup.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = close_modern_popup.gif; sourceTree = "<group>"; };
+		3CEFAE29209961DF00F42C5B /* bar_style.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = bar_style.gif; sourceTree = "<group>"; };
+		3CEFAE2A209961DF00F42C5B /* rtl_english.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rtl_english.png; sourceTree = "<group>"; };
+		3CEFAE2B209961DF00F42C5B /* modern_custom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = modern_custom.png; sourceTree = "<group>"; };
+		3CEFAE2C209961DF00F42C5B /* Icon.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = Icon.psd; sourceTree = "<group>"; };
+		3CEFAE2D209961DF00F42C5B /* hidesBottomBar_Toolbar.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = hidesBottomBar_Toolbar.gif; sourceTree = "<group>"; };
+		3CEFAE2E209961DF00F42C5B /* rtl_hebrew.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rtl_hebrew.png; sourceTree = "<group>"; };
+		3CEFAE2F209961DF00F42C5B /* statusbar_style.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = statusbar_style.gif; sourceTree = "<group>"; };
+		3CEFAE30209961DF00F42C5B /* modern_no_scroll.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = modern_no_scroll.gif; sourceTree = "<group>"; };
+		3CEFAE31209961DF00F42C5B /* modern_bar_style.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = modern_bar_style.gif; sourceTree = "<group>"; };
+		3CEFAE32209961DF00F42C5B /* hidesBottomBar_TabBar.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = hidesBottomBar_TabBar.gif; sourceTree = "<group>"; };
+		3CEFAE33209961DF00F42C5B /* scoll.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = scoll.gif; sourceTree = "<group>"; };
+		3CEFAE34209961DF00F42C5B /* swipes.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = swipes.gif; sourceTree = "<group>"; };
+		3CEFAE35209961E000F42C5B /* custom1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom1.png; sourceTree = "<group>"; };
+		3CEFAE36209961E000F42C5B /* statusbar_hidden.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = statusbar_hidden.gif; sourceTree = "<group>"; };
+		3CEFAE37209961E000F42C5B /* Artwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Artwork.png; sourceTree = "<group>"; };
+		3CEFAE38209961E000F42C5B /* custom_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom_bar.png; sourceTree = "<group>"; };
+		3CEFAE39209961E000F42C5B /* default_bar_accessibility_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_bar_accessibility_label.png; sourceTree = "<group>"; };
+		3CEFAE3A209961E000F42C5B /* taps.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = taps.gif; sourceTree = "<group>"; };
+		3CEFAE3B209961E000F42C5B /* .github_changelog_generator */ = {isa = PBXFileReference; lastKnownFileType = text; path = .github_changelog_generator; sourceTree = "<group>"; };
+		3CEFAE3C209961E000F42C5B /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		3CEFAE3D209961E000F42C5B /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		3CEFAE3E209961E000F42C5B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3CEFAE40209961E000F42C5B /* LNPopupControllerExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LNPopupControllerExample.xcodeproj; sourceTree = "<group>"; };
+		3CEFAE45209961E000F42C5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3CEFAE46209961E000F42C5B /* LNPopupControllerExampleUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNPopupControllerExampleUITests.m; sourceTree = "<group>"; };
+		3CEFAE48209961E000F42C5B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3CEFAE49209961E000F42C5B /* LNPopupControllerExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LNPopupControllerExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		3CEFAE4A209961E000F42C5B /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
+		3CEFAE4B209961E000F42C5B /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		3CEFAE4C209961E000F42C5B /* HigherSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HigherSearchBar.swift; sourceTree = "<group>"; };
+		3CEFAE4D209961E000F42C5B /* SettingsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsTableViewController.h; sourceTree = "<group>"; };
+		3CEFAE4E209961E000F42C5B /* CustomMapBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMapBarViewController.swift; sourceTree = "<group>"; };
+		3CEFAE4F209961E000F42C5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3CEFAE50209961E000F42C5B /* RandomColors.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RandomColors.m; sourceTree = "<group>"; };
+		3CEFAE51209961E000F42C5B /* DemoPopupContentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoPopupContentViewController.h; sourceTree = "<group>"; };
+		3CEFAE52209961E000F42C5B /* Music.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Music.storyboard; sourceTree = "<group>"; };
+		3CEFAE53209961E000F42C5B /* MapScene.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MapScene.storyboard; sourceTree = "<group>"; };
+		3CEFAE55209961E000F42C5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3CEFAE56209961E000F42C5B /* COSTouchVisualizerWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = COSTouchVisualizerWindow.h; sourceTree = "<group>"; };
+		3CEFAE57209961E000F42C5B /* LoremIpsum.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoremIpsum.m; sourceTree = "<group>"; };
+		3CEFAE58209961E000F42C5B /* DemoAlbumTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAlbumTableViewController.swift; sourceTree = "<group>"; };
+		3CEFAE59209961E000F42C5B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3CEFAE5A209961E000F42C5B /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		3CEFAE5B209961E000F42C5B /* MusicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicCell.swift; sourceTree = "<group>"; };
+		3CEFAE5C209961E000F42C5B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		3CEFAE5D209961E000F42C5B /* SettingsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsTableViewController.m; sourceTree = "<group>"; };
+		3CEFAE5E209961E000F42C5B /* PortraitTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortraitTabBarController.swift; sourceTree = "<group>"; };
+		3CEFAE5F209961E000F42C5B /* LocationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsController.swift; sourceTree = "<group>"; };
+		3CEFAE60209961E000F42C5B /* DemoMusicPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoMusicPlayerController.swift; sourceTree = "<group>"; };
+		3CEFAE61209961E000F42C5B /* LoremIpsum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoremIpsum.h; sourceTree = "<group>"; };
+		3CEFAE62209961E000F42C5B /* COSTouchVisualizerWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = COSTouchVisualizerWindow.m; sourceTree = "<group>"; };
+		3CEFAE63209961E000F42C5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3CEFAE64209961E000F42C5B /* DemoPopupContentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoPopupContentViewController.m; sourceTree = "<group>"; };
+		3CEFAE65209961E000F42C5B /* RandomColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RandomColors.h; sourceTree = "<group>"; };
+		3CEFAE66209961E000F42C5B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		3CEFAE68209961E000F42C5B /* ISSUE_TEMPLATE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ISSUE_TEMPLATE.md; sourceTree = "<group>"; };
+		3CEFAE6A209961E000F42C5B /* LNPopupControllerAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = LNPopupControllerAssets.xcassets; sourceTree = "<group>"; };
+		3CEFAE6B209961E000F42C5B /* LNPopupController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LNPopupController.xcodeproj; sourceTree = "<group>"; };
+		3CEFAE6E209961E000F42C5B /* LNPopupController.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupController.pch; sourceTree = "<group>"; };
+		3CEFAE6F209961E000F42C5B /* LNPopupController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupController.h; sourceTree = "<group>"; };
+		3CEFAE71209961E000F42C5B /* LNPopupCloseButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupCloseButton.h; sourceTree = "<group>"; };
+		3CEFAE72209961E000F42C5B /* LNPopupBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupBar.h; sourceTree = "<group>"; };
+		3CEFAE73209961E000F42C5B /* LNPopupContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupContentView.h; sourceTree = "<group>"; };
+		3CEFAE74209961E000F42C5B /* LNPopupItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupItem.h; sourceTree = "<group>"; };
+		3CEFAE75209961E000F42C5B /* UIViewController+LNPopupSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LNPopupSupport.h"; sourceTree = "<group>"; };
+		3CEFAE76209961E000F42C5B /* LNPopupCustomBarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupCustomBarViewController.h; sourceTree = "<group>"; };
+		3CEFAE78209961E000F42C5B /* LNForwardingDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNForwardingDelegate.m; sourceTree = "<group>"; };
+		3CEFAE79209961E000F42C5B /* LNPopupController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNPopupController.m; sourceTree = "<group>"; };
+		3CEFAE7A209961E000F42C5B /* LNPopupCustomBarViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNPopupCustomBarViewController.m; sourceTree = "<group>"; };
+		3CEFAE7B209961E000F42C5B /* LNPopupInteractionPanGestureRecognizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNPopupInteractionPanGestureRecognizer.m; sourceTree = "<group>"; };
+		3CEFAE7C209961E000F42C5B /* LNPopupLongPressGesutreRecognizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupLongPressGesutreRecognizer.h; sourceTree = "<group>"; };
+		3CEFAE7D209961E000F42C5B /* MarqueeLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MarqueeLabel.m; sourceTree = "<group>"; };
+		3CEFAE7E209961E000F42C5B /* LNPopupItem+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LNPopupItem+Private.h"; sourceTree = "<group>"; };
+		3CEFAE7F209961E000F42C5B /* LNPopupOpenTapGesutreRecognizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupOpenTapGesutreRecognizer.h; sourceTree = "<group>"; };
+		3CEFAE80209961E000F42C5B /* LNChevronView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNChevronView.m; sourceTree = "<group>"; };
+		3CEFAE81209961E000F42C5B /* _LNPopupBase64Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _LNPopupBase64Utils.h; sourceTree = "<group>"; };
+		3CEFAE82209961E000F42C5B /* UIViewController+LNPopupSupportPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LNPopupSupportPrivate.h"; sourceTree = "<group>"; };
+		3CEFAE83209961E000F42C5B /* _LNWeakRef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _LNWeakRef.h; sourceTree = "<group>"; };
+		3CEFAE84209961E000F42C5B /* LNPopupLongPressGesutreRecognizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNPopupLongPressGesutreRecognizer.m; sourceTree = "<group>"; };
+		3CEFAE85209961E000F42C5B /* LNPopupInteractionPanGestureRecognizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupInteractionPanGestureRecognizer.h; sourceTree = "<group>"; };
+		3CEFAE86209961E000F42C5B /* LNPopupBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNPopupBar.m; sourceTree = "<group>"; };
+		3CEFAE87209961E000F42C5B /* LNPopupCloseButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNPopupCloseButton.m; sourceTree = "<group>"; };
+		3CEFAE88209961E000F42C5B /* LNPopupController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNPopupController.h; sourceTree = "<group>"; };
+		3CEFAE89209961E000F42C5B /* LNPopupCloseButton+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LNPopupCloseButton+Private.h"; sourceTree = "<group>"; };
+		3CEFAE8A209961E000F42C5B /* LNForwardingDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNForwardingDelegate.h; sourceTree = "<group>"; };
+		3CEFAE8B209961E000F42C5B /* LNPopupItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNPopupItem.m; sourceTree = "<group>"; };
+		3CEFAE8C209961E000F42C5B /* LNChevronView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNChevronView.h; sourceTree = "<group>"; };
+		3CEFAE8D209961E000F42C5B /* LNPopupOpenTapGesutreRecognizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNPopupOpenTapGesutreRecognizer.m; sourceTree = "<group>"; };
+		3CEFAE8E209961E000F42C5B /* MarqueeLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MarqueeLabel.h; sourceTree = "<group>"; };
+		3CEFAE8F209961E000F42C5B /* LNPopupBar+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LNPopupBar+Private.h"; sourceTree = "<group>"; };
+		3CEFAE90209961E000F42C5B /* _LNWeakRef.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _LNWeakRef.m; sourceTree = "<group>"; };
+		3CEFAE91209961E000F42C5B /* UIViewController+LNPopupSupportPrivate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LNPopupSupportPrivate.m"; sourceTree = "<group>"; };
+		3CEFAE92209961E000F42C5B /* _LNPopupBase64Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _LNPopupBase64Utils.m; sourceTree = "<group>"; };
+		3CEFAE93209961E000F42C5B /* UIViewController+LNPopupSupport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LNPopupSupport.m"; sourceTree = "<group>"; };
+		3CEFAE94209961E000F42C5B /* LNPopupCustomBarViewController+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LNPopupCustomBarViewController+Private.h"; sourceTree = "<group>"; };
+		3CEFAE95209961E000F42C5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		46E6F759CE40E8D53074A07D /* Pods-BandiNew.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BandiNew.release.xcconfig"; path = "Pods/Target Support Files/Pods-BandiNew/Pods-BandiNew.release.xcconfig"; sourceTree = "<group>"; };
+		8FCD3984B99920FF44AD8632 /* Pods_BandiNew.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BandiNew.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCE3F844227391B0B43D390C /* Pods-BandiNew.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BandiNew.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BandiNew/Pods-BandiNew.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +233,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CEFAEA02099660700F42C5B /* LNPopupController.framework in Frameworks */,
+				D51C35FFD254772DB8884A33 /* Pods_BandiNew.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +262,8 @@
 				3C60397620952F400001E3A4 /* BandiNewTests */,
 				3C60398120952F400001E3A4 /* BandiNewUITests */,
 				3C60395D20952F3E0001E3A4 /* Products */,
+				3CEFAE23209961DF00F42C5B /* Frameworks */,
+				94E02632BE056699E878FC78 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -183,11 +316,12 @@
 		3C60399020952FCF0001E3A4 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				3C60399120952FFC0001E3A4 /* TabBarController.swift */,
+				3C60399120952FFC0001E3A4 /* CustomTabBarController.swift */,
 				3C6039932095305E0001E3A4 /* SearchTabController.swift */,
 				3C603995209530740001E3A4 /* QueueTabController.swift */,
 				3C6039972095307F0001E3A4 /* LinkTabController.swift */,
 				3CEFAE2120970AF000F42C5B /* CustomNavigationController.swift */,
+				3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -204,6 +338,7 @@
 		3C6039A3209538E50001E3A4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3C99F6E42099AAE400DFA6AE /* PullUpTabBarView.swift */,
 				3CE21DF72095AECD0019CA13 /* GradientAnimation.swift */,
 				3CE21E05209698610019CA13 /* PopupView.swift */,
 				3CE21E03209694970019CA13 /* PlatformPickerView.swift */,
@@ -264,6 +399,212 @@
 			path = "Search Bars";
 			sourceTree = "<group>";
 		};
+		3CEFAE23209961DF00F42C5B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE24209961DF00F42C5B /* LNPopupController */,
+				8FCD3984B99920FF44AD8632 /* Pods_BandiNew.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3CEFAE24209961DF00F42C5B /* LNPopupController */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE25209961DF00F42C5B /* releaseVersion.sh */,
+				3CEFAE26209961DF00F42C5B /* Supplements */,
+				3CEFAE3B209961E000F42C5B /* .github_changelog_generator */,
+				3CEFAE3C209961E000F42C5B /* LICENSE */,
+				3CEFAE3D209961E000F42C5B /* CHANGELOG.md */,
+				3CEFAE3E209961E000F42C5B /* README.md */,
+				3CEFAE3F209961E000F42C5B /* LNPopupControllerExample */,
+				3CEFAE66209961E000F42C5B /* .gitignore */,
+				3CEFAE67209961E000F42C5B /* .github */,
+				3CEFAE69209961E000F42C5B /* LNPopupController */,
+			);
+			name = LNPopupController;
+			path = Carthage/Checkouts/LNPopupController;
+			sourceTree = "<group>";
+		};
+		3CEFAE26209961DF00F42C5B /* Supplements */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE27209961DF00F42C5B /* open_modern_popup.gif */,
+				3CEFAE28209961DF00F42C5B /* close_modern_popup.gif */,
+				3CEFAE29209961DF00F42C5B /* bar_style.gif */,
+				3CEFAE2A209961DF00F42C5B /* rtl_english.png */,
+				3CEFAE2B209961DF00F42C5B /* modern_custom.png */,
+				3CEFAE2C209961DF00F42C5B /* Icon.psd */,
+				3CEFAE2D209961DF00F42C5B /* hidesBottomBar_Toolbar.gif */,
+				3CEFAE2E209961DF00F42C5B /* rtl_hebrew.png */,
+				3CEFAE2F209961DF00F42C5B /* statusbar_style.gif */,
+				3CEFAE30209961DF00F42C5B /* modern_no_scroll.gif */,
+				3CEFAE31209961DF00F42C5B /* modern_bar_style.gif */,
+				3CEFAE32209961DF00F42C5B /* hidesBottomBar_TabBar.gif */,
+				3CEFAE33209961DF00F42C5B /* scoll.gif */,
+				3CEFAE34209961DF00F42C5B /* swipes.gif */,
+				3CEFAE35209961E000F42C5B /* custom1.png */,
+				3CEFAE36209961E000F42C5B /* statusbar_hidden.gif */,
+				3CEFAE37209961E000F42C5B /* Artwork.png */,
+				3CEFAE38209961E000F42C5B /* custom_bar.png */,
+				3CEFAE39209961E000F42C5B /* default_bar_accessibility_label.png */,
+				3CEFAE3A209961E000F42C5B /* taps.gif */,
+			);
+			path = Supplements;
+			sourceTree = "<group>";
+		};
+		3CEFAE3F209961E000F42C5B /* LNPopupControllerExample */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE40209961E000F42C5B /* LNPopupControllerExample.xcodeproj */,
+				3CEFAE44209961E000F42C5B /* LNPopupControllerExampleUITests */,
+				3CEFAE47209961E000F42C5B /* LNPopupControllerExample */,
+			);
+			path = LNPopupControllerExample;
+			sourceTree = "<group>";
+		};
+		3CEFAE41209961E000F42C5B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE9C209961E000F42C5B /* LNPopupControllerExample.app */,
+				3CEFAE9E209961E000F42C5B /* LNPopupControllerExampleUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3CEFAE44209961E000F42C5B /* LNPopupControllerExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE45209961E000F42C5B /* Info.plist */,
+				3CEFAE46209961E000F42C5B /* LNPopupControllerExampleUITests.m */,
+			);
+			path = LNPopupControllerExampleUITests;
+			sourceTree = "<group>";
+		};
+		3CEFAE47209961E000F42C5B /* LNPopupControllerExample */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE48209961E000F42C5B /* AppDelegate.h */,
+				3CEFAE49209961E000F42C5B /* LNPopupControllerExample-Bridging-Header.h */,
+				3CEFAE4A209961E000F42C5B /* FirstViewController.h */,
+				3CEFAE4B209961E000F42C5B /* MapViewController.swift */,
+				3CEFAE4C209961E000F42C5B /* HigherSearchBar.swift */,
+				3CEFAE4D209961E000F42C5B /* SettingsTableViewController.h */,
+				3CEFAE4E209961E000F42C5B /* CustomMapBarViewController.swift */,
+				3CEFAE4F209961E000F42C5B /* Assets.xcassets */,
+				3CEFAE50209961E000F42C5B /* RandomColors.m */,
+				3CEFAE51209961E000F42C5B /* DemoPopupContentViewController.h */,
+				3CEFAE52209961E000F42C5B /* Music.storyboard */,
+				3CEFAE53209961E000F42C5B /* MapScene.storyboard */,
+				3CEFAE54209961E000F42C5B /* Main.storyboard */,
+				3CEFAE56209961E000F42C5B /* COSTouchVisualizerWindow.h */,
+				3CEFAE57209961E000F42C5B /* LoremIpsum.m */,
+				3CEFAE58209961E000F42C5B /* DemoAlbumTableViewController.swift */,
+				3CEFAE59209961E000F42C5B /* main.m */,
+				3CEFAE5A209961E000F42C5B /* FirstViewController.m */,
+				3CEFAE5B209961E000F42C5B /* MusicCell.swift */,
+				3CEFAE5C209961E000F42C5B /* AppDelegate.m */,
+				3CEFAE5D209961E000F42C5B /* SettingsTableViewController.m */,
+				3CEFAE5E209961E000F42C5B /* PortraitTabBarController.swift */,
+				3CEFAE5F209961E000F42C5B /* LocationsController.swift */,
+				3CEFAE60209961E000F42C5B /* DemoMusicPlayerController.swift */,
+				3CEFAE61209961E000F42C5B /* LoremIpsum.h */,
+				3CEFAE62209961E000F42C5B /* COSTouchVisualizerWindow.m */,
+				3CEFAE63209961E000F42C5B /* Info.plist */,
+				3CEFAE64209961E000F42C5B /* DemoPopupContentViewController.m */,
+				3CEFAE65209961E000F42C5B /* RandomColors.h */,
+			);
+			path = LNPopupControllerExample;
+			sourceTree = "<group>";
+		};
+		3CEFAE67209961E000F42C5B /* .github */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE68209961E000F42C5B /* ISSUE_TEMPLATE.md */,
+			);
+			path = .github;
+			sourceTree = "<group>";
+		};
+		3CEFAE69209961E000F42C5B /* LNPopupController */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE6A209961E000F42C5B /* LNPopupControllerAssets.xcassets */,
+				3CEFAE6B209961E000F42C5B /* LNPopupController.xcodeproj */,
+				3CEFAE6E209961E000F42C5B /* LNPopupController.pch */,
+				3CEFAE6F209961E000F42C5B /* LNPopupController.h */,
+				3CEFAE70209961E000F42C5B /* LNPopupController */,
+				3CEFAE95209961E000F42C5B /* Info.plist */,
+			);
+			path = LNPopupController;
+			sourceTree = "<group>";
+		};
+		3CEFAE6C209961E000F42C5B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE98209961E000F42C5B /* LNPopupController.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3CEFAE70209961E000F42C5B /* LNPopupController */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE71209961E000F42C5B /* LNPopupCloseButton.h */,
+				3CEFAE72209961E000F42C5B /* LNPopupBar.h */,
+				3CEFAE73209961E000F42C5B /* LNPopupContentView.h */,
+				3CEFAE74209961E000F42C5B /* LNPopupItem.h */,
+				3CEFAE75209961E000F42C5B /* UIViewController+LNPopupSupport.h */,
+				3CEFAE76209961E000F42C5B /* LNPopupCustomBarViewController.h */,
+				3CEFAE77209961E000F42C5B /* Private */,
+			);
+			path = LNPopupController;
+			sourceTree = "<group>";
+		};
+		3CEFAE77209961E000F42C5B /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				3CEFAE78209961E000F42C5B /* LNForwardingDelegate.m */,
+				3CEFAE79209961E000F42C5B /* LNPopupController.m */,
+				3CEFAE7A209961E000F42C5B /* LNPopupCustomBarViewController.m */,
+				3CEFAE7B209961E000F42C5B /* LNPopupInteractionPanGestureRecognizer.m */,
+				3CEFAE7C209961E000F42C5B /* LNPopupLongPressGesutreRecognizer.h */,
+				3CEFAE7D209961E000F42C5B /* MarqueeLabel.m */,
+				3CEFAE7E209961E000F42C5B /* LNPopupItem+Private.h */,
+				3CEFAE7F209961E000F42C5B /* LNPopupOpenTapGesutreRecognizer.h */,
+				3CEFAE80209961E000F42C5B /* LNChevronView.m */,
+				3CEFAE81209961E000F42C5B /* _LNPopupBase64Utils.h */,
+				3CEFAE82209961E000F42C5B /* UIViewController+LNPopupSupportPrivate.h */,
+				3CEFAE83209961E000F42C5B /* _LNWeakRef.h */,
+				3CEFAE84209961E000F42C5B /* LNPopupLongPressGesutreRecognizer.m */,
+				3CEFAE85209961E000F42C5B /* LNPopupInteractionPanGestureRecognizer.h */,
+				3CEFAE86209961E000F42C5B /* LNPopupBar.m */,
+				3CEFAE87209961E000F42C5B /* LNPopupCloseButton.m */,
+				3CEFAE88209961E000F42C5B /* LNPopupController.h */,
+				3CEFAE89209961E000F42C5B /* LNPopupCloseButton+Private.h */,
+				3CEFAE8A209961E000F42C5B /* LNForwardingDelegate.h */,
+				3CEFAE8B209961E000F42C5B /* LNPopupItem.m */,
+				3CEFAE8C209961E000F42C5B /* LNChevronView.h */,
+				3CEFAE8D209961E000F42C5B /* LNPopupOpenTapGesutreRecognizer.m */,
+				3CEFAE8E209961E000F42C5B /* MarqueeLabel.h */,
+				3CEFAE8F209961E000F42C5B /* LNPopupBar+Private.h */,
+				3CEFAE90209961E000F42C5B /* _LNWeakRef.m */,
+				3CEFAE91209961E000F42C5B /* UIViewController+LNPopupSupportPrivate.m */,
+				3CEFAE92209961E000F42C5B /* _LNPopupBase64Utils.m */,
+				3CEFAE93209961E000F42C5B /* UIViewController+LNPopupSupport.m */,
+				3CEFAE94209961E000F42C5B /* LNPopupCustomBarViewController+Private.h */,
+			);
+			path = Private;
+			sourceTree = "<group>";
+		};
+		94E02632BE056699E878FC78 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BCE3F844227391B0B43D390C /* Pods-BandiNew.debug.xcconfig */,
+				46E6F759CE40E8D53074A07D /* Pods-BandiNew.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -271,9 +612,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3C60398720952F400001E3A4 /* Build configuration list for PBXNativeTarget "BandiNew" */;
 			buildPhases = (
+				874AE9D8EA955E7C0285CA98 /* [CP] Check Pods Manifest.lock */,
 				3C60395820952F3E0001E3A4 /* Sources */,
 				3C60395920952F3E0001E3A4 /* Frameworks */,
 				3C60395A20952F3E0001E3A4 /* Resources */,
+				3CEFAE9F2099629F00F42C5B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -332,6 +675,11 @@
 				TargetAttributes = {
 					3C60395B20952F3E0001E3A4 = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					3C60397220952F400001E3A4 = {
 						CreatedOnToolsVersion = 9.3;
@@ -354,6 +702,16 @@
 			mainGroup = 3C60395320952F3E0001E3A4;
 			productRefGroup = 3C60395D20952F3E0001E3A4 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3CEFAE6C209961E000F42C5B /* Products */;
+					ProjectRef = 3CEFAE6B209961E000F42C5B /* LNPopupController.xcodeproj */;
+				},
+				{
+					ProductGroup = 3CEFAE41209961E000F42C5B /* Products */;
+					ProjectRef = 3CEFAE40209961E000F42C5B /* LNPopupControllerExample.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				3C60395B20952F3E0001E3A4 /* BandiNew */,
@@ -362,6 +720,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		3CEFAE98209961E000F42C5B /* LNPopupController.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = LNPopupController.framework;
+			remoteRef = 3CEFAE97209961E000F42C5B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3CEFAE9C209961E000F42C5B /* LNPopupControllerExample.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = LNPopupControllerExample.app;
+			remoteRef = 3CEFAE9B209961E000F42C5B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3CEFAE9E209961E000F42C5B /* LNPopupControllerExampleUITests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = LNPopupControllerExampleUITests.xctest;
+			remoteRef = 3CEFAE9D209961E000F42C5B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3C60395A20952F3E0001E3A4 /* Resources */ = {
@@ -390,6 +772,42 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3CEFAE9F2099629F00F42C5B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/LNPopupController.framework",
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LNPopupController.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		874AE9D8EA955E7C0285CA98 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BandiNew-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3C60395820952F3E0001E3A4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -398,17 +816,19 @@
 				3CE21E00209685510019CA13 /* DelayedSearchBar.swift in Sources */,
 				3C6039AB20953D720001E3A4 /* CustomSearchBar.swift in Sources */,
 				3C6039B2209543F50001E3A4 /* MusicFetcher.swift in Sources */,
+				3C99F6F0209B8BD600DFA6AE /* MusicDetailsController.swift in Sources */,
 				3C6039B4209545330001E3A4 /* Music.swift in Sources */,
 				3C6039942095305E0001E3A4 /* SearchTabController.swift in Sources */,
 				3C60396220952F3E0001E3A4 /* ViewController.swift in Sources */,
 				3C6039A0209534CA0001E3A4 /* MusicCollectionView.swift in Sources */,
 				3CE21E022096858D0019CA13 /* PlatformSearchView.swift in Sources */,
 				3CE21E06209698610019CA13 /* PopupView.swift in Sources */,
+				3C99F6E52099AAE400DFA6AE /* PullUpTabBarView.swift in Sources */,
 				3CE21DFC209682E70019CA13 /* SearchMusicCollectionViewCell.swift in Sources */,
 				3CE21E04209694970019CA13 /* PlatformPickerView.swift in Sources */,
 				3C6039B0209543B70001E3A4 /* MusicCollectionViewCell.swift in Sources */,
 				3CEFAE2220970AF000F42C5B /* CustomNavigationController.swift in Sources */,
-				3C60399220952FFC0001E3A4 /* TabBarController.swift in Sources */,
+				3C60399220952FFC0001E3A4 /* CustomTabBarController.swift in Sources */,
 				3C6039BD20957CAF0001E3A4 /* QueueMusicCollectionView.swift in Sources */,
 				3CE21DFE209683120019CA13 /* QueueMusicCollectionViewCell.swift in Sources */,
 				3C6039B920957AD20001E3A4 /* SearchMusicCollectionView.swift in Sources */,
@@ -471,6 +891,14 @@
 				3C60396C20952F400001E3A4 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		3CEFAE54209961E000F42C5B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3CEFAE55209961E000F42C5B /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -592,15 +1020,13 @@
 		};
 		3C60398820952F400001E3A4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BCE3F844227391B0B43D390C /* Pods-BandiNew.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNew/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -610,15 +1036,13 @@
 		};
 		3C60398920952F400001E3A4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 46E6F759CE40E8D53074A07D /* Pods-BandiNew.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNew/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -634,11 +1058,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNewTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNewTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -655,11 +1075,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNewTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNewTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -675,11 +1091,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNewUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNewUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -695,11 +1107,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNewUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNewUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

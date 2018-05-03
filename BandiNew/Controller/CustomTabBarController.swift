@@ -1,5 +1,5 @@
 //
-//  TabBarController.swift
+//  CustomTabBarController.swift
 //  BandiNew
 //
 //  Created by Siddha Tiwari on 4/28/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TabBarController: UITabBarController {
+class CustomTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,12 +35,20 @@ class TabBarController: UITabBarController {
         
         setTransparentTabBar(isSet: false)
         tabBar.tintColor = Constants.Colors().primaryLightColor
-        
         tabBar.layer.borderWidth = 0
         tabBar.clipsToBounds = true
         
         viewControllers = tabViewControllers
         selectedIndex = 0
+        
+        setupViews()
+    }
+    
+    func setupViews() {
+        popupInteractionStyle = .drag
+        popupBar.inheritsVisualStyleFromDockingView = true
+        popupBar.barStyle = .default
+        popupContentView.popupCloseButtonStyle = .none
     }
     
     func setTransparentTabBar(isSet: Bool) {

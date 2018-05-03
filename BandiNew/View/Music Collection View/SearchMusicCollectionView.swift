@@ -12,6 +12,8 @@ class SearchMusicCollectionView: MusicCollectionView {
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
+        
+        allowsSelection = true
         register(SearchMusicCollectionViewCell.self, forCellWithReuseIdentifier: musicCellId)
     }
     
@@ -51,6 +53,8 @@ class SearchMusicCollectionView: MusicCollectionView {
         }
         return cell
     }
+    
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

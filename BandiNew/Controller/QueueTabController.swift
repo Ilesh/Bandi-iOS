@@ -23,7 +23,6 @@ class QueueTabController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         self.musicCollectionView.reloadData()
-        print(TEMPSessionData.queueMusic)
         if TEMPSessionData.queueMusic.count == 0 && (searchBar.text?.isEmpty)! {
             searchBarShownHeight?.isActive = false
             searchBarHiddenHeight?.isActive = true

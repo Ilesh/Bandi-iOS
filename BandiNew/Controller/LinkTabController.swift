@@ -10,14 +10,26 @@ import UIKit
 
 class LinkTabController: UIViewController {
     
+    
+    
     override func viewDidLoad() {
         view.backgroundColor = .clear
         setupViews()
+//        DispatchQueue.global(qos: .background).async {
+//            DispatchQueue.main.async {
+//                UIView.animate(withDuration: 3, delay: 0, options: [.repeat, .autoreverse, .allowUserInteraction], animations: {
+//                    self.containingView.frame.origin = CGPoint(x: self.containingView.frame.origin.x,
+//                                                               y: self.containingView.frame.origin.y - 50)
+//                })
+//            }
+//        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    var firstLoad = false
     
     let containingView: UIView = {
         let view = UIView()
@@ -45,14 +57,16 @@ class LinkTabController: UIViewController {
         return button
     }()
     
+    override func viewDidLayoutSubviews() {
+
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         //let tabBarController = self.tabBarController as? TabBarController
         //tabBarController?.setTransparentTabBar(isSet: true)
         
-        UIView.animate(withDuration: 3, delay: 0, options: [.repeat, .autoreverse, .allowUserInteraction], animations: {
-            self.containingView.frame.origin = CGPoint(x: self.containingView.frame.origin.x,
-                                                       y: self.containingView.frame.origin.y - 10)
-        })
+        // TODO: FIX ANIMATION
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {

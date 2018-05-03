@@ -8,12 +8,19 @@
 
 import UIKit
 import CoreData
+import XCDYouTubeKit
+import RMYouTubeExtractor
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
 
+    lazy var mainTabBarController: CustomTabBarController = {
+        let tbc = CustomTabBarController()
+        return tbc
+    }()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -24,7 +31,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         gradient.frame = (window?.frame)!
         window?.layer.addSublayer(gradient)
         
-        window?.rootViewController = TabBarController()
+        window?.rootViewController = mainTabBarController
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
+            print("Playback OK")
+            try AVAudioSession.sharedInstance().setActive(true)
+            print("Session is Active")
+        } catch {
+            print(error)
+        }
         
         return true
     }
