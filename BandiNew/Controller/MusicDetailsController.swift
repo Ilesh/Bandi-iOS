@@ -7,16 +7,17 @@
 //
 
 import UIKit
+import AVFoundation
+import AVKit
 
-class MusicDetailsController: UIViewController {
+class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .black
         setupViews()
         
-        
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.9)
         popupItem.title = "sdfasdf"
     }
     
@@ -38,6 +39,22 @@ class MusicDetailsController: UIViewController {
         return .lightContent
     }
     
+    var playingMusic: Music? {
+        didSet {
+            popupItem.title = playingMusic?.title
+            titleLabel.text = playingMusic?.title
+            popupItem.subtitle = playingMusic?.artist
+            artistLabel.text = playingMusic?.artist
+            let url = URL(string: (playingMusic?.thumbnailURLString)!)
+            if let thumbnailData = try? Data(contentsOf: url!) {
+                popupItem.image = UIImage(data: thumbnailData)
+            }
+            popupItem.progress = 0.34
+            
+            //popupItem.leftBarButtonItems = [playBarButton, pauseBarButton]
+        }
+    }
+    
     let backgroundView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .dark)
         let view = UIVisualEffectView(effect: effect)
@@ -45,16 +62,58 @@ class MusicDetailsController: UIViewController {
         return view
     }()
     
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = Constants.Colors().textGray
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let artistLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = Constants.Colors().primaryColor
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     let playButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .green
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(named: "play-100")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     let pauseButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .red
+        button.setImage(UIImage(named: "pause-100")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    let rewindButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "rewind-96")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.adjustsImageWhenHighlighted = false
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    let forwardButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "forward-96")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.adjustsImageWhenHighlighted = false
+        button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -65,6 +124,15 @@ class MusicDetailsController: UIViewController {
         return av
     }()
     
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "rate" {
+            if avp.rate > 0 {
+                print(avp.rate)
+                hideLoading()
+            }
+        }
+    }
+    
     lazy var youtubePlayerFrame: AVPlayerLayer = {
         let avpLayer = AVPlayerLayer(player: avp)
         avpLayer.videoGravity = .resizeAspect
@@ -72,23 +140,42 @@ class MusicDetailsController: UIViewController {
         return avpLayer
     }()
     
+    let screenContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     lazy var videoContainer: UIView = {
         let view = UIView()
+        view.backgroundColor = .clear
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let loadingView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        view.startAnimating()
+        view.backgroundColor = .black
+        view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     func setupViews() {
         view.addSubview(backgroundView)
+        view.addSubview(titleLabel)
+        view.addSubview(artistLabel)
         view.addSubview(playButton)
         view.addSubview(pauseButton)
+        view.addSubview(rewindButton)
+        view.addSubview(forwardButton)
+        view.addSubview(screenContainer)
         
         videoContainer.layer.addSublayer(youtubePlayerFrame)
-        
-        
-        view.addSubview(videoContainer)
-        //        addChildViewController(youtubeController)
-        //        view.addSubview(youtubeController.view)
+        screenContainer.addSubview(videoContainer)
+        //screenContainer.addSubview(loadingView)
         
         NSLayoutConstraint.activate([
             backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -96,38 +183,101 @@ class MusicDetailsController: UIViewController {
             backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            pauseButton.heightAnchor.constraint(equalToConstant: 50),
-            pauseButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pauseButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            pauseButton.bottomAnchor.constraint(equalTo: playButton.topAnchor),
+            screenContainer.heightAnchor.constraint(equalToConstant: 200),
+            screenContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            screenContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            screenContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            playButton.heightAnchor.constraint(equalToConstant: 50),
-            playButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            playButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            playButton.bottomAnchor.constraint(equalTo: videoContainer.topAnchor),
+            videoContainer.topAnchor.constraint(equalTo: screenContainer.topAnchor),
+            videoContainer.leadingAnchor.constraint(equalTo: screenContainer.leadingAnchor),
+            videoContainer.trailingAnchor.constraint(equalTo: screenContainer.trailingAnchor),
+            videoContainer.bottomAnchor.constraint(equalTo: screenContainer.bottomAnchor),
             
-            videoContainer.heightAnchor.constraint(equalToConstant: 200),
-            videoContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            videoContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            videoContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            //            loadingView.topAnchor.constraint(equalTo: screenContainer.topAnchor),
+            //            loadingView.leadingAnchor.constraint(equalTo: screenContainer.leadingAnchor),
+            //            loadingView.trailingAnchor.constraint(equalTo: screenContainer.trailingAnchor),
+            //            loadingView.bottomAnchor.constraint(equalTo: screenContainer.bottomAnchor),
+            
+            titleLabel.topAnchor.constraint(equalTo: screenContainer.bottomAnchor, constant: 30),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            titleLabel.heightAnchor.constraint(equalToConstant: 35),
+            
+            artistLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0),
+            artistLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            artistLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            artistLabel.heightAnchor.constraint(equalToConstant: 25),
+            
+            rewindButton.heightAnchor.constraint(equalToConstant: 40),
+            rewindButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
+            rewindButton.widthAnchor.constraint(equalToConstant: 60),
+            rewindButton.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 27),
+            
+            pauseButton.heightAnchor.constraint(equalToConstant: 60),
+            pauseButton.leadingAnchor.constraint(equalTo: rewindButton.trailingAnchor),
+            pauseButton.trailingAnchor.constraint(equalTo: forwardButton.leadingAnchor),
+            pauseButton.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 17.5),
+
+            playButton.heightAnchor.constraint(equalToConstant: 55),
+            playButton.leadingAnchor.constraint(equalTo: rewindButton.trailingAnchor),
+            playButton.trailingAnchor.constraint(equalTo: forwardButton.leadingAnchor),
+            playButton.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 17.5),
+            
+            forwardButton.heightAnchor.constraint(equalToConstant: 40),
+            forwardButton.widthAnchor.constraint(equalToConstant: 60),
+            forwardButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
+            forwardButton.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 27),
             ])
         
-        playButton.addTarget(self, action: #selector(playButtonTap), for: .touchUpInside)
-        pauseButton.addTarget(self, action: #selector(pauseButtonTap), for: .touchUpInside)
+        avp.addObserver(self, forKeyPath: "rate", options: .new, context: nil)
+        
+        setPlayBarButton()
+        
+        playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
+        pauseButton.addTarget(self, action: #selector(pause), for: .touchUpInside)
+    }
+    
+    func showLoading() {
+        loadingView.startAnimating()
+        loadingView.isHidden = false
+    }
+    
+    func hideLoading() {
+        loadingView.isHidden = true
+        loadingView.stopAnimating()
     }
     
     func updateVideo(videoURLString: String) {
-        let trimmedURL = videoURLString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        let url = URL(string: trimmedURL)
+        let url = URL(string: videoURLString)
         avp.replaceCurrentItem(with: AVPlayerItem(url: url!))
     }
     
-    @objc func playButtonTap() {
-        self.avp.play()
+    func setPlayBarButton() {
+        let playBarButton = UIBarButtonItem(image: UIImage(named: "play-mini"), style: .plain, target: self, action: #selector(play))
+        playBarButton.tintColor = .white
+        
+        popupItem.leftBarButtonItems = [playBarButton]
     }
     
-    @objc func pauseButtonTap() {
+    func setPauseBarButton() {
+        let pauseBarButton = UIBarButtonItem(image: UIImage(named: "pause-mini"), style: .plain, target: self, action: #selector(pause))
+        pauseBarButton.tintColor = .white
+        
+        popupItem.leftBarButtonItems = [pauseBarButton]
+    }
+    
+    @objc func play() {
+        self.avp.play()
+        setPauseBarButton()
+        playButton.isHidden = true
+        pauseButton.isHidden = false
+    }
+    
+    @objc func pause() {
         self.avp.pause()
+        setPlayBarButton()
+        playButton.isHidden = false
+        pauseButton.isHidden = true
     }
     
 }

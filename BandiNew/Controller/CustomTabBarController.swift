@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AVFoundation
+import LNPopupController
 
 class CustomTabBarController: UITabBarController {
     
@@ -42,13 +44,29 @@ class CustomTabBarController: UITabBarController {
         selectedIndex = 0
         
         setupViews()
+        setupPopupStyle()
     }
+    
+    lazy var musicDetailsController: MusicDetailsController = {
+        let yp = MusicDetailsController()
+        return yp
+    }()
     
     func setupViews() {
         popupInteractionStyle = .drag
-        popupBar.inheritsVisualStyleFromDockingView = true
-        popupBar.barStyle = .default
-        popupContentView.popupCloseButtonStyle = .none
+        popupBar.barStyle = .custom
+        popupContentView.popupCloseButtonStyle = .chevron
+        popupBar.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1).withAlphaComponent(0.99)
+        popupBar.isTranslucent = false
+        popupBar.marqueeScrollEnabled = true
+        popupBar.progressViewStyle = .default
+        popupBar.tintColor = Constants.Colors().primaryColor
+    }
+    
+    func setupPopupStyle() {
+        LNPopupBar.appearance(whenContainedInInstancesOf: [UIViewController.self]).titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 17) as Any, .foregroundColor: Constants.Colors().textGray]
+        LNPopupBar.appearance(whenContainedInInstancesOf: [UIViewController.self]).subtitleTextAttributes = [.font: UIFont.italicSystemFont(ofSize: 13) as Any, .foregroundColor: UIColor.lightGray]
+        
     }
     
     func setTransparentTabBar(isSet: Bool) {

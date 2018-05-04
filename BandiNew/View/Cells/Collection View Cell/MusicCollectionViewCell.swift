@@ -36,8 +36,8 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
     let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
-        label.font = UIFont(name: "Avenir-Heavy", size: 15)
+        label.textColor = Constants.Colors().textGray
+        label.font = UIFont.boldSystemFont(ofSize: 16) //UIFont(name: "Avenir-Heavy", size: 15)
         return label
     }()
     
@@ -45,7 +45,7 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lightGray
-        label.font = UIFont(name: "Avenir-MediumOblique", size: 12)
+        label.font = UIFont.italicSystemFont(ofSize: 13) //UIFont(name: "Avenir-MediumOblique", size: 12)
         return label
     }()
     
@@ -55,6 +55,15 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
         panRecognizer?.delegate = self
         addGestureRecognizer(panRecognizer!)
+    }
+    
+    override func prepareForReuse() {
+        titleLabel.text = music?.title
+        artistLabel.text = music?.artist
+        let url = URL(string: music!.thumbnailURLString!)
+        if let thumbnailData = try? Data(contentsOf: url!) {
+            thumbnailImageView.image = UIImage(data: thumbnailData)
+        }
     }
     
     @objc func onPan() {

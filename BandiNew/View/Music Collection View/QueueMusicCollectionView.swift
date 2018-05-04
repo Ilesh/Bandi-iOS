@@ -70,6 +70,7 @@ class QueueMusicCollectionView: MusicCollectionView {
         let temp = musicArray[sourceIndexPath.row]
         musicArray[sourceIndexPath.row] = musicArray[destinationIndexPath.row]
         musicArray[destinationIndexPath.row] = temp
+        TEMPSessionData.queueMusic = musicArray
     }
     
     required init?(coder aDecoder: NSCoder) {

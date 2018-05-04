@@ -15,21 +15,16 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
         backgroundColor = Constants.Colors().primaryColor
     }
     
-    override var isSelected: Bool {
-        didSet {
-            if isSelected {
-                MusicFetcher.fetchYoutubeVideoUrl(address: APIKeys().serverAddress, videoID: (music?.youtubeVideoID)!, quality: "CHANGE THIS", handler: { (videoURL) in
-                    DispatchQueue.main.async {
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        let musicDetails = appDelegate.mainTabBarController.popupContent as! MusicDetailsController
-                        musicDetails.updateVideo(videoURLString: videoURL!)
-                    }
-                })
-            }
-        }
-    }
-    
     var addMusic: (() -> ())?
+    var musicTapped: (()->())?
+    
+    let interactionButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.clipsToBounds = true
+        button.backgroundColor = .clear
+        return button
+    }()
     
     let addButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -57,6 +52,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
         contentView.addSubview(thumbnailImageView)
         contentView.addSubview(artistLabel)
         contentView.addSubview(titleLabel)
+        contentView.addSubview(interactionButton)
         contentView.addSubview(addButton)
         
         insertSubview(addLabel, belowSubview: contentView)
@@ -65,28 +61,55 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
             thumbnailImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
             thumbnailImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
             thumbnailImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10),
-            thumbnailImageView.widthAnchor.constraint(equalToConstant: 80),
+            thumbnailImageView.widthAnchor.constraint(equalToConstant: 55),
             
             titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 15),
             titleLabel.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: -10),
             titleLabel.heightAnchor.constraint(equalToConstant: 25),
             
             artistLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            artistLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
+            artistLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 15),
             artistLabel.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: -10),
             artistLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -15),
             
+            interactionButton.topAnchor.constraint(equalTo: self.topAnchor),
+            interactionButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            interactionButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            interactionButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            
             addButton.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            addButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
+            addButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -15),
             addButton.widthAnchor.constraint(equalToConstant: 25),
             addButton.heightAnchor.constraint(equalToConstant: 25)
             ])
         
+        interactionButton.addTarget(self, action: #selector(cellTapped), for: .touchUpInside)
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         addButton.addTarget(self, action: #selector(addButtonTouchUp), for: .touchUpInside)
         addButton.addTarget(self, action: #selector(addButtonTouchUp), for: .touchUpOutside)
         addButton.addTarget(self, action: #selector(addButtonTouchDown), for: .touchDown)
+    }
+    
+    @objc func cellTapped() {
+        print("here")
+        self.musicTapped?()
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let tabBar = appDelegate.mainTabBarController
+        let musicDetails = tabBar.musicDetailsController
+        musicDetails.showLoading()
+        musicDetails.pause()
+        tabBar.presentPopupBar(withContentViewController: musicDetails, openPopup: true, animated: true, completion: nil)
+        MusicFetcher.fetchYoutubeVideoUrl(address: APIKeys().serverAddress, videoID: (music?.youtubeVideoID)!, quality: "CHANGE THIS", handler: { (videoURL) in
+            DispatchQueue.main.async {
+                if let trimmedURL = videoURL?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
+                    print(trimmedURL)
+                    musicDetails.playingMusic = self.music
+                    musicDetails.updateVideo(videoURLString: trimmedURL)
+                    musicDetails.play()
+                }
+            }
+        })
     }
     
     @objc func addButtonTapped() {

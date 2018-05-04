@@ -17,6 +17,8 @@ class MusicFetcher {
         let url = URL(string: urlString)
         var music: [Music] = []
         
+        // let userCredential = URLCredential(user: "user", password: "password", persistence: .permanent)
+        
         URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) -> Void in
             do {
                 if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] {

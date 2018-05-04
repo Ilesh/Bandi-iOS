@@ -17,6 +17,8 @@ class SearchMusicCollectionView: MusicCollectionView {
         register(SearchMusicCollectionViewCell.self, forCellWithReuseIdentifier: musicCellId)
     }
     
+    var handleMusicTapped: (()->())?
+    
     private let noResultsLabel: UILabel = {
         let label = UILabel()
         label.text = "No Results :("
@@ -50,6 +52,9 @@ class SearchMusicCollectionView: MusicCollectionView {
         }
         cell.swipeStarted = {
             self.handleSwipeStarted?()
+        }
+        cell.musicTapped = {
+            self.handleMusicTapped?()
         }
         return cell
     }

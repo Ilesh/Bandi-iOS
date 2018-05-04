@@ -24,7 +24,7 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
         return view
     }()
     
-    let removeButton: UIButton = {
+    let rearrangeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .clear
         if let image = UIImage(named: "handle-60")?.withRenderingMode(.alwaysTemplate) {
@@ -50,7 +50,7 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
         contentView.addSubview(thumbnailImageView)
         contentView.addSubview(artistLabel)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(removeButton)
+        contentView.addSubview(rearrangeButton)
         
         insertSubview(removelabel, belowSubview: contentView)
         
@@ -58,26 +58,26 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
             thumbnailImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
             thumbnailImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
             thumbnailImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10),
-            thumbnailImageView.widthAnchor.constraint(equalToConstant: 80),
+            thumbnailImageView.widthAnchor.constraint(equalToConstant: 50),
             
             titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
-            titleLabel.trailingAnchor.constraint(equalTo: removeButton.leadingAnchor, constant: -13),
+            titleLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 15),
+            titleLabel.trailingAnchor.constraint(equalTo: rearrangeButton.leadingAnchor, constant: -13),
             titleLabel.heightAnchor.constraint(equalToConstant: 25),
             
             artistLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            artistLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
-            artistLabel.trailingAnchor.constraint(equalTo: removeButton.leadingAnchor, constant: -13),
+            artistLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 15),
+            artistLabel.trailingAnchor.constraint(equalTo: rearrangeButton.leadingAnchor, constant: -13),
             artistLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -15),
             
-            removeButton.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            removeButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
-            removeButton.widthAnchor.constraint(equalToConstant: 22),
-            removeButton.heightAnchor.constraint(equalToConstant: 22)
+            rearrangeButton.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            rearrangeButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -15),
+            rearrangeButton.widthAnchor.constraint(equalToConstant: 22),
+            rearrangeButton.heightAnchor.constraint(equalToConstant: 22)
             ])
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(removeButtonLongGesture(_:)))
-        removeButton.addGestureRecognizer(longPressGesture)
+        rearrangeButton.addGestureRecognizer(longPressGesture)
     }
     
     @objc func removeButtonLongGesture(_ sender: UILongPressGestureRecognizer) {
@@ -88,9 +88,11 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
                         break
                     }
                     parentCollectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+                    self.backgroundColor = .clear
                     UIView.transition(with: self, duration: 0.2, options: .transitionCrossDissolve, animations: {
                         self.contentView.backgroundColor = #colorLiteral(red: 0.1882352941, green: 0.1882352941, blue: 0.1882352941, alpha: 1)
-                        self.removeButton.tintColor = Constants.Colors().secondaryColor
+                        self.contentView.alpha = 0.66
+                        self.rearrangeButton.tintColor = Constants.Colors().secondaryColor
                     })
                 case .changed:
                     let position = CGPoint(x: self.frame.width / 2, y: sender.location(in: parentCollectionView).y)
@@ -98,7 +100,10 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
                 case .ended:
                     UIView.transition(with: self, duration: 0.2, options: .transitionCrossDissolve, animations: {
                         self.contentView.backgroundColor = #colorLiteral(red: 0.1254901961, green: 0.1254901961, blue: 0.1254901961, alpha: 1)
-                        self.removeButton.tintColor = .lightGray
+                        self.contentView.alpha = 1
+                        self.rearrangeButton.tintColor = .lightGray
+                    }, completion: { completed in
+                        self.backgroundColor = Constants.Colors().secondaryColor
                     })
                     parentCollectionView.endInteractiveMovement()
                 default:

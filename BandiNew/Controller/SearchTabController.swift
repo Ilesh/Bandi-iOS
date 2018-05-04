@@ -8,7 +8,6 @@
 
 import UIKit
 import LNPopupController
-import RMYouTubeExtractor
 
 class SearchTabController: UIViewController, UISearchBarDelegate {
     
@@ -17,21 +16,6 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         
         title = "Search"
         setupViews()
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "test", style: .done, target: self, action: #selector(addTapped))
-    }
-    
-    lazy var musicDetailsController: MusicDetailsController = {
-        let yp = MusicDetailsController()
-
-        return yp
-    }()
-    
-    
-    @objc func addTapped() {
-        tabBarController?.presentPopupBar(withContentViewController: musicDetailsController, animated: true, completion: nil)
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -58,6 +42,9 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         }
         cv.handleSwipeStarted = {
             self.showSearchBar(show: false)
+        }
+        cv.handleMusicTapped = {
+            self.searchBar.searchBar.endEditing(true)
         }
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
