@@ -29,7 +29,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
     let addButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .clear
-        if let image = UIImage(named: "plus-52")?.withRenderingMode(.alwaysTemplate) {
+        if let image = UIImage(named: "plus-96")?.withRenderingMode(.alwaysTemplate) {
             button.setImage(image, for: .normal)
         }
         button.tintColor = Constants.Colors().primaryColor
@@ -49,7 +49,6 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
     override func setupViews() {
         super.setupViews()
         
-        contentView.addSubview(thumbnailImageView)
         contentView.addSubview(artistLabel)
         contentView.addSubview(titleLabel)
         contentView.addSubview(interactionButton)
@@ -58,11 +57,6 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
         insertSubview(addLabel, belowSubview: contentView)
         
         NSLayoutConstraint.activate([
-            thumbnailImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
-            thumbnailImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
-            thumbnailImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10),
-            thumbnailImageView.widthAnchor.constraint(equalToConstant: 55),
-            
             titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 15),
             titleLabel.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: -10),
@@ -103,7 +97,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
         MusicFetcher.fetchYoutubeVideoUrl(address: APIKeys().serverAddress, videoID: (music?.youtubeVideoID)!, quality: "CHANGE THIS", handler: { (videoURL) in
             DispatchQueue.main.async {
                 if let trimmedURL = videoURL?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
-                    print(trimmedURL)
+                    //print(trimmedURL)
                     musicDetails.playingMusic = self.music
                     musicDetails.updateVideo(videoURLString: trimmedURL)
                     musicDetails.play()
@@ -130,7 +124,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         if (panRecognizer?.state == .changed) {
             let p: CGPoint = panRecognizer!.translation(in: self)
             let width = self.contentView.frame.width
@@ -147,7 +141,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
             }
         }
     }
-    
+
     @objc override func onPan() {
         guard let window = UIApplication.shared.keyWindow else {
             assert(false, "window missing")

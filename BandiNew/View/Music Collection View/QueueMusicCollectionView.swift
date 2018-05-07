@@ -68,9 +68,15 @@ class QueueMusicCollectionView: MusicCollectionView {
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let temp = musicArray[sourceIndexPath.row]
-        musicArray[sourceIndexPath.row] = musicArray[destinationIndexPath.row]
-        musicArray[destinationIndexPath.row] = temp
+        musicArray.remove(at: sourceIndexPath.row)
+        musicArray.insert(temp, at: destinationIndexPath.row)
         TEMPSessionData.queueMusic = musicArray
+        
+        UIView.performWithoutAnimation {
+            performBatchUpdates({
+                reloadData()
+            }, completion: nil)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

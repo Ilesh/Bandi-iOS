@@ -34,9 +34,8 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         return sb
     }()
     
-    lazy var musicCollectionView: SearchMusicCollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let cv = SearchMusicCollectionView(frame: view.frame, collectionViewLayout: layout)
+    lazy var musicTableView: SearchMusicTableView = {
+        let cv = SearchMusicTableView(frame: .zero)
         cv.handleScroll = { (isUp) -> () in
             self.showSearchBar(show: !isUp)
         }
@@ -52,7 +51,7 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
     
     func setupViews() {
         view.addSubview(searchBar)
-        view.addSubview(musicCollectionView)
+        view.addSubview(musicTableView)
         
         searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 50)
         searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 0)
@@ -63,19 +62,19 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: 50),
             
-            musicCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-            musicCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            musicCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            musicCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            musicTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            musicTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            musicTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            musicTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         
     }
     
     func setCollectionBackground() {
-        if self.musicCollectionView.musicArray.count == 0 {
-            self.musicCollectionView.showNoResults()
+        if self.musicTableView.musicArray.count == 0 {
+            self.musicTableView.showNoResults()
         } else {
-            self.musicCollectionView.backgroundView = nil
+            self.musicTableView.backgroundView = nil
         }
     }
     
@@ -94,13 +93,13 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         if let text = searchBar.searchBar.text, !text.isEmpty {
             MusicFetcher.fetchYoutube(apiKey: APIKeys.init().youtubeKey, keywords: text) { (youtubeVideos) -> Void in
                 DispatchQueue.main.async {
-                    self.musicCollectionView.showLoading()
+                    self.musicTableView.showLoading()
                 }
                 if let youtubeVideos = youtubeVideos {
                     DispatchQueue.main.async {
-                        self.musicCollectionView.musicArray = youtubeVideos
+                        self.musicTableView.musicArray = youtubeVideos
                         DispatchQueue.main.async {
-                            self.musicCollectionView.reloadData()
+                            self.musicTableView.reloadData()
                             dispatchGroup.leave()
                         }
                     }

@@ -42,6 +42,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(error)
         }
         
+        // Used to prevent white background when removing tableviewcell
+        UITableViewCell.appearance().backgroundColor = .clear
+        
         return true
     }
 

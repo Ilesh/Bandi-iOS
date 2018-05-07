@@ -27,9 +27,7 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
     let rearrangeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .clear
-        if let image = UIImage(named: "handle-60")?.withRenderingMode(.alwaysTemplate) {
-            button.setImage(image, for: .normal)
-        }
+        button.setImage(UIImage(named: "handle-96")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = .lightGray
         button.adjustsImageWhenHighlighted = false
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -55,25 +53,20 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
         insertSubview(removelabel, belowSubview: contentView)
         
         NSLayoutConstraint.activate([
-            thumbnailImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
-            thumbnailImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
-            thumbnailImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10),
-            thumbnailImageView.widthAnchor.constraint(equalToConstant: 50),
-            
             titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 15),
-            titleLabel.trailingAnchor.constraint(equalTo: rearrangeButton.leadingAnchor, constant: -13),
+            titleLabel.trailingAnchor.constraint(equalTo: rearrangeButton.leadingAnchor, constant: -10),
             titleLabel.heightAnchor.constraint(equalToConstant: 25),
             
             artistLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             artistLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 15),
-            artistLabel.trailingAnchor.constraint(equalTo: rearrangeButton.leadingAnchor, constant: -13),
+            artistLabel.trailingAnchor.constraint(equalTo: rearrangeButton.leadingAnchor, constant: -10),
             artistLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -15),
             
             rearrangeButton.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
             rearrangeButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -15),
-            rearrangeButton.widthAnchor.constraint(equalToConstant: 22),
-            rearrangeButton.heightAnchor.constraint(equalToConstant: 22)
+            rearrangeButton.widthAnchor.constraint(equalToConstant: 25),
+            rearrangeButton.heightAnchor.constraint(equalToConstant: 25)
             ])
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(removeButtonLongGesture(_:)))

@@ -1,22 +1,29 @@
 //
-//  VideosCollectionView.swift
+//  MusicTableView.swift
 //  BandiNew
 //
-//  Created by Siddha Tiwari on 4/28/18.
+//  Created by Siddha Tiwari on 5/5/18.
 //  Copyright © 2018 Siddha Tiwari. All rights reserved.
 //
 
 import UIKit
 
-class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
+    override init(frame: CGRect, style: UITableViewStyle) {
+        super.init(frame: frame, style: style)
         
-        backgroundColor = UIColor.black.withAlphaComponent(0.90)
+//        estimatedRowHeight = 0
+//        estimatedSectionFooterHeight = 0
+//        estimatedSectionHeaderHeight = 0
+        
+        backgroundColor = UIColor.black.withAlphaComponent(0.9)
+        separatorInset = UIEdgeInsets(top: 0, left: 80, bottom: 0, right: 0)
+        separatorColor = .black
         alwaysBounceVertical = true
         delegate = self
         dataSource = self
+        allowsSelection = false
         setupViews()
     }
     
@@ -72,25 +79,18 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
         handleScroll?(translation.y > 0)
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return musicArray.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = dequeueReusableCell(withReuseIdentifier: musicCellId, for: indexPath) as! MusicCollectionViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = dequeueReusableCell(withIdentifier: musicCellId, for: indexPath) as! MusicTableViewCell
         cell.music = musicArray[indexPath.row]
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let window = UIApplication.shared.keyWindow else {
-            assert(false, "window missing")
-        }
-        return CGSize(width: window.frame.width, height: 70)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0.5
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
     }
     
     required init?(coder aDecoder: NSCoder) {

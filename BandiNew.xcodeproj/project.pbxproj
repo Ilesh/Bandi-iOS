@@ -30,6 +30,7 @@
 		3C6039B920957AD20001E3A4 /* SearchMusicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039B820957AD20001E3A4 /* SearchMusicCollectionView.swift */; };
 		3C6039BB20957C4F0001E3A4 /* TEMPSessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039BA20957C4F0001E3A4 /* TEMPSessionData.swift */; };
 		3C6039BD20957CAF0001E3A4 /* QueueMusicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6039BC20957CAF0001E3A4 /* QueueMusicCollectionView.swift */; };
+		3C8143D3209ED0DA0086C1DA /* TrackSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143D2209ED0DA0086C1DA /* TrackSlider.swift */; };
 		3C99F6E52099AAE400DFA6AE /* PullUpTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C99F6E42099AAE400DFA6AE /* PullUpTabBarView.swift */; };
 		3C99F6F0209B8BD600DFA6AE /* MusicDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */; };
 		3CE21DF82095AECD0019CA13 /* GradientAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21DF72095AECD0019CA13 /* GradientAnimation.swift */; };
@@ -42,6 +43,18 @@
 		3CE21E08209699780019CA13 /* PlatformPickerPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21E07209699780019CA13 /* PlatformPickerPopupView.swift */; };
 		3CEFAE2220970AF000F42C5B /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEFAE2120970AF000F42C5B /* CustomNavigationController.swift */; };
 		3CEFAEA02099660700F42C5B /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CEFAE98209961E000F42C5B /* LNPopupController.framework */; };
+		3CFA8C6D209D3BE300EB7B04 /* MarqueeLabelSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CFA8C6C209D3BE200EB7B04 /* MarqueeLabelSwift.framework */; };
+		3CFA8C6E209D3BF600EB7B04 /* MarqueeLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CFA8C67209D3BD200EB7B04 /* MarqueeLabel.framework */; };
+		3CFA8C70209D5D8400EB7B04 /* VolumeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8C6F209D5D8400EB7B04 /* VolumeSlider.swift */; };
+		3CFA8C73209D6E2400EB7B04 /* MusicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8C72209D6E2400EB7B04 /* MusicTableViewCell.swift */; };
+		3CFA8C75209D6E3C00EB7B04 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8C74209D6E3C00EB7B04 /* BaseTableViewCell.swift */; };
+		3CFA8C77209D6EC200EB7B04 /* SearchMusicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8C76209D6EC200EB7B04 /* SearchMusicTableViewCell.swift */; };
+		3CFA8C79209D6F1000EB7B04 /* QueueMusicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8C78209D6F1000EB7B04 /* QueueMusicTableViewCell.swift */; };
+		3CFA8C7C209D6F6D00EB7B04 /* MusicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8C7B209D6F6D00EB7B04 /* MusicTableView.swift */; };
+		3CFA8C7E209D707F00EB7B04 /* SearchMusicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8C7D209D707F00EB7B04 /* SearchMusicTableView.swift */; };
+		3CFA8C80209D712100EB7B04 /* QueueMusicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8C7F209D712100EB7B04 /* QueueMusicTableView.swift */; };
+		3CFA8CBF209DA75B00EB7B04 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8CBE209DA75B00EB7B04 /* LibraryViewController.swift */; };
+		3CFA8CC1209DB19900EB7B04 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFA8CC0209DB19900EB7B04 /* Helpers.swift */; };
 		D51C35FFD254772DB8884A33 /* Pods_BandiNew.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FCD3984B99920FF44AD8632 /* Pods_BandiNew.framework */; };
 /* End PBXBuildFile section */
 
@@ -113,6 +126,7 @@
 		3C6039B820957AD20001E3A4 /* SearchMusicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMusicCollectionView.swift; sourceTree = "<group>"; };
 		3C6039BA20957C4F0001E3A4 /* TEMPSessionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TEMPSessionData.swift; sourceTree = "<group>"; };
 		3C6039BC20957CAF0001E3A4 /* QueueMusicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueMusicCollectionView.swift; sourceTree = "<group>"; };
+		3C8143D2209ED0DA0086C1DA /* TrackSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackSlider.swift; sourceTree = "<group>"; };
 		3C99F6E42099AAE400DFA6AE /* PullUpTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullUpTabBarView.swift; sourceTree = "<group>"; };
 		3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicDetailsController.swift; sourceTree = "<group>"; };
 		3CE21DF72095AECD0019CA13 /* GradientAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientAnimation.swift; sourceTree = "<group>"; };
@@ -223,6 +237,18 @@
 		3CEFAE93209961E000F42C5B /* UIViewController+LNPopupSupport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LNPopupSupport.m"; sourceTree = "<group>"; };
 		3CEFAE94209961E000F42C5B /* LNPopupCustomBarViewController+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LNPopupCustomBarViewController+Private.h"; sourceTree = "<group>"; };
 		3CEFAE95209961E000F42C5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3CFA8C67209D3BD200EB7B04 /* MarqueeLabel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MarqueeLabel.framework; path = Carthage/Build/iOS/MarqueeLabel.framework; sourceTree = "<group>"; };
+		3CFA8C6C209D3BE200EB7B04 /* MarqueeLabelSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MarqueeLabelSwift.framework; path = Carthage/Build/iOS/MarqueeLabelSwift.framework; sourceTree = "<group>"; };
+		3CFA8C6F209D5D8400EB7B04 /* VolumeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeSlider.swift; sourceTree = "<group>"; };
+		3CFA8C72209D6E2400EB7B04 /* MusicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicTableViewCell.swift; sourceTree = "<group>"; };
+		3CFA8C74209D6E3C00EB7B04 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		3CFA8C76209D6EC200EB7B04 /* SearchMusicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMusicTableViewCell.swift; sourceTree = "<group>"; };
+		3CFA8C78209D6F1000EB7B04 /* QueueMusicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueMusicTableViewCell.swift; sourceTree = "<group>"; };
+		3CFA8C7B209D6F6D00EB7B04 /* MusicTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicTableView.swift; sourceTree = "<group>"; };
+		3CFA8C7D209D707F00EB7B04 /* SearchMusicTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMusicTableView.swift; sourceTree = "<group>"; };
+		3CFA8C7F209D712100EB7B04 /* QueueMusicTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueMusicTableView.swift; sourceTree = "<group>"; };
+		3CFA8CBE209DA75B00EB7B04 /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
+		3CFA8CC0209DB19900EB7B04 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		46E6F759CE40E8D53074A07D /* Pods-BandiNew.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BandiNew.release.xcconfig"; path = "Pods/Target Support Files/Pods-BandiNew/Pods-BandiNew.release.xcconfig"; sourceTree = "<group>"; };
 		8FCD3984B99920FF44AD8632 /* Pods_BandiNew.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BandiNew.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCE3F844227391B0B43D390C /* Pods-BandiNew.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BandiNew.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BandiNew/Pods-BandiNew.debug.xcconfig"; sourceTree = "<group>"; };
@@ -235,6 +261,8 @@
 			files = (
 				3CEFAEA02099660700F42C5B /* LNPopupController.framework in Frameworks */,
 				D51C35FFD254772DB8884A33 /* Pods_BandiNew.framework in Frameworks */,
+				3CFA8C6E209D3BF600EB7B04 /* MarqueeLabel.framework in Frameworks */,
+				3CFA8C6D209D3BE300EB7B04 /* MarqueeLabelSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +350,7 @@
 				3C6039972095307F0001E3A4 /* LinkTabController.swift */,
 				3CEFAE2120970AF000F42C5B /* CustomNavigationController.swift */,
 				3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */,
+				3CFA8CBE209DA75B00EB7B04 /* LibraryViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -331,6 +360,7 @@
 			children = (
 				3C60399A209531EC0001E3A4 /* Constants.swift */,
 				3C6039A1209535310001E3A4 /* APIKeys.swift */,
+				3CFA8CC0209DB19900EB7B04 /* Helpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -343,9 +373,12 @@
 				3CE21E05209698610019CA13 /* PopupView.swift */,
 				3CE21E03209694970019CA13 /* PlatformPickerView.swift */,
 				3CE21E07209699780019CA13 /* PlatformPickerPopupView.swift */,
-				3CE21DF22095A7BF0019CA13 /* Search Bars */,
+				3CFA8C6F209D5D8400EB7B04 /* VolumeSlider.swift */,
+				3CFA8C7A209D6F5100EB7B04 /* Music Table View */,
 				3C6039B52095733E0001E3A4 /* Music Collection View */,
+				3CE21DF22095A7BF0019CA13 /* Search Bars */,
 				3C6039A6209539100001E3A4 /* Cells */,
+				3C8143D2209ED0DA0086C1DA /* TrackSlider.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -353,6 +386,7 @@
 		3C6039A6209539100001E3A4 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				3CFA8C71209D6DB000EB7B04 /* Table View Cell */,
 				3C6039A72095391A0001E3A4 /* Collection View Cell */,
 			);
 			path = Cells;
@@ -402,6 +436,8 @@
 		3CEFAE23209961DF00F42C5B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3CFA8C6C209D3BE200EB7B04 /* MarqueeLabelSwift.framework */,
+				3CFA8C67209D3BD200EB7B04 /* MarqueeLabel.framework */,
 				3CEFAE24209961DF00F42C5B /* LNPopupController */,
 				8FCD3984B99920FF44AD8632 /* Pods_BandiNew.framework */,
 			);
@@ -596,6 +632,27 @@
 			path = Private;
 			sourceTree = "<group>";
 		};
+		3CFA8C71209D6DB000EB7B04 /* Table View Cell */ = {
+			isa = PBXGroup;
+			children = (
+				3CFA8C72209D6E2400EB7B04 /* MusicTableViewCell.swift */,
+				3CFA8C74209D6E3C00EB7B04 /* BaseTableViewCell.swift */,
+				3CFA8C78209D6F1000EB7B04 /* QueueMusicTableViewCell.swift */,
+				3CFA8C76209D6EC200EB7B04 /* SearchMusicTableViewCell.swift */,
+			);
+			path = "Table View Cell";
+			sourceTree = "<group>";
+		};
+		3CFA8C7A209D6F5100EB7B04 /* Music Table View */ = {
+			isa = PBXGroup;
+			children = (
+				3CFA8C7B209D6F6D00EB7B04 /* MusicTableView.swift */,
+				3CFA8C7D209D707F00EB7B04 /* SearchMusicTableView.swift */,
+				3CFA8C7F209D712100EB7B04 /* QueueMusicTableView.swift */,
+			);
+			path = "Music Table View";
+			sourceTree = "<group>";
+		};
 		94E02632BE056699E878FC78 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -775,11 +832,13 @@
 /* Begin PBXShellScriptBuildPhase section */
 		3CEFAE9F2099629F00F42C5B /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/LNPopupController.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/MarqueeLabel.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/MarqueeLabelSwift.framework",
 			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/LNPopupController.framework",
@@ -815,27 +874,38 @@
 			files = (
 				3CE21E00209685510019CA13 /* DelayedSearchBar.swift in Sources */,
 				3C6039AB20953D720001E3A4 /* CustomSearchBar.swift in Sources */,
+				3CFA8CBF209DA75B00EB7B04 /* LibraryViewController.swift in Sources */,
+				3CFA8C7C209D6F6D00EB7B04 /* MusicTableView.swift in Sources */,
 				3C6039B2209543F50001E3A4 /* MusicFetcher.swift in Sources */,
 				3C99F6F0209B8BD600DFA6AE /* MusicDetailsController.swift in Sources */,
 				3C6039B4209545330001E3A4 /* Music.swift in Sources */,
 				3C6039942095305E0001E3A4 /* SearchTabController.swift in Sources */,
 				3C60396220952F3E0001E3A4 /* ViewController.swift in Sources */,
 				3C6039A0209534CA0001E3A4 /* MusicCollectionView.swift in Sources */,
+				3CFA8CC1209DB19900EB7B04 /* Helpers.swift in Sources */,
 				3CE21E022096858D0019CA13 /* PlatformSearchView.swift in Sources */,
 				3CE21E06209698610019CA13 /* PopupView.swift in Sources */,
 				3C99F6E52099AAE400DFA6AE /* PullUpTabBarView.swift in Sources */,
 				3CE21DFC209682E70019CA13 /* SearchMusicCollectionViewCell.swift in Sources */,
 				3CE21E04209694970019CA13 /* PlatformPickerView.swift in Sources */,
+				3CFA8C73209D6E2400EB7B04 /* MusicTableViewCell.swift in Sources */,
 				3C6039B0209543B70001E3A4 /* MusicCollectionViewCell.swift in Sources */,
 				3CEFAE2220970AF000F42C5B /* CustomNavigationController.swift in Sources */,
+				3CFA8C75209D6E3C00EB7B04 /* BaseTableViewCell.swift in Sources */,
+				3CFA8C80209D712100EB7B04 /* QueueMusicTableView.swift in Sources */,
 				3C60399220952FFC0001E3A4 /* CustomTabBarController.swift in Sources */,
 				3C6039BD20957CAF0001E3A4 /* QueueMusicCollectionView.swift in Sources */,
 				3CE21DFE209683120019CA13 /* QueueMusicCollectionViewCell.swift in Sources */,
 				3C6039B920957AD20001E3A4 /* SearchMusicCollectionView.swift in Sources */,
 				3C6039A9209539360001E3A4 /* BaseCollectionViewCell.swift in Sources */,
+				3CFA8C7E209D707F00EB7B04 /* SearchMusicTableView.swift in Sources */,
+				3CFA8C70209D5D8400EB7B04 /* VolumeSlider.swift in Sources */,
+				3C8143D3209ED0DA0086C1DA /* TrackSlider.swift in Sources */,
 				3C603996209530740001E3A4 /* QueueTabController.swift in Sources */,
+				3CFA8C77209D6EC200EB7B04 /* SearchMusicTableViewCell.swift in Sources */,
 				3C60396020952F3E0001E3A4 /* AppDelegate.swift in Sources */,
 				3C6039BB20957C4F0001E3A4 /* TEMPSessionData.swift in Sources */,
+				3CFA8C79209D6F1000EB7B04 /* QueueMusicTableViewCell.swift in Sources */,
 				3C6039A2209535310001E3A4 /* APIKeys.swift in Sources */,
 				3CE21DF82095AECD0019CA13 /* GradientAnimation.swift in Sources */,
 				3CE21E08209699780019CA13 /* PlatformPickerPopupView.swift in Sources */,
@@ -1025,8 +1095,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = BandiNew/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1041,8 +1118,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = BandiNew/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1058,7 +1142,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNewTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNewTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1075,7 +1163,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNewTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNewTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1091,7 +1183,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNewUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNewUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -1107,7 +1203,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q2W54465S4;
 				INFOPLIST_FILE = BandiNewUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.ufl.siddhatiwari.BandiNewUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

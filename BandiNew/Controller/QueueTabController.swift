@@ -22,7 +22,8 @@ class QueueTabController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.musicCollectionView.reloadData()
+        
+        self.musicTableView.reloadData()
         if TEMPSessionData.queueMusic.count == 0 && (searchBar.text?.isEmpty)! {
             searchBarShownHeight?.isActive = false
             searchBarHiddenHeight?.isActive = true
@@ -44,9 +45,8 @@ class QueueTabController: UIViewController {
         return sb
     }()
     
-    lazy var musicCollectionView: QueueMusicCollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let cv = QueueMusicCollectionView(frame: view.frame, collectionViewLayout: layout)
+    lazy var musicTableView: QueueMusicTableView = {
+        let cv = QueueMusicTableView(frame: .zero)
         cv.musicArray = TEMPSessionData.queueMusic
         cv.handleScroll = { (isUp) -> () in
             if TEMPSessionData.queueMusic.count != 0 {
@@ -59,13 +59,14 @@ class QueueTabController: UIViewController {
         cv.handleMusicRemoved = {
             self.setCollectionBackground()
         }
+        cv.isEditing = false
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
     
     func setupViews() {
         view.addSubview(searchBar)
-        view.addSubview(musicCollectionView)
+        view.addSubview(musicTableView)
         
         searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 50)
         searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 0)
@@ -76,23 +77,23 @@ class QueueTabController: UIViewController {
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: 50),
             
-            musicCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-            musicCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            musicCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            musicCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            musicTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            musicTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            musicTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            musicTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         
-        musicCollectionView.reloadData()
+        musicTableView.reloadData()
     }
     
     func setCollectionBackground() {
         if TEMPSessionData.queueMusic.count == 0 {
-            self.musicCollectionView.showNoQueue()
+            self.musicTableView.showNoQueue()
         } else {
-            if (searchBar.text?.isEmpty)! && self.musicCollectionView.musicArray.count == 0 {
-                self.musicCollectionView.showNoResults()
+            if (searchBar.text?.isEmpty)! && self.musicTableView.musicArray.count == 0 {
+                self.musicTableView.showNoResults()
             } else {
-                self.musicCollectionView.backgroundView = nil
+                self.musicTableView.backgroundView = nil
             }
         }
     }
@@ -108,14 +109,14 @@ class QueueTabController: UIViewController {
     
     func updateSearchResults() {
         if let text = searchBar.text, !text.isEmpty {
-            self.musicCollectionView.musicArray = TEMPSessionData.queueMusic.filter({ (music) -> Bool in
+            self.musicTableView.musicArray = TEMPSessionData.queueMusic.filter({ (music) -> Bool in
                 return (music.title?.lowercased().contains(text.lowercased()))!
             })
         } else {
-            self.musicCollectionView.musicArray = TEMPSessionData.queueMusic
+            self.musicTableView.musicArray = TEMPSessionData.queueMusic
         }
         setCollectionBackground()
-        self.musicCollectionView.reloadData()
+        self.musicTableView.reloadData()
     }
     
 }

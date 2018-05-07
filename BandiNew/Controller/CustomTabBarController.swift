@@ -16,7 +16,7 @@ class CustomTabBarController: UITabBarController {
         super.viewDidLoad()
         
         let searchTabController = CustomNavigationController(rootViewController: SearchTabController())
-        
+
         let queueTabController = CustomNavigationController(rootViewController: QueueTabController())
         
         let linkTabController = LinkTabController()

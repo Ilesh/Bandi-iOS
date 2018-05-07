@@ -21,29 +21,33 @@ class MusicFetcher {
         
         URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) -> Void in
             do {
-                if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] {
-                    //print(jsonResult)
-                    if let items = jsonResult["items"] as? [AnyObject]? {
-                        
-                        for item in items! {
+                if data != nil {
+                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] {
+                        //print(jsonResult)
+                        if let items = jsonResult["items"] as? [AnyObject]? {
                             
-                            let musicPiece = Music()
+                            for item in items! {
+                                
+                                let musicPiece = Music()
+                                
+                                let snippetDict = item["snippet"] as! Dictionary<String, Any>
+                                musicPiece.title = snippetDict["title"] as? String
+                                musicPiece.artist = snippetDict["channelTitle"] as? String
+                                let thumbnails = snippetDict["thumbnails"] as! Dictionary<String, Any>
+                                let defaultThumbnail = thumbnails["default"] as! Dictionary<String, Any> //120 x 90
+                                musicPiece.thumbnailURLString = defaultThumbnail["url"] as? String
+                                
+                                let idDict = item["id"] as! Dictionary<String, Any>
+                                musicPiece.youtubeVideoID = idDict["videoId"] as? String
+                                
+                                music.append(musicPiece)
+                            }
                             
-                            let snippetDict = item["snippet"] as! Dictionary<String, Any>
-                            musicPiece.title = snippetDict["title"] as? String
-                            musicPiece.artist = snippetDict["channelTitle"] as? String
-                            let thumbnails = snippetDict["thumbnails"] as! Dictionary<String, Any>
-                            let defaultThumbnail = thumbnails["default"] as! Dictionary<String, Any> //120 x 90
-                            musicPiece.thumbnailURLString = defaultThumbnail["url"] as? String
-                            
-                            let idDict = item["id"] as! Dictionary<String, Any>
-                            musicPiece.youtubeVideoID = idDict["videoId"] as? String
-                            
-                            music.append(musicPiece)
+                            handler(music)
                         }
-                        
-                        handler(music)
                     }
+                } else {
+                    print("no json data")
                 }
             }
             catch {

@@ -50,6 +50,15 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
     }()
     
     override func setupViews() {
+        contentView.addSubview(thumbnailImageView)
+
+        NSLayoutConstraint.activate([
+            thumbnailImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10),
+            thumbnailImageView.widthAnchor.constraint(equalToConstant: 55),
+            ])
+        
         contentView.backgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1)
         
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
