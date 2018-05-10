@@ -26,10 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.tintColor = Constants.Colors().primaryColor
+        window?.backgroundColor = Constants.Colors().darkTableCell
         
-        let gradient = GradientAnimation()
-        gradient.frame = (window?.frame)!
-        window?.layer.addSublayer(gradient)
+//        let gradient = GradientAnimation()
+//        gradient.frame = (window?.frame)!
+//        window?.layer.addSublayer(gradient)
         
         window?.rootViewController = mainTabBarController
         

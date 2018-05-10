@@ -7,24 +7,26 @@
 //
 
 import UIKit
+import LayoutKit
 
-class MusicTableViewCell: BaseTableViewCell {
+class MusicTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1)
+        backgroundColor = Constants.Colors().darkTableCell
+        setupViews()
     }
     
     var panRecognizer: UIPanGestureRecognizer?
     var swipeStarted: (()->())?
+    var thumbnailImage: UIImage?
     
     var music: Music? {
         didSet {
-            titleLabel.text = music?.title
-            artistLabel.text = music?.artist
-            let url = URL(string: music!.thumbnailURLString!)
-            if let thumbnailData = try? Data(contentsOf: url!) {
-                thumbnailImageView.image = UIImage(data: thumbnailData)
+            DispatchQueue.main.async {
+                self.titleLabel.text = self.music?.title
+                self.artistLabel.text = self.music?.artist
+                self.thumbnailImageView.image = self.music?.thumbnailImage
             }
         }
     }
@@ -50,7 +52,7 @@ class MusicTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = Constants.Colors().textGray
-        label.font = UIFont.boldSystemFont(ofSize: 16) //UIFont(name: "Avenir-Heavy", size: 15)
+        label.font = UIFont.systemFont(ofSize: 18)
         return label
     }()
     
@@ -58,34 +60,11 @@ class MusicTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lightGray
-        label.font = UIFont.italicSystemFont(ofSize: 13) //UIFont(name: "Avenir-MediumOblique", size: 12)
+        label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     
-//    override func prepareForReuse() {
-//        titleLabel.text = music?.title
-//        artistLabel.text = music?.artist
-//        let url = URL(string: music!.thumbnailURLString!)
-//        if let thumbnailData = try? Data(contentsOf: url!) {
-//            thumbnailImageView.image = UIImage(data: thumbnailData)
-//        }
-//    }
-    
-//    @objc func onPan() {
-//
-//    }
-    
-//    override func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return false
-//    }
-    
-//    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        let doesBegin = abs((panRecognizer!.velocity(in: panRecognizer!.view)).x) > abs((panRecognizer!.velocity(in: panRecognizer!.view)).y)
-//        if doesBegin {
-//            swipeStarted?()
-//        }
-//        return doesBegin
-//    }
+    func setupViews(){ }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

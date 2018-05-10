@@ -16,6 +16,8 @@ class QueueTabController: UIViewController {
         if let navBar = navigationController {
             navBar.navigationBar.prefersLargeTitles = false
         }
+    
+        navigationItem.rightBarButtonItem = self.editButtonItem
         
         title = "Queue"
         setupViews()
@@ -46,12 +48,22 @@ class QueueTabController: UIViewController {
     }()
     
     lazy var musicTableView: QueueMusicTableView = {
-        let cv = QueueMusicTableView(frame: .zero)
+        let cv = QueueMusicTableView(frame: .zero, style: UITableViewStyle.plain)
         cv.musicArray = TEMPSessionData.queueMusic
         cv.handleScroll = { (isUp) -> () in
             if TEMPSessionData.queueMusic.count != 0 {
                 self.showSearchBar(show: !isUp)
             }
+        }
+        cv.handleLinkTapped = {
+            //let activityVC = UIActivityViewController(title: nil, message: nil, preferredStyle: UIActivityIndicatorViewStyle.gray, blurStyle: .dark)
+            let activityVC = UIActivityViewController(activityItems: ["REPLACE THIS LINK"], applicationActivities: nil)
+            //activityVC.view.backgroundColor = Constants.Colors().darkTableCell
+            self.present(activityVC, animated: true, completion: nil)
+        }
+        cv.handleEditTapped = {
+            let alert = QueueEditAlertController(title: nil, message: nil, preferredStyle: .actionSheet) //QueueEditAlertController(title: nil, message: nil, preferredStyle: .actionSheet, blurStyle: .dark)
+            self.present(alert, animated: true, completion: nil)
         }
         cv.handleSwipeStarted = {
             self.showSearchBar(show: false)
@@ -59,31 +71,31 @@ class QueueTabController: UIViewController {
         cv.handleMusicRemoved = {
             self.setCollectionBackground()
         }
-        cv.isEditing = false
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
     
     func setupViews() {
-        view.addSubview(searchBar)
         view.addSubview(musicTableView)
         
         searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 50)
         searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 0)
 
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchBar.heightAnchor.constraint(equalToConstant: 50),
-            
-            musicTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            musicTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             musicTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             musicTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             musicTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
         
         musicTableView.reloadData()
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        // Reset to handle case where cell is swiped to be edited
+        musicTableView.setEditing(!editing, animated: false)
+        musicTableView.setEditing(editing, animated: animated)
     }
     
     func setCollectionBackground() {

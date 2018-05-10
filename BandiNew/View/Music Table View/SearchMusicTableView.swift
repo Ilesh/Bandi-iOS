@@ -42,17 +42,11 @@ class SearchMusicTableView: MusicTableView {
         backgroundView = loadingView
     }
     
-    override func cellForRow(at indexPath: IndexPath) -> UITableViewCell? {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueReusableCell(withIdentifier: musicCellId, for: indexPath) as! SearchMusicTableViewCell
         cell.music = musicArray[indexPath.row]
         cell.addMusic = {
             TEMPSessionData.queueMusic.append(cell.music!)
-        }
-        cell.swipeStarted = {
-            self.handleSwipeStarted?()
-        }
-        cell.musicTapped = {
-            self.handleMusicTapped?()
         }
         return cell
     }
@@ -66,12 +60,17 @@ class SearchMusicTableView: MusicTableView {
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let queue = UITableViewRowAction(style: .destructive, title: "QUEUE") { (action, indexPath) in
+        let queue = UITableViewRowAction(style: .destructive, title: "QUEUE", handler: { action, indexPath in
             TEMPSessionData.queueMusic.append(self.musicArray[indexPath.row])
-        }
-        queue.backgroundColor = Constants.Colors().primaryColor
+        })
+        queue.backgroundColor = Constants.Colors().secondaryColor
         
-        return [queue]
+        let save = UITableViewRowAction(style: .normal, title: "SAVE", handler: { action, indexPath in
+            
+        })
+        save.backgroundColor = Constants.Colors().primaryColor
+        
+        return [queue, save]
     }
 
     required init?(coder aDecoder: NSCoder) {

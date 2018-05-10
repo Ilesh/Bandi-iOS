@@ -13,17 +13,16 @@ class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame: frame, style: style)
         
-//        estimatedRowHeight = 0
-//        estimatedSectionFooterHeight = 0
-//        estimatedSectionHeaderHeight = 0
-        
-        backgroundColor = UIColor.black.withAlphaComponent(0.9)
-        separatorInset = UIEdgeInsets(top: 0, left: 80, bottom: 0, right: 0)
+        backgroundColor = Constants.Colors().darkTableCell
+        separatorInset = UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 0)
         separatorColor = .black
         alwaysBounceVertical = true
         delegate = self
         dataSource = self
         allowsSelection = false
+        
+        tableFooterView = UIView()
+        
         setupViews()
     }
     
@@ -85,12 +84,13 @@ class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueReusableCell(withIdentifier: musicCellId, for: indexPath) as! MusicTableViewCell
+        print("makingbad")
         cell.music = musicArray[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 60
     }
     
     required init?(coder aDecoder: NSCoder) {

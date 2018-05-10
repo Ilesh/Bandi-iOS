@@ -1,17 +1,18 @@
 //
-//  QueueMusicTableViewCell.swift
+//  UpNextTableViewCell.swift
 //  BandiNew
 //
-//  Created by Siddha Tiwari on 5/5/18.
+//  Created by Siddha Tiwari on 5/9/18.
 //  Copyright © 2018 Siddha Tiwari. All rights reserved.
 //
 
 import UIKit
 
-class QueueMusicTableViewCell: MusicTableViewCell {
+class UpNextTableViewCell: MusicTableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupViews()
     }
     
     override func setupViews() {

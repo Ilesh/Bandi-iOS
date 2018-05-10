@@ -9,10 +9,16 @@
 import UIKit
 import LNPopupController
 
-class SearchTabController: UIViewController, UISearchBarDelegate {
+class SearchTabController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let navBar = navigationController {
+            navBar.navigationBar.prefersLargeTitles = true
+        }
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.searchController = searchController
         
         title = "Search"
         setupViews()
@@ -22,75 +28,51 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
         return .lightContent
     }
     
-    var searchBarShownHeight: NSLayoutConstraint?
-    var searchBarHiddenHeight: NSLayoutConstraint?
-    
-    lazy var searchBar: PlatformSearchView = {
-        let sb = PlatformSearchView()
-        sb.handleDelayedSearchTextChanged = {
-            self.updateSearchResults()
-        }
-        sb.translatesAutoresizingMaskIntoConstraints = false
+    lazy var searchController: SearchController = {
+        let sb = SearchController(searchResultsController: nil)
+        sb.delegate = self
+        sb.searchBar.delegate = self
+        sb.searchBar.placeholder = "Search Youtube"
         return sb
     }()
     
-    lazy var musicTableView: SearchMusicTableView = {
+    let musicTableView: SearchMusicTableView = {
         let cv = SearchMusicTableView(frame: .zero)
-        cv.handleScroll = { (isUp) -> () in
-            self.showSearchBar(show: !isUp)
-        }
-        cv.handleSwipeStarted = {
-            self.showSearchBar(show: false)
-        }
         cv.handleMusicTapped = {
-            self.searchBar.searchBar.endEditing(true)
+            //self.searchController.searchBar.endEditing(true)
         }
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
     
     func setupViews() {
-        view.addSubview(searchBar)
         view.addSubview(musicTableView)
         
-        searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 50)
-        searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 0)
-        
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchBar.heightAnchor.constraint(equalToConstant: 50),
-            
-            musicTableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            musicTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             musicTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             musicTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             musicTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
-        
     }
     
-    func setCollectionBackground() {
-        if self.musicTableView.musicArray.count == 0 {
-            self.musicTableView.showNoResults()
-        } else {
-            self.musicTableView.backgroundView = nil
-        }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(updateSearchResults), object: nil)
+        self.perform(#selector(updateSearchResults), with: nil, afterDelay: 0.5)
     }
     
-    func showSearchBar(show: Bool) {
-        self.searchBar.endEditing(!show)
-        searchBarShownHeight?.isActive = show
-        searchBarHiddenHeight?.isActive = !show
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.layoutIfNeeded()
-        })
-    }
+//    func setCollectionBackground() {
+//        if self.musicTableView.musicArray.count == 0 {
+//            self.musicTableView.showNoResults()
+//        } else {
+//            self.musicTableView.backgroundView = nil
+//        }
+//    }
     
-    func updateSearchResults() {
+    @objc func updateSearchResults() {
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
-        if let text = searchBar.searchBar.text, !text.isEmpty {
+        if let text = searchController.searchBar.text, !text.isEmpty {
             MusicFetcher.fetchYoutube(apiKey: APIKeys.init().youtubeKey, keywords: text) { (youtubeVideos) -> Void in
                 DispatchQueue.main.async {
                     self.musicTableView.showLoading()
@@ -107,7 +89,7 @@ class SearchTabController: UIViewController, UISearchBarDelegate {
             }
         }
         dispatchGroup.notify(queue: .main) {
-            self.setCollectionBackground()
+            //self.setCollectionBackground()
         }
     }
     

@@ -12,9 +12,7 @@ class PopupView: NSObject {
     
     init(heightRatio: CGFloat, title: String) {
         super.init()
-        guard let window = UIApplication.shared.keyWindow else {
-            assert(false, "Window missing")
-        }
+        let window = UIApplication.shared.keyWindow!
         baseView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: (window.frame.height - UIApplication.shared.statusBarFrame.size.height) * heightRatio)
         headerTitle.text = title
         if heightRatio == 1 {
@@ -82,9 +80,7 @@ class PopupView: NSObject {
     
     func setupViews() {
         
-        guard let window = UIApplication.shared.keyWindow else {
-            assert(false, "Window missing")
-        }
+        let window = UIApplication.shared.keyWindow!
         
         window.addSubview(darkView)
         window.addSubview(baseView)
@@ -141,9 +137,7 @@ class PopupView: NSObject {
     }
     
     func showPopupMenu() {
-        guard let window = UIApplication.shared.keyWindow else {
-            assert(false, "window missing")
-        }
+        let window = UIApplication.shared.keyWindow!
         baseView.isHidden = false
         UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.darkView.alpha = 1
@@ -152,9 +146,7 @@ class PopupView: NSObject {
     }
     
     func dismissPopupMenu() {
-        guard let window = UIApplication.shared.keyWindow else {
-            assert(false, "window missing")
-        }
+        let window = UIApplication.shared.keyWindow!
         UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.darkView.alpha = 0
             self.baseView.frame.origin.y = window.frame.height
@@ -164,9 +156,7 @@ class PopupView: NSObject {
     }
     
     @objc func handlePanGesture(_ panGesture: UIPanGestureRecognizer) {
-        guard let window = UIApplication.shared.keyWindow else {
-            assert(false, "window missing")
-        }
+        let window = UIApplication.shared.keyWindow!
         let translation = panGesture.translation(in: baseView)
         panGesture.setTranslation(CGPoint.zero, in: baseView)
         let menuMinY = baseView.frame.minY

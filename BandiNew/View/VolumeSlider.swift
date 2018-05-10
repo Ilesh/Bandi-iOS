@@ -20,48 +20,31 @@ class VolumeSlider: UIView {
         let view = MPVolumeView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.tintColor = .darkGray
-        return view
-    }()
-    
-    let lowVolume: UIImageView = {
-        let image = UIImage(named: "lowvolume-96")?.withRenderingMode(.alwaysTemplate)
-        let view = UIImageView(image: image)
-        view.tintColor = .darkGray
-        view.contentMode = .scaleAspectFit
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    let highVolume: UIImageView = {
-        let image = UIImage(named: "highvolume-96")?.withRenderingMode(.alwaysTemplate)
-        let view = UIImageView(image: image)
-        view.tintColor = .darkGray
-        view.contentMode = .scaleAspectFit
-        view.translatesAutoresizingMaskIntoConstraints = false
+        if let volumeSliderView = view.subviews.first as? UISlider {
+            let imageSize = CGSize(width: 20, height: 20)
+            volumeSliderView.minimumValueImage = self.imageWithImage(image: #imageLiteral(resourceName: "lowvolume-96"), scaledToSize: imageSize).withRenderingMode(.alwaysTemplate)
+            volumeSliderView.maximumValueImage = self.imageWithImage(image: #imageLiteral(resourceName: "highvolume-96"), scaledToSize: imageSize).withRenderingMode(.alwaysTemplate)
+        }
         return view
     }()
     
     func setupViews() {
-        self.addSubview(volumeSlider)
-        self.addSubview(lowVolume)
-        self.addSubview(highVolume)
+        addSubview(volumeSlider)
         
         NSLayoutConstraint.activate([
-            lowVolume.heightAnchor.constraint(equalToConstant: 20),
-            lowVolume.widthAnchor.constraint(equalToConstant: 20),
-            lowVolume.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            lowVolume.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -1),
-            
-            volumeSlider.topAnchor.constraint(equalTo: self.topAnchor),
-            volumeSlider.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            volumeSlider.leadingAnchor.constraint(equalTo: lowVolume.trailingAnchor, constant: 2),
-            volumeSlider.trailingAnchor.constraint(equalTo: highVolume.leadingAnchor, constant: -10),
-            
-            highVolume.heightAnchor.constraint(equalToConstant: 20),
-            highVolume.widthAnchor.constraint(equalToConstant: 20),
-            highVolume.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            highVolume.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -1),
+            volumeSlider.heightAnchor.constraint(equalToConstant: 20),
+            volumeSlider.centerYAnchor.constraint(equalTo: centerYAnchor),
+            volumeSlider.leadingAnchor.constraint(equalTo: leadingAnchor),
+            volumeSlider.trailingAnchor.constraint(equalTo: trailingAnchor),
             ])
+    }
+    
+    func imageWithImage(image:UIImage, scaledToSize newSize:CGSize) -> UIImage{
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
+        image.draw(in: CGRect(origin: CGPoint.zero, size: CGSize(width: newSize.width, height: newSize.height)))
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -6,14 +6,14 @@
 //  Copyright © 2018 Siddha Tiwari. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class MusicFetcher {
     
     static func fetchYoutube(apiKey: String, keywords: String, handler: @escaping (_ music: [Music]?) -> Void) {
         
         let keywordsReplaced = keywords.replacingOccurrences(of: " ", with: "+")
-        let urlString = "https://www.googleapis.com/youtube/v3/search?q=\(keywordsReplaced)&part=snippet&type=video&relevanceLanguage=en&order=relevance&maxResults=8&key=\(apiKey)"
+        let urlString = "https://www.googleapis.com/youtube/v3/search?q=\(keywordsReplaced)&part=snippet&type=video&relevanceLanguage=en&order=relevance&maxResults=11&key=\(apiKey)"
         let url = URL(string: urlString)
         var music: [Music] = []
         
@@ -35,7 +35,10 @@ class MusicFetcher {
                                 musicPiece.artist = snippetDict["channelTitle"] as? String
                                 let thumbnails = snippetDict["thumbnails"] as! Dictionary<String, Any>
                                 let defaultThumbnail = thumbnails["default"] as! Dictionary<String, Any> //120 x 90
-                                musicPiece.thumbnailURLString = defaultThumbnail["url"] as? String
+                                let url = URL(string: (defaultThumbnail["url"] as? String)!)
+                                if let thumbnailData = try? Data(contentsOf: url!) {
+                                    musicPiece.thumbnailImage = UIImage(data: thumbnailData)
+                                }
                                 
                                 let idDict = item["id"] as! Dictionary<String, Any>
                                 musicPiece.youtubeVideoID = idDict["videoId"] as? String

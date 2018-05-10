@@ -23,10 +23,33 @@ class CustomNavigationController: UINavigationController {
     }
     
     override func viewDidLoad() {
-        navigationBar.barStyle = .blackTranslucent
-        navigationBar.backgroundColor = .clear
-        navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationBar.shadowImage = UIImage()
+        navigationBar.barStyle = .blackOpaque
+        navigationBar.tintColor = Constants.Colors().primaryColor
+        navigationBar.shouldRemoveShadow(true)
+        
+//        let bgimage = imageWithGradient(startColor: Constants.Colors().secondaryColor, endColor: Constants.Colors().themeBlue, size: CGSize(width: UIScreen.main.bounds.size.width, height: 1))
+//        navigationBar.barTintColor = UIColor(patternImage: bgimage!)
+
+    }
+    
+    func imageWithGradient(startColor:UIColor, endColor:UIColor, size:CGSize, horizontally:Bool = true) -> UIImage? {
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        gradientLayer.colors = [startColor.cgColor, endColor.cgColor]
+        if horizontally {
+            gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+            gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        } else {
+            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+        }
+        
+        UIGraphicsBeginImageContext(gradientLayer.bounds.size)
+        gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
     
     required init?(coder aDecoder: NSCoder) {

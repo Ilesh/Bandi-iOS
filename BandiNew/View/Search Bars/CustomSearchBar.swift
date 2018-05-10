@@ -19,8 +19,8 @@ class CustomSearchBar: UISearchBar, UISearchBarDelegate {
         tintColor = Constants.Colors().secondaryColor
         keyboardAppearance = .dark
         
-        let attributes = [NSAttributedStringKey.font : UIFont(name: "AvenirNext-Medium", size: 17) as Any]
-        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
+//        let attributes = [NSAttributedStringKey.font : UIFont(name: "AvenirNext-Medium", size: 17) as Any]
+//        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
         
         let textFieldInsideUISearchBar = value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.textColor = .white

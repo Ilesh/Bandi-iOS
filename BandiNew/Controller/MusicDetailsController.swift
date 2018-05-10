@@ -22,12 +22,13 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         popupItem.title = "sdfasdf"
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        print(1)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        print(2)
+    override func viewWillAppear(_ animated: Bool) {
+        upNextTableView.musicArray = TEMPSessionData.queueMusic
+        upNextTableView.reloadData()
+        let calculatedTableHeight = CGFloat(105 + upNextTableView.musicArray.count * 60)
+        print(calculatedTableHeight)
+        contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: view.bounds.height - contentTopInset - 105 + calculatedTableHeight)
+        mainScrollView.contentSize = contentView.frame.size
     }
     
     override func viewDidLayoutSubviews() {
@@ -46,10 +47,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             titleLabel.text = playingMusic?.title
             popupItem.subtitle = playingMusic?.artist
             artistLabel.text = playingMusic?.artist
-            let url = URL(string: (playingMusic?.thumbnailURLString)!)
-            if let thumbnailData = try? Data(contentsOf: url!) {
-                popupItem.image = UIImage(data: thumbnailData)
-            }
+            popupItem.image = playingMusic?.thumbnailImage
             popupItem.progress = 0.34
         }
     }
@@ -185,16 +183,63 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         return av
     }()
     
+    let upNextTableView: UpNextTableView = {
+        let tv = UpNextTableView(frame: .zero, style: .plain)
+        // TODO: UPDATE DATA
+        tv.musicArray = TEMPSessionData.queueMusic
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
+    }()
+    
+    let mainScrollView: UIScrollView = {
+        let view = UIScrollView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    var contentView = UIView(frame: .zero)
+    var contentTopInset = CGFloat(55)
+    
     func setupViews() {
+        
         view.addSubview(backgroundView)
-        view.addSubview(screenContainer)
-        view.addSubview(titleLabel)
-        view.addSubview(artistLabel)
-        view.addSubview(playButton)
-        view.addSubview(pauseButton)
-        view.addSubview(rewindButton)
-        view.addSubview(forwardButton)
-        view.addSubview(volumeSliderView)
+        
+        let musicDetailsSubview = UIView()
+        musicDetailsSubview.translatesAutoresizingMaskIntoConstraints = false
+        musicDetailsSubview.addSubview(titleLabel)
+        musicDetailsSubview.addSubview(artistLabel)
+        
+        let controlsSubview = UIView()
+        controlsSubview.translatesAutoresizingMaskIntoConstraints = false
+        controlsSubview.addSubview(playButton)
+        controlsSubview.addSubview(pauseButton)
+        controlsSubview.addSubview(rewindButton)
+        controlsSubview.addSubview(forwardButton)
+        
+        let mainDetailsStackView = UIStackView()
+        mainDetailsStackView.translatesAutoresizingMaskIntoConstraints = false
+        mainDetailsStackView.axis = .vertical
+        mainDetailsStackView.alignment = .center
+        mainDetailsStackView.distribution = .fillEqually
+        
+        mainDetailsStackView.addArrangedSubview(musicDetailsSubview)
+        mainDetailsStackView.addArrangedSubview(controlsSubview)
+        mainDetailsStackView.addArrangedSubview(volumeSliderView)
+        
+        mainScrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(mainScrollView)
+        if modelIdentifier().contains("iPhone10") {
+            contentTopInset = 100
+        }
+        
+        upNextTableView.musicArray = TEMPSessionData.queueMusic
+        upNextTableView.reloadData()
+        let calculatedTableHeight = CGFloat(105 + upNextTableView.musicArray.count * 60)
+        contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: view.bounds.height - contentTopInset - 105 + calculatedTableHeight)
+        mainScrollView.contentSize = contentView.frame.size
+        
+        mainScrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: contentTopInset).isActive = true
+        mainScrollView.addSubview(contentView)
         
         videoContainer.layer.addSublayer(youtubePlayerFrame)
         screenContainer.addSubview(videoContainer)
@@ -203,11 +248,9 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         screenContainer.addSubview(remainingTimeLabel)
         //screenContainer.addSubview(loadingView)
         
-        if modelIdentifier().contains("iPhone10") {
-            screenContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-        } else {
-            screenContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 55).isActive = true
-        }
+        contentView.addSubview(screenContainer)
+        contentView.addSubview(mainDetailsStackView)
+        contentView.addSubview(upNextTableView)
         
         NSLayoutConstraint.activate([
             backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -215,14 +258,19 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
+            mainScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mainScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            screenContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
             screenContainer.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.5625),
             screenContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             screenContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            trackSlider.heightAnchor.constraint(equalToConstant: 10),
+            trackSlider.heightAnchor.constraint(equalToConstant: 20),
             trackSlider.leadingAnchor.constraint(equalTo: screenContainer.leadingAnchor),
             trackSlider.trailingAnchor.constraint(equalTo: screenContainer.trailingAnchor),
-            trackSlider.bottomAnchor.constraint(equalTo: screenContainer.bottomAnchor, constant: -1),
+            trackSlider.bottomAnchor.constraint(equalTo: screenContainer.bottomAnchor, constant: 9),
             
             currentTimeLabel.leadingAnchor.constraint(equalTo: screenContainer.leadingAnchor, constant: 15),
             currentTimeLabel.trailingAnchor.constraint(equalTo: screenContainer.trailingAnchor, constant: -15),
@@ -239,45 +287,51 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             videoContainer.trailingAnchor.constraint(equalTo: screenContainer.trailingAnchor),
             videoContainer.bottomAnchor.constraint(equalTo: screenContainer.bottomAnchor),
             
+            mainDetailsStackView.topAnchor.constraint(equalTo: currentTimeLabel.bottomAnchor, constant: 10),
+            mainDetailsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            mainDetailsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            mainDetailsStackView.bottomAnchor.constraint(equalTo:  upNextTableView.topAnchor),
+            
+            titleLabel.bottomAnchor.constraint(equalTo: musicDetailsSubview.centerYAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: musicDetailsSubview.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: musicDetailsSubview.trailingAnchor),
+            
+            artistLabel.topAnchor.constraint(equalTo: musicDetailsSubview.centerYAnchor),
+            artistLabel.leadingAnchor.constraint(equalTo: musicDetailsSubview.leadingAnchor),
+            artistLabel.trailingAnchor.constraint(equalTo: musicDetailsSubview.trailingAnchor),
+            
             //            loadingView.topAnchor.constraint(equalTo: screenContainer.topAnchor),
             //            loadingView.leadingAnchor.constraint(equalTo: screenContainer.leadingAnchor),
             //            loadingView.trailingAnchor.constraint(equalTo: screenContainer.trailingAnchor),
             //            loadingView.bottomAnchor.constraint(equalTo: screenContainer.bottomAnchor),
             
-            titleLabel.topAnchor.constraint(equalTo: currentTimeLabel.bottomAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            titleLabel.heightAnchor.constraint(equalToConstant: 35),
-            
-            artistLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0),
-            artistLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            artistLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            artistLabel.heightAnchor.constraint(equalToConstant: 25),
-            
             rewindButton.heightAnchor.constraint(equalToConstant: 40),
-            rewindButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 70),
+            rewindButton.leadingAnchor.constraint(equalTo: controlsSubview.leadingAnchor, constant: 70),
             rewindButton.widthAnchor.constraint(equalToConstant: 60),
-            rewindButton.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 27),
-            
+            rewindButton.centerYAnchor.constraint(equalTo: controlsSubview.centerYAnchor),
+
             pauseButton.heightAnchor.constraint(equalToConstant: 60),
             pauseButton.leadingAnchor.constraint(equalTo: rewindButton.trailingAnchor),
             pauseButton.trailingAnchor.constraint(equalTo: forwardButton.leadingAnchor),
-            pauseButton.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 17.5),
+            pauseButton.centerYAnchor.constraint(equalTo: controlsSubview.centerYAnchor),
 
             playButton.heightAnchor.constraint(equalToConstant: 55),
             playButton.leadingAnchor.constraint(equalTo: rewindButton.trailingAnchor),
             playButton.trailingAnchor.constraint(equalTo: forwardButton.leadingAnchor),
-            playButton.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 17.5),
-            
+            playButton.centerYAnchor.constraint(equalTo: controlsSubview.centerYAnchor),
+
             forwardButton.heightAnchor.constraint(equalToConstant: 40),
             forwardButton.widthAnchor.constraint(equalToConstant: 60),
-            forwardButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70),
-            forwardButton.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 27),
+            forwardButton.trailingAnchor.constraint(equalTo: controlsSubview.trailingAnchor, constant: -70),
+            forwardButton.centerYAnchor.constraint(equalTo: controlsSubview.centerYAnchor),
+
+            volumeSliderView.leadingAnchor.constraint(equalTo: mainDetailsStackView.leadingAnchor, constant: 25),
+            volumeSliderView.trailingAnchor.constraint(equalTo: mainDetailsStackView.trailingAnchor, constant: -25),
             
-            volumeSliderView.heightAnchor.constraint(equalToConstant: 20),
-            volumeSliderView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
-            volumeSliderView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
-            volumeSliderView.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 20),
+            //upNextTableView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height - contentTopInset - UIApplication.shared.statusBarFrame.height + 105),
+            upNextTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            upNextTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            upNextTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             ])
         
         avp.addObserver(self, forKeyPath: "rate", options: .new, context: nil)

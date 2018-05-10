@@ -130,9 +130,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
             let width = self.contentView.frame.width
             let height = self.contentView.frame.height
             if p.x >= 0 {
-                guard let window = UIApplication.shared.keyWindow else {
-                    assert(false, "window missing")
-                }
+                let window = UIApplication.shared.keyWindow!
                 let marginSwiped = abs(p.x) / (window.frame.width * 0.33)
                 self.backgroundColor = Constants.Colors().primaryColor.withAlphaComponent(marginSwiped)
                 self.addLabel.textColor = UIColor.white.withAlphaComponent(marginSwiped)
@@ -143,9 +141,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
     }
 
     @objc override func onPan() {
-        guard let window = UIApplication.shared.keyWindow else {
-            assert(false, "window missing")
-        }
+        let window = UIApplication.shared.keyWindow!
         let p: CGPoint = panRecognizer!.translation(in: self)
         if panRecognizer?.state == .changed {
             self.setNeedsLayout()
@@ -157,7 +153,7 @@ class SearchMusicCollectionViewCell: MusicCollectionViewCell {
                     self.contentView.backgroundColor = Constants.Colors().primaryColor
                 }, completion: { completed in
                     UIView.transition(with: self, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                        self.contentView.backgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1)
+                        self.contentView.backgroundColor = Constants.Colors().darkTableCell
                     })
                 })
             }

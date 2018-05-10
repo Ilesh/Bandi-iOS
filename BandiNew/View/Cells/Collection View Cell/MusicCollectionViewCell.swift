@@ -17,10 +17,10 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
         didSet {
             titleLabel.text = music?.title
             artistLabel.text = music?.artist
-            let url = URL(string: music!.thumbnailURLString!)
-            if let thumbnailData = try? Data(contentsOf: url!) {
-                thumbnailImageView.image = UIImage(data: thumbnailData)
-            }
+//            let url = URL(string: music!.thumbnailURLString!)
+//            if let thumbnailData = try? Data(contentsOf: url!) {
+//                thumbnailImageView.image = UIImage(data: thumbnailData)
+//            }
         }
     }
     
@@ -59,7 +59,7 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
             thumbnailImageView.widthAnchor.constraint(equalToConstant: 55),
             ])
         
-        contentView.backgroundColor = UIColor(red: 0.125, green: 0.125, blue: 0.125, alpha: 1)
+        contentView.backgroundColor = Constants.Colors().darkTableCell
         
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
         panRecognizer?.delegate = self
@@ -69,10 +69,10 @@ class MusicCollectionViewCell: BaseCollectionViewCell, UIGestureRecognizerDelega
     override func prepareForReuse() {
         titleLabel.text = music?.title
         artistLabel.text = music?.artist
-        let url = URL(string: music!.thumbnailURLString!)
-        if let thumbnailData = try? Data(contentsOf: url!) {
-            thumbnailImageView.image = UIImage(data: thumbnailData)
-        }
+//        let url = URL(string: music!.thumbnailURLString!)
+//        if let thumbnailData = try? Data(contentsOf: url!) {
+//            thumbnailImageView.image = UIImage(data: thumbnailData)
+//        }
     }
     
     @objc func onPan() {

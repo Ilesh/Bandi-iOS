@@ -37,3 +37,96 @@ extension NSCoder {
         return NSKeyedUnarchiver(forReadingWith: data as Data)
     }
 }
+
+extension UINavigationBar {
+    func shouldRemoveShadow(_ value: Bool) -> Void {
+        if value {
+            self.setValue(true, forKey: "hidesShadow")
+        } else {
+            self.setValue(false, forKey: "hidesShadow")
+        }
+    }
+}
+
+extension UIView
+{
+    func searchVisualEffectsSubview() -> UIVisualEffectView?
+    {
+        if let visualEffectView = self as? UIVisualEffectView
+        {
+            return visualEffectView
+        }
+        else
+        {
+            for subview in subviews
+            {
+                if let found = subview.searchVisualEffectsSubview()
+                {
+                    return found
+                }
+            }
+        }
+        
+        return nil
+    }
+}
+
+extension UIAlertController {
+    
+    private struct AssociatedKeys {
+        static var blurStyleKey = "UIAlertController.blurStyleKey"
+    }
+    
+    public var blurStyle: UIBlurEffectStyle {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.blurStyleKey) as? UIBlurEffectStyle ?? .extraLight
+        } set (style) {
+            objc_setAssociatedObject(self, &AssociatedKeys.blurStyleKey, style, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+        }
+    }
+    
+    public var cancelButtonColor: UIColor? {
+        return blurStyle == .dark ? UIColor(red: 28.0/255.0, green: 28.0/255.0, blue: 28.0/255.0, alpha: 1) : nil
+    }
+    
+    private var visualEffectView: UIVisualEffectView? {
+        if let presentationController = presentationController, presentationController.responds(to: Selector(("popoverView"))), let view = presentationController.value(forKey: "popoverView") as? UIView
+        {
+            return view.recursiveSubviews.compactMap({$0 as? UIVisualEffectView}).first
+        }
+        
+        return view.recursiveSubviews.compactMap({$0 as? UIVisualEffectView}).first
+    }
+    private var cancelActionView: UIView? {
+        return view.recursiveSubviews.compactMap({
+            $0 as? UILabel}
+            ).first(where: {
+                $0.text == actions.first(where: { $0.style == .cancel })?.title
+            })?.superview?.superview
+    }
+    
+    public convenience init(title: String?, message: String?, preferredStyle: UIAlertControllerStyle, blurStyle: UIBlurEffectStyle) {
+        self.init(title: title, message: message, preferredStyle: preferredStyle)
+        self.blurStyle = blurStyle
+    }
+    
+    open override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        visualEffectView?.effect = UIBlurEffect(style: blurStyle)
+        cancelActionView?.backgroundColor = cancelButtonColor
+    }
+}
+
+extension UIView {
+    var recursiveSubviews: [UIView] {
+        var subviews = self.subviews.compactMap({$0})
+        subviews.forEach { subviews.append(contentsOf: $0.recursiveSubviews) }
+        return subviews
+    }
+}
+
+

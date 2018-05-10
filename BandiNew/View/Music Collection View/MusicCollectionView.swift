@@ -83,9 +83,7 @@ class MusicCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let window = UIApplication.shared.keyWindow else {
-            assert(false, "window missing")
-        }
+        let window = UIApplication.shared.keyWindow!
         return CGSize(width: window.frame.width, height: 70)
     }
     

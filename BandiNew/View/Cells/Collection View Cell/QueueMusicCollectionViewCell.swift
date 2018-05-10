@@ -114,9 +114,7 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
             let width = self.contentView.frame.width
             let height = self.contentView.frame.height
             if p.x <= 0 {
-                guard let window = UIApplication.shared.keyWindow else {
-                    assert(false, "window missing")
-                }
+                let window = UIApplication.shared.keyWindow!
                 let marginSwiped = abs(p.x) / (window.frame.width * 0.33)
                 self.backgroundColor = Constants.Colors().secondaryColor.withAlphaComponent(marginSwiped)
                 self.removelabel.textColor = UIColor.white.withAlphaComponent(marginSwiped)
@@ -127,9 +125,7 @@ class QueueMusicCollectionViewCell: MusicCollectionViewCell {
     }
     
     @objc override func onPan() {
-        guard let window = UIApplication.shared.keyWindow else {
-            assert(false, "window missing")
-        }
+        let window = UIApplication.shared.keyWindow!
         let p: CGPoint = panRecognizer!.translation(in: self)
         if panRecognizer?.state == .changed {
             self.setNeedsLayout()
