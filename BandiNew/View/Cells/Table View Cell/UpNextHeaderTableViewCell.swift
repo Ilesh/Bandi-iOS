@@ -15,6 +15,8 @@ class UpNextHeaderTableViewCell: UITableViewCell {
         setupViews()
     }
     
+    var scrollDownTapped: (()->())?
+    
     let upNextLabel: UILabel = {
         let label = UILabel()
         label.text = "Up Next"
@@ -22,6 +24,15 @@ class UpNextHeaderTableViewCell: UITableViewCell {
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    let scrollDownButton: UIButton = {
+        let button = UIButton()
+        button.setImage(#imageLiteral(resourceName: "downtriangle-100").withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = .white
+        button.imageView?.contentMode = .scaleAspectFit
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     let shuffleButton: PlaylistControlButton = {
@@ -40,12 +51,18 @@ class UpNextHeaderTableViewCell: UITableViewCell {
         contentView.backgroundColor = Constants.Colors().darkTableCell
         
         contentView.addSubview(upNextLabel)
+        contentView.addSubview(scrollDownButton)
         contentView.addSubview(shuffleButton)
         contentView.addSubview(repeatButton)
         
         NSLayoutConstraint.activate([
             upNextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             upNextLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            
+            scrollDownButton.heightAnchor.constraint(equalToConstant: 20),
+            scrollDownButton.widthAnchor.constraint(equalToConstant: 20),
+            scrollDownButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            scrollDownButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 7),
             
             shuffleButton.heightAnchor.constraint(equalToConstant: 50),
             shuffleButton.topAnchor.constraint(equalTo: upNextLabel.bottomAnchor, constant: 10),
@@ -57,6 +74,12 @@ class UpNextHeaderTableViewCell: UITableViewCell {
             repeatButton.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10),
             repeatButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             ])
+        
+        scrollDownButton.addTarget(self, action: #selector(scrollDownTap), for: .touchUpInside)
+    }
+    
+    @objc func scrollDownTap() {
+        scrollDownTapped?()
     }
     
     required init?(coder aDecoder: NSCoder) {

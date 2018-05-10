@@ -23,7 +23,7 @@ class MusicFetcher {
             do {
                 if data != nil {
                     if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] {
-                        //print(jsonResult)
+                        print(jsonResult)
                         if let items = jsonResult["items"] as? [AnyObject]? {
                             
                             for item in items! {

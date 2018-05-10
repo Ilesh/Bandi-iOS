@@ -25,9 +25,8 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         upNextTableView.musicArray = TEMPSessionData.queueMusic
         upNextTableView.reloadData()
-        let calculatedTableHeight = CGFloat(105 + upNextTableView.musicArray.count * 60)
-        print(calculatedTableHeight)
-        contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: view.bounds.height - contentTopInset - 105 + calculatedTableHeight)
+        let calculatedHeight = view.bounds.height - contentTopInset - 105 + CGFloat(upNextTableView.getCalculatedHeight())
+        contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: calculatedHeight)
         mainScrollView.contentSize = contentView.frame.size
     }
     
@@ -183,8 +182,11 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         return av
     }()
     
-    let upNextTableView: UpNextTableView = {
+    lazy var upNextTableView: UpNextTableView = {
         let tv = UpNextTableView(frame: .zero, style: .plain)
+        tv.handleScrollDownTapped = {
+            self.mainScrollView.scrollToView(view: tv, animated: true)
+        }
         // TODO: UPDATE DATA
         tv.musicArray = TEMPSessionData.queueMusic
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -231,12 +233,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         if modelIdentifier().contains("iPhone10") {
             contentTopInset = 100
         }
-        
-        upNextTableView.musicArray = TEMPSessionData.queueMusic
-        upNextTableView.reloadData()
-        let calculatedTableHeight = CGFloat(105 + upNextTableView.musicArray.count * 60)
-        contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: view.bounds.height - contentTopInset - 105 + calculatedTableHeight)
-        mainScrollView.contentSize = contentView.frame.size
         
         mainScrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: contentTopInset).isActive = true
         mainScrollView.addSubview(contentView)
@@ -445,9 +441,4 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         uname(&sysinfo) // ignore return value
         return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
     }
-    
-
-    
 }
-
-

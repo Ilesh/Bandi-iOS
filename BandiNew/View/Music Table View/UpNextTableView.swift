@@ -14,18 +14,19 @@ class UpNextTableView: MusicTableView {
         super.init(frame: frame, style: style)
         isEditing = true
         backgroundColor = Constants.Colors().darkTableCell
+        isScrollEnabled = false
         register(UpNextHeaderTableViewCell.self, forCellReuseIdentifier: upNextHeaderId)
         register(UpNextTableViewCell.self, forCellReuseIdentifier: upNextCellId)
         setupViews()
     }
     
+    var handleScrollDownTapped: (()->())?
     let upNextHeaderId = "upNextHeaderId"
     let upNextCellId = "upNextCellId"
     
     override var contentSize:CGSize {
         didSet {
-            self.invalidateIntrinsicContentSize()
-            
+            self.invalidateIntrinsicContentSize()   
         }
     }
     
@@ -36,6 +37,10 @@ class UpNextTableView: MusicTableView {
     
     override func setupViews() {
         super.setupViews()
+    }
+    
+    func getCalculatedHeight() -> Int {
+        return musicArray.count * 60 + 105
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -61,6 +66,9 @@ class UpNextTableView: MusicTableView {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = dequeueReusableCell(withIdentifier: upNextHeaderId) as! UpNextHeaderTableViewCell
+            cell.scrollDownTapped = {
+                self.handleScrollDownTapped?()
+            }
             return cell
         } else {
             let cell = dequeueReusableCell(withIdentifier: upNextCellId) as! UpNextTableViewCell
