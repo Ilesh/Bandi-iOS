@@ -69,6 +69,7 @@ class UpNextTableView: MusicTableView {
             cell.scrollDownTapped = {
                 self.handleScrollDownTapped?()
             }
+            cell.scrollDownButton.isHidden = musicArray.count == 0
             return cell
         } else {
             let cell = dequeueReusableCell(withIdentifier: upNextCellId) as! UpNextTableViewCell

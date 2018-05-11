@@ -21,14 +21,32 @@ class MusicTableViewCell: UITableViewCell {
     var swipeStarted: (()->())?
     var thumbnailImage: UIImage?
     
-    var music: Music? {
+    var music: Song? {
         didSet {
             DispatchQueue.main.async {
                 self.titleLabel.text = self.music?.title
                 self.artistLabel.text = self.music?.artist
-                self.thumbnailImageView.image = self.music?.thumbnailImage
+                if self.music?.liveBroadcastContent == "live" {
+                    print("LIVE VIDEO FOUND")
+                    self.durationLabel.text = "LIVE"
+                } else {
+                    self.durationLabel.text = self.music?.duration?.decodeYoutubeTime()
+                }
+                if self.music?.thumbnailImages == nil {
+                    DispatchQueue.main.async {
+                        self.music?.getThumbnails(completionHandler: { success in
+                            self.thumbnailImageView.image = self.music?.thumbnailImages!["small"]
+                        })
+                    }
+                } else {
+                    self.thumbnailImageView.image = self.music?.thumbnailImages!["small"]
+                }
             }
         }
+    }
+    
+    override func prepareForReuse() {
+        thumbnailImageView.image = UIImage()
     }
     
     let interactionButton: UIButton = {
@@ -42,6 +60,7 @@ class MusicTableViewCell: UITableViewCell {
     let thumbnailImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.backgroundColor = .black
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 5
@@ -61,6 +80,22 @@ class MusicTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lightGray
         label.font = UIFont.systemFont(ofSize: 13)
+        return label
+    }()
+    
+    let durationLabel: PaddingLabel = {
+        let label = PaddingLabel()
+        label.topInset = 2
+        label.bottomInset = 2
+        label.leftInset = 2
+        label.rightInset = 2
+        label.text = "3:42"
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textColor = .white
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.77)
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 3
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     

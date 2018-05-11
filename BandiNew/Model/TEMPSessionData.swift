@@ -10,6 +10,6 @@ import Foundation
 
 class TEMPSessionData {
     
-    static var queueMusic: [Music] = []
+    static var queueMusic: [Song] = []
     
 }

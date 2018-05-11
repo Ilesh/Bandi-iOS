@@ -32,6 +32,7 @@ class SearchMusicTableViewCell: MusicTableViewCell {
         contentView.backgroundColor = Constants.Colors().darkTableCell
         
         contentView.addSubview(thumbnailImageView)
+        thumbnailImageView.addSubview(durationLabel)
         contentView.addSubview(titleLabel)
         contentView.addSubview(artistLabel)
         contentView.addSubview(interactionButton)
@@ -42,6 +43,9 @@ class SearchMusicTableViewCell: MusicTableViewCell {
             thumbnailImageView.widthAnchor.constraint(equalToConstant: 60),
             thumbnailImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 15),
             thumbnailImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            
+            durationLabel.trailingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: -2),
+            durationLabel.bottomAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: -2),
             
             titleLabel.heightAnchor.constraint(equalToConstant: 25),
             titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
@@ -77,7 +81,8 @@ class SearchMusicTableViewCell: MusicTableViewCell {
         musicDetails.showLoading()
         musicDetails.pause()
         tabBar.presentPopupBar(withContentViewController: musicDetails, openPopup: true, animated: true, completion: nil)
-        MusicFetcher.fetchYoutubeVideoUrl(address: APIKeys().serverAddress, videoID: (music?.youtubeVideoID)!, quality: "CHANGE THIS", handler: { (videoURL) in
+        let videoId = music?.id!["id"] as! String
+        MusicFetcher.fetchYoutubeVideoUrl(videoID: videoId, quality: "CHANGE THIS", handler: { (videoURL) in
             DispatchQueue.main.async {
                 if let trimmedURL = videoURL?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
                     //print(trimmedURL)

@@ -27,7 +27,7 @@ class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     }
     
     let musicCellId = "musicCellId"
-    var musicArray: [Music] = []
+    var musicArray: [Song] = []
     var lastContentOffset: CGFloat = 0
     var lastTranslation: CGFloat = 0
     var scrolledUp = false

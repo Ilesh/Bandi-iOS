@@ -73,7 +73,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
         if let text = searchController.searchBar.text, !text.isEmpty {
-            MusicFetcher.fetchYoutube(apiKey: APIKeys.init().youtubeKey, keywords: text) { (youtubeVideos) -> Void in
+            MusicFetcher.fetchYoutube(keywords: text) { (youtubeVideos) -> Void in
                 DispatchQueue.main.async {
                     self.musicTableView.showLoading()
                 }

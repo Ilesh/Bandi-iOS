@@ -40,13 +40,13 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         return .lightContent
     }
     
-    var playingMusic: Music? {
+    var playingMusic: Song? {
         didSet {
             popupItem.title = playingMusic?.title
             titleLabel.text = playingMusic?.title
             popupItem.subtitle = playingMusic?.artist
             artistLabel.text = playingMusic?.artist
-            popupItem.image = playingMusic?.thumbnailImage
+            popupItem.image = playingMusic?.thumbnailImages!["small"]
             popupItem.progress = 0.34
         }
     }
@@ -195,6 +195,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     
     let mainScrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
+        view.alwaysBounceVertical = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

@@ -29,6 +29,32 @@ class PaddingLabel: UILabel {
     
 }
 
+extension String {
+    subscript(_ range: CountableRange<Int>) -> String {
+        let idx1 = index(startIndex, offsetBy: max(0, range.lowerBound))
+        let idx2 = index(startIndex, offsetBy: min(self.count, range.upperBound))
+        return String(self[idx1..<idx2])
+    }
+    
+    func decodeYoutubeTime() -> String {
+        let trimmedTime = self[2..<self.count]
+        var timeComponents = trimmedTime.components(separatedBy: CharacterSet(charactersIn: "DHMS"))
+        timeComponents.remove(at: timeComponents.count - 1)
+        var time = ""
+        for i in 0..<timeComponents.count {
+            var component = timeComponents[i]
+            if i != 0 && component.count < 2 && i <= 2 {
+                component = "0\(component)"
+            }
+            time.append(component)
+            if i != timeComponents.count - 1 {
+                time.append(":")
+            }
+        }
+        return time
+    }
+}
+
 extension NSCoder {
     class func empty() -> NSCoder {
         let data = NSMutableData()
