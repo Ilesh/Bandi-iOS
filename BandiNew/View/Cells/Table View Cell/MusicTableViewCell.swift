@@ -33,7 +33,7 @@ class MusicTableViewCell: UITableViewCell {
             }
             let requestedImageType = "large"
             if self.music?.thumbnailImages[requestedImageType] == nil {
-                DispatchQueue.global(qos: .background).async {
+                DispatchQueue.global(qos: .userInitiated).async {
                     self.music?.fetchThumbnail(requestedImageType: requestedImageType, completionHandler: { success in
                         if success {
                             DispatchQueue.main.async {

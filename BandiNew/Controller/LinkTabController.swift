@@ -15,14 +15,6 @@ class LinkTabController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = .clear
         setupViews()
-//        DispatchQueue.global(qos: .background).async {
-//            DispatchQueue.main.async {
-//                UIView.animate(withDuration: 3, delay: 0, options: [.repeat, .autoreverse, .allowUserInteraction], animations: {
-//                    self.containingView.frame.origin = CGPoint(x: self.containingView.frame.origin.x,
-//                                                               y: self.containingView.frame.origin.y - 50)
-//                })
-//            }
-//        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
