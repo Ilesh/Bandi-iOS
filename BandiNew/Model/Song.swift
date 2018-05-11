@@ -21,7 +21,7 @@ class Song: NSObject/*, NSCoding */{
     let duration: String?
     let thumbnails: Dictionary<String, Any>?
 
-    var thumbnailImages: Dictionary<String, UIImage>?
+    var thumbnailImages: Dictionary<String, UIImage> = [:]
     
     init(title: String, artist: String, album: String = "", parentId: String = "", dateAdded: String = "",
          id: Dictionary<String, Any>, liveBroadcastContent: String, duration: String, thumbnails: Dictionary<String, Any>) {
@@ -38,16 +38,23 @@ class Song: NSObject/*, NSCoding */{
     
     typealias CompletionHandler = (Bool) -> Void
     
-    func getThumbnails(completionHandler: CompletionHandler) {
+    func fetchThumbnail(requestedImageType: String, completionHandler: CompletionHandler) {
         do {
-            self.thumbnailImages = [
-                "small" : try UIImage(data: Data(contentsOf: URL(string: thumbnails!["small"] as! String)!)),
-                //"wide" : try UIImage(data: Data(contentsOf: URL(string: thumbnails!["wide"] as! String)!)),
-                //"large" : try UIImage(data: Data(contentsOf: URL(string: thumbnails!["large"] as! String)!)),
-                ] as? Dictionary<String, UIImage>
+            thumbnailImages[requestedImageType] = try UIImage(data: Data(contentsOf: URL(string: thumbnails![requestedImageType] as! String)!))
             completionHandler(true)
+            let imageTypes = ["small", "wide", "large"]
+            for imageType in imageTypes {
+                if imageType != requestedImageType {
+                    thumbnailImages[imageType] = try UIImage(data: Data(contentsOf: URL(string: thumbnails![imageType] as! String)!))
+                }
+            }
+            let songId = id!["id"]
+            if (MusicFetcher.songsCache.object(forKey: songId as! NSString) == nil) {
+                MusicFetcher.songsCache.setObject(self, forKey: songId as! NSString)
+            }
         } catch {
-            print("image failed")
+            print("thumbnail image fetching error")
+            completionHandler(false)
         }
     }
     

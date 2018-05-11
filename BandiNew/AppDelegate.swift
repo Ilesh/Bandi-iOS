@@ -15,7 +15,7 @@ import LNPopupController
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-
+    
     lazy var mainTabBarController: CustomTabBarController = {
         let tbc = CustomTabBarController()
         return tbc
@@ -27,10 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.tintColor = Constants.Colors().primaryColor
         window?.backgroundColor = Constants.Colors().darkTableCell
-        
-//        let gradient = GradientAnimation()
-//        gradient.frame = (window?.frame)!
-//        window?.layer.addSublayer(gradient)
         
         window?.rootViewController = mainTabBarController
         

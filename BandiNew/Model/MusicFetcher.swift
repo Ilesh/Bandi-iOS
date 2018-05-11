@@ -10,6 +10,8 @@ import UIKit
 
 class MusicFetcher {
     
+    static let songsCache = NSCache<NSString, Song>()
+    
     // First request IDs of videos then request snippet + contentDetails becuase contentDetails cant be requested with a search api request
     static func fetchYoutube(keywords: String, handler: @escaping (_ music: [Song]?) -> Void) {
         
@@ -81,6 +83,15 @@ class MusicFetcher {
                             //print(jsonResult)
                             if let items = jsonResult["items"] as? [AnyObject]? {
                                 for item in items! {
+                                    let id  = [
+                                        "type" : "youtube#video",
+                                        "id" : item["id"] as! String,
+                                        ]
+                                    if let cachedSong = songsCache.object(forKey: id["id"]! as NSString) {
+                                        songs.append(cachedSong)
+                                        continue
+                                    }
+                                    
                                     let snippet = item["snippet"] as! Dictionary<String, Any>
                                     let liveBroadcastContent = snippet["liveBroadcastContent"] as! String
                                     if liveBroadcastContent == "live" {
@@ -89,10 +100,6 @@ class MusicFetcher {
                                     let contentDetails = item["contentDetails"] as! Dictionary<String, Any>
                                     let thumbnails = snippet["thumbnails"] as! Dictionary<String, Any>
                                     
-                                    let id  = [
-                                        "type" : "youtube#video",
-                                        "id" : item["id"] as! String,
-                                        ]
                                     let title = snippet["title"] as! String
                                     let artist = snippet["channelTitle"] as! String
                                     let duration = contentDetails["duration"] as! String

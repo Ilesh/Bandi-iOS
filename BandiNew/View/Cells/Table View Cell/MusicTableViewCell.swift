@@ -23,24 +23,27 @@ class MusicTableViewCell: UITableViewCell {
     
     var music: Song? {
         didSet {
-            DispatchQueue.main.async {
-                self.titleLabel.text = self.music?.title
-                self.artistLabel.text = self.music?.artist
-                if self.music?.liveBroadcastContent == "live" {
-                    print("LIVE VIDEO FOUND")
-                    self.durationLabel.text = "LIVE"
-                } else {
-                    self.durationLabel.text = self.music?.duration?.decodeYoutubeTime()
+            self.titleLabel.text = self.music?.title
+            self.artistLabel.text = self.music?.artist
+            if self.music?.liveBroadcastContent == "live" {
+                print("LIVE VIDEO FOUND")
+                self.durationLabel.text = "LIVE"
+            } else {
+                self.durationLabel.text = self.music?.duration?.decodeYoutubeTime()
+            }
+            let requestedImageType = "large"
+            if self.music?.thumbnailImages[requestedImageType] == nil {
+                DispatchQueue.global(qos: .background).async {
+                    self.music?.fetchThumbnail(requestedImageType: requestedImageType, completionHandler: { success in
+                        if success {
+                            DispatchQueue.main.async {
+                                self.thumbnailImageView.image = self.music?.thumbnailImages[requestedImageType]
+                            }
+                        }
+                    })
                 }
-                if self.music?.thumbnailImages == nil {
-                    DispatchQueue.main.async {
-                        self.music?.getThumbnails(completionHandler: { success in
-                            self.thumbnailImageView.image = self.music?.thumbnailImages!["small"]
-                        })
-                    }
-                } else {
-                    self.thumbnailImageView.image = self.music?.thumbnailImages!["small"]
-                }
+            } else {
+                self.thumbnailImageView.image = self.music?.thumbnailImages[requestedImageType]
             }
         }
     }
@@ -59,11 +62,12 @@ class MusicTableViewCell: UITableViewCell {
     
     let thumbnailImageView: UIImageView = {
         let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
         iv.backgroundColor = .black
+        //iv.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleRightMargin, .flexibleLeftMargin, .flexibleTopMargin]
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 5
+        iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
     
