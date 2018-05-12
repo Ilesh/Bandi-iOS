@@ -13,7 +13,6 @@ class UpNextTableView: MusicTableView {
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame: frame, style: style)
         isEditing = true
-        backgroundColor = Constants.Colors().darkTableCell
         isScrollEnabled = false
         register(UpNextHeaderTableViewCell.self, forCellReuseIdentifier: upNextHeaderId)
         register(UpNextTableViewCell.self, forCellReuseIdentifier: upNextCellId)

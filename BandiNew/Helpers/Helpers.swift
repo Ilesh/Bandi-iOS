@@ -51,6 +51,9 @@ extension String {
                 time.append(":")
             }
         }
+        if timeComponents.count == 1 {
+            time = "0:\(time)"
+        }
         return time
     }
 }

@@ -18,7 +18,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         super.viewDidLoad()
         setupViews()
         
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.9)
+        view.backgroundColor = #colorLiteral(red: 0.0862745098, green: 0.0862745098, blue: 0.0862745098, alpha: 1)//UIColor.black.withAlphaComponent(0.9)
         popupItem.title = "sdfasdf"
     }
     
@@ -245,6 +245,15 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         screenContainer.addSubview(remainingTimeLabel)
         //screenContainer.addSubview(loadingView)
         
+        let bottomBackground = UIView()
+        bottomBackground.backgroundColor = Constants.Colors().darkTableCell
+        bottomBackground.translatesAutoresizingMaskIntoConstraints = false
+        mainScrollView.addSubview(bottomBackground)
+        
+        let topBackground = UIView()
+        topBackground.backgroundColor = #colorLiteral(red: 0.0862745098, green: 0.0862745098, blue: 0.0862745098, alpha: 1)
+        topBackground.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(topBackground)
         contentView.addSubview(screenContainer)
         contentView.addSubview(mainDetailsStackView)
         contentView.addSubview(upNextTableView)
@@ -258,6 +267,16 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             mainScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mainScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            bottomBackground.topAnchor.constraint(equalTo: mainScrollView.topAnchor),
+            bottomBackground.bottomAnchor.constraint(equalTo: mainScrollView.bottomAnchor),
+            bottomBackground.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor),
+            bottomBackground.trailingAnchor.constraint(equalTo: mainScrollView.trailingAnchor),
+            
+            topBackground.topAnchor.constraint(equalTo: contentView.topAnchor),
+            topBackground.bottomAnchor.constraint(equalTo: upNextTableView.topAnchor),
+            topBackground.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            topBackground.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
             screenContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
             screenContainer.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.5625),

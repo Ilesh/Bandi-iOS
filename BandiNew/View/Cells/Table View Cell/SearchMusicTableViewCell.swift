@@ -85,7 +85,6 @@ class SearchMusicTableViewCell: MusicTableViewCell {
         MusicFetcher.fetchYoutubeVideoUrl(videoID: videoId, quality: "CHANGE THIS", handler: { (videoURL) in
             DispatchQueue.main.async {
                 if let trimmedURL = videoURL?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
-                    //print(trimmedURL)
                     musicDetails.playingMusic = self.music
                     musicDetails.updateVideo(videoURLString: trimmedURL)
                     musicDetails.play()

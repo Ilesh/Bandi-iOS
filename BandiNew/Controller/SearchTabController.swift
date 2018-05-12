@@ -9,17 +9,19 @@
 import UIKit
 import LNPopupController
 
-class SearchTabController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
-    
+class SearchTabController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating {
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         if let navBar = navigationController {
             navBar.navigationBar.prefersLargeTitles = true
+            navBar.extendedLayoutIncludesOpaqueBars = true
         }
+        definesPresentationContext = true
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
         title = "Search"
@@ -34,19 +36,24 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         let sb = SearchController(searchResultsController: nil)
         sb.delegate = self
         sb.searchBar.delegate = self
+        sb.searchResultsUpdater = self
+        sb.obscuresBackgroundDuringPresentation = false
         sb.hidesNavigationBarDuringPresentation = true
         sb.searchBar.placeholder = "Search Youtube"
         sb.dimsBackgroundDuringPresentation = false
         return sb
     }()
     
-    let musicTableView: SearchMusicTableView = {
-        let cv = SearchMusicTableView(frame: .zero)
-        cv.handleMusicTapped = {
-            //self.searchController.searchBar.endEditing(true)
+    lazy var musicTableView: SearchMusicTableView = {
+        let tv = SearchMusicTableView(frame: .zero)
+        tv.handleMusicTapped = {
+            self.searchController.searchBar.endEditing(true)
         }
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        return cv
+        tv.handleScroll = { isUp in
+            self.searchController.searchBar.endEditing(true)
+        }
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
     }()
     
     lazy var suggestionsTableView: SearchSuggestionsTableView = {
@@ -77,15 +84,15 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
             ])
     }
     
+    func updateSearchResults(for searchController: UISearchController) {
+        updateSearchSuggestions()
+        suggestionsTableView.isHidden = false
+    }
+    
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             suggestionsTableView.contentInset.bottom = keyboardSize.height
         }
-    }
-    
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        updateSearchSuggestions()
-        suggestionsTableView.isHidden = false
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
@@ -98,22 +105,17 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         updateSearchResults()
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let searchBarText = self.searchController.searchBar.text!
-        if !searchBarText.isEmpty {
-            updateSearchSuggestions()
-        }
-    }
-    
     func updateSearchSuggestions() {
         let searchBarText = self.searchController.searchBar.text!
-        DispatchQueue.global(qos: .userInitiated).async {
-            MusicFetcher.fetchYoutubeAutocomplete(searchQuery: searchBarText, handler: { suggestions in
-                self.suggestionsTableView.suggestions = suggestions
-                DispatchQueue.main.async {
-                    self.suggestionsTableView.reloadData()
-                }
-            })
+        if !searchBarText.isEmpty {
+            DispatchQueue.global(qos: .userInitiated).async {
+                MusicFetcher.fetchYoutubeAutocomplete(searchQuery: searchBarText, handler: { suggestions in
+                    self.suggestionsTableView.suggestions = suggestions
+                    DispatchQueue.main.async {
+                        self.suggestionsTableView.reloadData()
+                    }
+                })
+            }
         }
     }
     

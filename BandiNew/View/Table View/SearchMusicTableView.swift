@@ -48,6 +48,9 @@ class SearchMusicTableView: MusicTableView {
         cell.addMusic = {
             TEMPSessionData.queueMusic.append(cell.music!)
         }
+        cell.musicTapped = {
+            self.handleMusicTapped?()
+        }
         return cell
     }
     

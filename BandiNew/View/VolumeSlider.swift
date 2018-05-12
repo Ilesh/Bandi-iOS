@@ -32,7 +32,7 @@ class VolumeSlider: UIView {
         addSubview(volumeSlider)
         
         NSLayoutConstraint.activate([
-            volumeSlider.heightAnchor.constraint(equalToConstant: 20),
+            volumeSlider.heightAnchor.constraint(equalToConstant: 30),
             volumeSlider.centerYAnchor.constraint(equalTo: centerYAnchor),
             volumeSlider.leadingAnchor.constraint(equalTo: leadingAnchor),
             volumeSlider.trailingAnchor.constraint(equalTo: trailingAnchor),
