@@ -15,7 +15,7 @@ class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
         
         backgroundColor = Constants.Colors().darkTableCell
         separatorInset = UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 0)
-        separatorColor = .black
+        separatorColor = Constants.Colors().darkTableSeparator
         alwaysBounceVertical = true
         delegate = self
         dataSource = self

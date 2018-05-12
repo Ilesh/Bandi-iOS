@@ -31,7 +31,7 @@ class MusicTableViewCell: UITableViewCell {
             } else {
                 self.durationLabel.text = self.music?.duration?.decodeYoutubeTime()
             }
-            let requestedImageType = "large"
+            let requestedImageType = "wide"
             if self.music?.thumbnailImages[requestedImageType] == nil {
                 DispatchQueue.global(qos: .userInitiated).async {
                     self.music?.fetchThumbnail(requestedImageType: requestedImageType, completionHandler: { success in
@@ -63,7 +63,6 @@ class MusicTableViewCell: UITableViewCell {
     let thumbnailImageView: UIImageView = {
         let iv = UIImageView()
         iv.backgroundColor = .black
-        //iv.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleRightMargin, .flexibleLeftMargin, .flexibleTopMargin]
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 5

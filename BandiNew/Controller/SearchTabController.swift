@@ -20,6 +20,8 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
         title = "Search"
         setupViews()
     }
@@ -32,7 +34,9 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         let sb = SearchController(searchResultsController: nil)
         sb.delegate = self
         sb.searchBar.delegate = self
+        sb.hidesNavigationBarDuringPresentation = true
         sb.searchBar.placeholder = "Search Youtube"
+        sb.dimsBackgroundDuringPresentation = false
         return sb
     }()
     
@@ -45,10 +49,27 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         return cv
     }()
     
+    lazy var suggestionsTableView: SearchSuggestionsTableView = {
+        let tv = SearchSuggestionsTableView(frame: .zero)
+        tv.suggestionSelected = { suggestion in
+            self.searchController.searchBar.text = suggestion
+            self.searchController.searchBar.endEditing(true)
+            self.updateSearchResults()
+        }
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
+    }()
+    
     func setupViews() {
         view.addSubview(musicTableView)
+        view.addSubview(suggestionsTableView)
         
         NSLayoutConstraint.activate([
+            suggestionsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            suggestionsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            suggestionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            suggestionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
             musicTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             musicTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             musicTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -56,9 +77,44 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
             ])
     }
     
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            suggestionsTableView.contentInset.bottom = keyboardSize.height
+        }
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        updateSearchSuggestions()
+        suggestionsTableView.isHidden = false
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        suggestionsTableView.isHidden = true
+        suggestionsTableView.suggestions.removeAll()
+        suggestionsTableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        updateSearchResults()
+    }
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(updateSearchResults), object: nil)
-        self.perform(#selector(updateSearchResults), with: nil, afterDelay: 0.5)
+        let searchBarText = self.searchController.searchBar.text!
+        if !searchBarText.isEmpty {
+            updateSearchSuggestions()
+        }
+    }
+    
+    func updateSearchSuggestions() {
+        let searchBarText = self.searchController.searchBar.text!
+        DispatchQueue.global(qos: .userInitiated).async {
+            MusicFetcher.fetchYoutubeAutocomplete(searchQuery: searchBarText, handler: { suggestions in
+                self.suggestionsTableView.suggestions = suggestions
+                DispatchQueue.main.async {
+                    self.suggestionsTableView.reloadData()
+                }
+            })
+        }
     }
     
 //    func setCollectionBackground() {
@@ -70,26 +126,25 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
 //    }
     
     @objc func updateSearchResults() {
-        let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
-        if let text = searchController.searchBar.text, !text.isEmpty {
-            MusicFetcher.fetchYoutube(keywords: text) { (youtubeVideos) -> Void in
-                DispatchQueue.main.async {
-                    self.musicTableView.showLoading()
-                }
+        let searchBarText = self.searchController.searchBar.text!
+        DispatchQueue.global(qos: .userInitiated).async {
+            let dispatchGroup = DispatchGroup()
+            dispatchGroup.enter()
+            MusicFetcher.fetchYoutube(keywords: searchBarText) { (youtubeVideos) -> Void in
+                //                    DispatchQueue.main.async {
+                //                        self.musicTableView.showLoading()
+                //                    }
                 if let youtubeVideos = youtubeVideos {
+                    self.musicTableView.musicArray = youtubeVideos
                     DispatchQueue.main.async {
-                        self.musicTableView.musicArray = youtubeVideos
-                        DispatchQueue.main.async {
-                            self.musicTableView.reloadData()
-                            dispatchGroup.leave()
-                        }
+                        self.musicTableView.reloadData()
+                        dispatchGroup.leave()
                     }
                 }
             }
-        }
-        dispatchGroup.notify(queue: .main) {
-            //self.setCollectionBackground()
+            dispatchGroup.notify(queue: .main) {
+                //self.setCollectionBackground()
+            }
         }
     }
     

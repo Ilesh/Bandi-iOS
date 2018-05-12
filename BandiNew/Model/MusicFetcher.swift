@@ -22,11 +22,6 @@ class MusicFetcher {
         var urlParameters: Dictionary<String, String>?
         var urlString: String?
         var url: URL?
-        func parametersToString(parameters: Dictionary<String, String>) -> String {
-            return (parameters.compactMap({ (key, value) -> String in
-                return "\(key)=\(value)"
-            }) as Array).joined(separator: "&")
-        }
         
         // Get list of video Ids
         
@@ -127,8 +122,11 @@ class MusicFetcher {
     }
     
     static func fetchYoutubeVideoUrl(videoID: String, quality: String, handler: @escaping (_ videoURL: String?) -> Void) {
-        let videoURL = "www.youtube.com/watch?v=\(videoID)"
-        let requestURL = URL(string: "\(APIKeys().serverAddress)/?url=\(videoURL)")
+        let urlParameters = [
+            "url" : "www.youtube.com/watch?v=\(videoID)",
+            ]
+        let requestString = "\(APIKeys().serverAddress)/?" + parametersToString(parameters: urlParameters)
+        let requestURL = URL(string: requestString)
         URLSession.shared.dataTask(with: requestURL!, completionHandler: { (data, response, error) -> Void in
             do {
                 if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] {
@@ -140,6 +138,39 @@ class MusicFetcher {
                 print("json error: \(error)")
             }
         }).resume()
+    }
+    
+    static func fetchYoutubeAutocomplete(searchQuery: String, handler: @escaping (_ suggestions: [String]) -> Void) {
+        let updatedSearch = searchQuery.replacingOccurrences(of: " ", with: "+")
+        let urlParameters = [
+            "client" : "firefox",
+            "ds" : "yt",
+            "q" : updatedSearch,
+            "hl" : "en",
+        ]
+        let requestString = "https://suggestqueries.google.com/complete/search?" + parametersToString(parameters: urlParameters)
+        let requestURL = URL(string: requestString)
+        URLSession.shared.downloadTask(with: requestURL!) { (data, response, error) in
+            do {
+                if data != nil {
+                    let text = try String(contentsOf: data!.absoluteURL, encoding: .utf8)
+                    let textData = text.data(using: .utf8)
+                    if let jsonResult = try JSONSerialization.jsonObject(with: textData!, options: .allowFragments) as? [Any]{
+                        let suggestions = jsonResult[1] as! [String]
+                        handler(suggestions)
+                    }
+                }
+            }
+            catch {
+                print("error: \(error)")
+            }
+        }.resume()
+    }
+    
+    static func parametersToString(parameters: Dictionary<String, String>) -> String {
+        return (parameters.compactMap({ (key, value) -> String in
+            return "\(key)=\(value)"
+        }) as Array).joined(separator: "&")
     }
     
 }

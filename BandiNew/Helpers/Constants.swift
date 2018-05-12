@@ -13,6 +13,7 @@ struct Constants {
     struct Colors {
         let textGray = #colorLiteral(red: 0.8823529412, green: 0.8823529412, blue: 0.8823529412, alpha: 1);
         let darkTableCell = UIColor(red: 0.11, green: 0.11, blue: 0.11, alpha: 1);
+        let darkTableSeparator = #colorLiteral(red: 0.2509803922, green: 0.2509803922, blue: 0.2509803922, alpha: 1)
 
         let primaryColor = UIColor(red: 0.67, green: 0.00, blue: 1.00, alpha: 1.0);
         let primaryLightColor = UIColor(red: 0.89, green: 0.33, blue: 1.00, alpha: 1.0);
