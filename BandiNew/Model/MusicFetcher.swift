@@ -14,11 +14,13 @@ class MusicFetcher {
     static let youtubeApiKey = APIKeys().youtubeKey
     static let songsCache = NSCache<NSString, Song>()
     static var nextPageToken: String?
+    static var lastSearchQuery: String?
     static let maxYoutubeResults = "11"
     
     static func fetchYoutubeNextPage(handler: @escaping (_ music: [Song]?) -> Void) {
-        if nextPageToken != nil {
+        if nextPageToken != nil && lastSearchQuery != nil {
             let urlParameters: Dictionary<String, String> = [
+                "q" : lastSearchQuery!,
                 "pageToken" : nextPageToken!,
                 "maxResults" : maxYoutubeResults,
                 "part" : "snippet",
@@ -33,6 +35,7 @@ class MusicFetcher {
     
     static func fetchYoutube(keywords: String, handler: @escaping (_ music: [Song]?) -> Void) {
         let keywordsReplaced = keywords.replacingOccurrences(of: " ", with: "+")
+        lastSearchQuery = keywordsReplaced
         let urlParameters: Dictionary<String, String> = [
             "q" : keywordsReplaced,
             "part" : "id",
