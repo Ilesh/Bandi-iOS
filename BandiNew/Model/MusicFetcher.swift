@@ -15,7 +15,7 @@ class MusicFetcher {
     static let songsCache = NSCache<NSString, Song>()
     static var nextPageToken: String?
     static var lastSearchQuery: String?
-    static let maxYoutubeResults = "11"
+    static let maxYoutubeResults = "14"
     
     static func fetchYoutubeNextPage(handler: @escaping (_ music: [Song]?) -> Void) {
         if nextPageToken != nil && lastSearchQuery != nil {
@@ -63,7 +63,9 @@ class MusicFetcher {
                             for item in items! {
                                 let id = item["id"] as! Dictionary<String, Any>
                                 let videoId = id["videoId"] as? String
-                                videoIds.append(videoId!)
+                                if videoId != nil {
+                                    videoIds.append(videoId!)
+                                }
                             }
                             handler(videoIds)
                         }

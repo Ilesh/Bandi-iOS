@@ -57,7 +57,10 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
             DispatchQueue.global(qos: .userInitiated).async {
                 MusicFetcher.fetchYoutubeNextPage(handler: { (youtubeVideos) -> Void in
                     if let youtubeVideos = youtubeVideos {
-                        self.musicTableView.musicArray = self.musicTableView.musicArray + youtubeVideos
+                        let filteredVideos = youtubeVideos.filter({ song in
+                            return !self.musicTableView.musicArray.contains(song)
+                        })
+                        self.musicTableView.musicArray = self.musicTableView.musicArray + filteredVideos
                         DispatchQueue.main.async {
                             self.musicTableView.reloadData()
                         }
