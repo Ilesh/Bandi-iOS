@@ -23,6 +23,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         title = "Search"
         setupViews()
@@ -45,12 +46,24 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     }()
     
     lazy var musicTableView: SearchMusicTableView = {
-        let tv = SearchMusicTableView(frame: .zero)
+        let tv = SearchMusicTableView(frame: .zero, style: .grouped)
         tv.handleMusicTapped = {
             self.searchController.searchBar.endEditing(true)
         }
         tv.handleScroll = { isUp in
             self.searchController.searchBar.endEditing(true)
+        }
+        tv.bottomReached = {
+            DispatchQueue.global(qos: .userInitiated).async {
+                MusicFetcher.fetchYoutubeNextPage(handler: { (youtubeVideos) -> Void in
+                    if let youtubeVideos = youtubeVideos {
+                        self.musicTableView.musicArray = self.musicTableView.musicArray + youtubeVideos
+                        DispatchQueue.main.async {
+                            self.musicTableView.reloadData()
+                        }
+                    }
+                })
+            }
         }
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
@@ -93,6 +106,10 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             suggestionsTableView.contentInset.bottom = keyboardSize.height
         }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        suggestionsTableView.contentInset.bottom = 0
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {

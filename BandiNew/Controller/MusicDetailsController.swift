@@ -344,7 +344,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             volumeSliderView.leadingAnchor.constraint(equalTo: mainDetailsStackView.leadingAnchor, constant: 25),
             volumeSliderView.trailingAnchor.constraint(equalTo: mainDetailsStackView.trailingAnchor, constant: -25),
             
-            //upNextTableView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height - contentTopInset - UIApplication.shared.statusBarFrame.height + 105),
             upNextTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             upNextTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             upNextTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),

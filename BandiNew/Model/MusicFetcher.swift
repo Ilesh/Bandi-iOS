@@ -10,43 +10,59 @@ import UIKit
 
 class MusicFetcher {
     
+    static let baseYoutubeApiUrlString = "https://www.googleapis.com/youtube/v3/"
+    static let youtubeApiKey = APIKeys().youtubeKey
     static let songsCache = NSCache<NSString, Song>()
+    static var nextPageToken: String?
+    static let maxYoutubeResults = "11"
     
-    // First request IDs of videos then request snippet + contentDetails becuase contentDetails cant be requested with a search api request
+    static func fetchYoutubeNextPage(handler: @escaping (_ music: [Song]?) -> Void) {
+        if nextPageToken != nil {
+            let urlParameters: Dictionary<String, String> = [
+                "pageToken" : nextPageToken!,
+                "maxResults" : maxYoutubeResults,
+                "part" : "snippet",
+                "key" : youtubeApiKey
+            ]
+            let urlString = baseYoutubeApiUrlString + "search?" + parametersToString(parameters: urlParameters)
+            getVideoList(urlString: urlString, handler: { videoIds in
+                getVideoDetails(videoIds: videoIds, handler: handler)
+            })
+        }
+    }
+    
     static func fetchYoutube(keywords: String, handler: @escaping (_ music: [Song]?) -> Void) {
-        
-        let apiKey = APIKeys().youtubeKey
-        let baseYoutubeApiUrlString = "https://www.googleapis.com/youtube/v3/"
         let keywordsReplaced = keywords.replacingOccurrences(of: " ", with: "+")
-        var videoIds: [String] = []
-        var urlParameters: Dictionary<String, String>?
-        var urlString: String?
-        var url: URL?
-        
-        // Get list of video Ids
-        
-        urlParameters = [
+        let urlParameters: Dictionary<String, String> = [
             "q" : keywordsReplaced,
             "part" : "id",
             "relevanceLanguage" : "en",
             "type" : "video",
-            "maxResults" : "11",
-            "key" : apiKey,
+            "maxResults" : maxYoutubeResults,
+            "key" : youtubeApiKey,
         ]
-        urlString = baseYoutubeApiUrlString + "search?" + parametersToString(parameters: urlParameters!)
-        url = URL(string: urlString!)
+        let urlString = baseYoutubeApiUrlString + "search?" + parametersToString(parameters: urlParameters)
+        getVideoList(urlString: urlString, handler: { videoIds in
+            getVideoDetails(videoIds: videoIds, handler: handler)
+        })
+    }
+    
+    static func getVideoList(urlString: String, handler: @escaping (_ videoIds: [String]) -> Void) {
+        var videoIds: [String] = []
+        let url = URL(string: urlString)
         URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) -> Void in
             do {
                 if data != nil {
                     if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] {
                         //print(jsonResult)
+                        nextPageToken = jsonResult["nextPageToken"] as? String
                         if let items = jsonResult["items"] as? [AnyObject]? {
                             for item in items! {
                                 let id = item["id"] as! Dictionary<String, Any>
                                 let videoId = id["videoId"] as? String
                                 videoIds.append(videoId!)
                             }
-                            getVideoDetails()
+                            handler(videoIds)
                         }
                     }
                 } else {
@@ -57,68 +73,66 @@ class MusicFetcher {
                 print("json error: \(error)")
             }
         }).resume()
+    }
+    
+    static func getVideoDetails(videoIds: [String], handler: @escaping (_ music: [Song]?) -> Void) {
+        let videoIdsAppended = videoIds.joined(separator: ",")
+        let urlParameters: Dictionary<String, String>  = [
+            "id" : videoIdsAppended,
+            "part" : "snippet,contentDetails",
+            "key" : youtubeApiKey,
+        ]
+        let urlString = baseYoutubeApiUrlString + "videos?" + parametersToString(parameters: urlParameters)
+        let url = URL(string: urlString)
         
-        // Get details of each video and handle the resulting songs
-        
-        func getVideoDetails() {
-            let videoIdsAppended = videoIds.joined(separator: ",")
-            urlParameters?.removeAll()
-            urlParameters = [
-                "id" : videoIdsAppended,
-                "part" : "snippet,contentDetails",
-                "key" : apiKey,
-            ]
-            urlString = baseYoutubeApiUrlString + "videos?" + parametersToString(parameters: urlParameters!)
-            url = URL(string: urlString!)
-            var songs: [Song] = []
-            URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) -> Void in
-                do {
-                    if data != nil {
-                        if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] {
-                            //print(jsonResult)
-                            if let items = jsonResult["items"] as? [AnyObject]? {
-                                for item in items! {
-                                    let id  = [
-                                        "type" : "youtube#video",
-                                        "id" : item["id"] as! String,
-                                        ]
-                                    if let cachedSong = songsCache.object(forKey: id["id"]! as NSString) {
-                                        songs.append(cachedSong)
-                                        continue
-                                    }
-                                    
-                                    let snippet = item["snippet"] as! Dictionary<String, Any>
-                                    let liveBroadcastContent = snippet["liveBroadcastContent"] as! String
-                                    if liveBroadcastContent == "live" {
-                                        continue
-                                    }
-                                    let contentDetails = item["contentDetails"] as! Dictionary<String, Any>
-                                    let thumbnails = snippet["thumbnails"] as! Dictionary<String, Any>
-                                    
-                                    let title = snippet["title"] as! String
-                                    let artist = snippet["channelTitle"] as! String
-                                    let duration = contentDetails["duration"] as! String
-                                    let thumbnailsDetail = [
-                                        "small" : (thumbnails["default"] as! Dictionary<String, Any>)["url"] as! String,
-                                        "wide" : (thumbnails["medium"] as! Dictionary<String, Any>)["url"] as! String,
-                                        "large" : (thumbnails["high"] as! Dictionary<String, Any>)["url"] as! String,
-                                        ]
-                                    
-                                    let song = Song(title: title, artist: artist, id: id, liveBroadcastContent: liveBroadcastContent, duration: duration, thumbnails: thumbnailsDetail)
-                                    songs.append(song)
+        var songs: [Song] = []
+        URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) -> Void in
+            do {
+                if data != nil {
+                    if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] {
+                        //print(jsonResult)
+                        if let items = jsonResult["items"] as? [AnyObject]? {
+                            for item in items! {
+                                let id  = [
+                                    "type" : "youtube#video",
+                                    "id" : item["id"] as! String,
+                                    ]
+                                if let cachedSong = songsCache.object(forKey: id["id"]! as NSString) {
+                                    songs.append(cachedSong)
+                                    continue
                                 }
-                                handler(songs)
+                                
+                                let snippet = item["snippet"] as! Dictionary<String, Any>
+                                let liveBroadcastContent = snippet["liveBroadcastContent"] as! String
+                                if liveBroadcastContent == "live" {
+                                    continue
+                                }
+                                let contentDetails = item["contentDetails"] as! Dictionary<String, Any>
+                                let thumbnails = snippet["thumbnails"] as! Dictionary<String, Any>
+                                
+                                let title = snippet["title"] as! String
+                                let artist = snippet["channelTitle"] as! String
+                                let duration = contentDetails["duration"] as! String
+                                let thumbnailsDetail = [
+                                    "small" : (thumbnails["default"] as! Dictionary<String, Any>)["url"] as! String,
+                                    "wide" : (thumbnails["medium"] as! Dictionary<String, Any>)["url"] as! String,
+                                    "large" : (thumbnails["high"] as! Dictionary<String, Any>)["url"] as! String,
+                                    ]
+                                
+                                let song = Song(title: title, artist: artist, id: id, liveBroadcastContent: liveBroadcastContent, duration: duration, thumbnails: thumbnailsDetail)
+                                songs.append(song)
                             }
+                            handler(songs)
                         }
-                    } else {
-                        print("no json data")
                     }
+                } else {
+                    print("no json data")
                 }
-                catch {
-                    print("json error: \(error)")
-                }
-            }).resume()
-        }
+            }
+            catch {
+                print("json error: \(error)")
+            }
+        }).resume()
     }
     
     static func fetchYoutubeVideoUrl(videoID: String, quality: String, handler: @escaping (_ videoURL: String?) -> Void) {

@@ -42,6 +42,7 @@
 		3C99F6E52099AAE400DFA6AE /* PullUpTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C99F6E42099AAE400DFA6AE /* PullUpTabBarView.swift */; };
 		3C99F6F0209B8BD600DFA6AE /* MusicDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */; };
 		3CDC6B6020A6643100AD4A60 /* SearchSuggestionsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDC6B5F20A6643100AD4A60 /* SearchSuggestionsTableView.swift */; };
+		3CDC6B6420A7C9DE00AD4A60 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDC6B6320A7C9DE00AD4A60 /* LoadingTableViewCell.swift */; };
 		3CE21DF82095AECD0019CA13 /* GradientAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21DF72095AECD0019CA13 /* GradientAnimation.swift */; };
 		3CE21E00209685510019CA13 /* DelayedSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21DFF209685510019CA13 /* DelayedSearchBar.swift */; };
 		3CE21E022096858D0019CA13 /* PlatformSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21E012096858D0019CA13 /* PlatformSearchView.swift */; };
@@ -143,6 +144,7 @@
 		3C99F6E42099AAE400DFA6AE /* PullUpTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullUpTabBarView.swift; sourceTree = "<group>"; };
 		3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicDetailsController.swift; sourceTree = "<group>"; };
 		3CDC6B5F20A6643100AD4A60 /* SearchSuggestionsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestionsTableView.swift; sourceTree = "<group>"; };
+		3CDC6B6320A7C9DE00AD4A60 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		3CE21DF72095AECD0019CA13 /* GradientAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientAnimation.swift; sourceTree = "<group>"; };
 		3CE21DFF209685510019CA13 /* DelayedSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedSearchBar.swift; sourceTree = "<group>"; };
 		3CE21E012096858D0019CA13 /* PlatformSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformSearchView.swift; sourceTree = "<group>"; };
@@ -652,6 +654,7 @@
 				3C1FBE7B20A36E6800C72DF1 /* AddMusicTableViewCell.swift */,
 				3C1FBE8520A3F78F00C72DF1 /* UpNextTableViewCell.swift */,
 				3C1FBE8720A3F83500C72DF1 /* UpNextHeaderTableViewCell.swift */,
+				3CDC6B6320A7C9DE00AD4A60 /* LoadingTableViewCell.swift */,
 			);
 			path = "Table View Cell";
 			sourceTree = "<group>";
@@ -915,6 +918,7 @@
 				3CFA8C80209D712100EB7B04 /* QueueMusicTableView.swift in Sources */,
 				3C60399220952FFC0001E3A4 /* CustomTabBarController.swift in Sources */,
 				3C8143D820A006D50086C1DA /* PlaylistHeaderView.swift in Sources */,
+				3CDC6B6420A7C9DE00AD4A60 /* LoadingTableViewCell.swift in Sources */,
 				3CFA8C7E209D707F00EB7B04 /* SearchMusicTableView.swift in Sources */,
 				3CFA8C70209D5D8400EB7B04 /* VolumeSlider.swift in Sources */,
 				3C8143D3209ED0DA0086C1DA /* TrackSlider.swift in Sources */,

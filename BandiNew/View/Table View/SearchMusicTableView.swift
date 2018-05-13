@@ -13,9 +13,12 @@ class SearchMusicTableView: MusicTableView {
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame: frame, style: style)
         register(SearchMusicTableViewCell.self, forCellReuseIdentifier: musicCellId)
+        //register(LoadingTableViewCell.self, forHeaderFooterViewReuseIdentifier: loadingCellId)
     }
     
+    let loadingCellId = "loadingCellId"
     var handleMusicTapped: (()->())?
+    var bottomReached: (()->())?
     
     private let noResultsLabel: UILabel = {
         let label = UILabel()
@@ -75,7 +78,27 @@ class SearchMusicTableView: MusicTableView {
         
         return [queue, save]
     }
-
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return LoadingTableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        bottomReached?()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
