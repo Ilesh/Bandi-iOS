@@ -94,9 +94,7 @@ class SearchMusicTableViewCell: MusicTableViewCell {
     }
     
     @objc func addButtonTapped() {
-        print("asdf")
         addMusic!()
-        //TEMPSessionData.queueMusic.append(music!)
     }
     
     required init?(coder aDecoder: NSCoder) {

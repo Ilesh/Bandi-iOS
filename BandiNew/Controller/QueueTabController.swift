@@ -24,35 +24,19 @@ class QueueTabController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        self.musicTableView.musicArray = TEMPSessionData.queueMusic
         self.musicTableView.reloadData()
-        if TEMPSessionData.queueMusic.count == 0 && (searchBar.text?.isEmpty)! {
-            searchBarShownHeight?.isActive = false
-            searchBarHiddenHeight?.isActive = true
-            self.view.layoutIfNeeded()
-        }
-        updateSearchResults()
-        setCollectionBackground()
     }
     
     var searchBarShownHeight: NSLayoutConstraint?
     var searchBarHiddenHeight: NSLayoutConstraint?
-    
-    lazy var searchBar: CustomSearchBar = {
-        let sb = CustomSearchBar(frame: .zero)
-        sb.handleSearchTextChanged = {
-            self.updateSearchResults()
-        }
-        sb.translatesAutoresizingMaskIntoConstraints = false
-        return sb
-    }()
     
     lazy var musicTableView: QueueMusicTableView = {
         let cv = QueueMusicTableView(frame: .zero, style: UITableViewStyle.plain)
         cv.musicArray = TEMPSessionData.queueMusic
         cv.handleScroll = { (isUp) -> () in
             if TEMPSessionData.queueMusic.count != 0 {
-                self.showSearchBar(show: !isUp)
+                //self.showSearchBar(show: !isUp)
             }
         }
         cv.handleLinkTapped = {
@@ -66,10 +50,10 @@ class QueueTabController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
         cv.handleSwipeStarted = {
-            self.showSearchBar(show: false)
+            //self.showSearchBar(show: false)
         }
         cv.handleMusicRemoved = {
-            self.setCollectionBackground()
+            //self.setCollectionBackground()
         }
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
@@ -77,9 +61,6 @@ class QueueTabController: UIViewController {
     
     func setupViews() {
         view.addSubview(musicTableView)
-        
-        searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 50)
-        searchBarShownHeight = searchBar.heightAnchor.constraint(equalToConstant: 0)
 
         NSLayoutConstraint.activate([
             musicTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -98,37 +79,17 @@ class QueueTabController: UIViewController {
         musicTableView.setEditing(editing, animated: animated)
     }
     
-    func setCollectionBackground() {
-        if TEMPSessionData.queueMusic.count == 0 {
-            self.musicTableView.showNoQueue()
-        } else {
-            if (searchBar.text?.isEmpty)! && self.musicTableView.musicArray.count == 0 {
-                self.musicTableView.showNoResults()
-            } else {
-                self.musicTableView.backgroundView = nil
-            }
-        }
-    }
-    
-    func showSearchBar(show: Bool) {
-        self.searchBar.endEditing(!show)
-        searchBarShownHeight?.isActive = show
-        searchBarHiddenHeight?.isActive = !show
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.layoutIfNeeded()
-        })
-    }
-    
-    func updateSearchResults() {
-        if let text = searchBar.text, !text.isEmpty {
-            self.musicTableView.musicArray = TEMPSessionData.queueMusic.filter({ (music) -> Bool in
-                return (music.title?.lowercased().contains(text.lowercased()))!
-            })
-        } else {
-            self.musicTableView.musicArray = TEMPSessionData.queueMusic
-        }
-        setCollectionBackground()
-        self.musicTableView.reloadData()
-    }
+//
+//    func updateSearchResults() {
+//        if let text = searchBar.text, !text.isEmpty {
+//            self.musicTableView.musicArray = TEMPSessionData.queueMusic.filter({ (music) -> Bool in
+//                return (music.title?.lowercased().contains(text.lowercased()))!
+//            })
+//        } else {
+//            self.musicTableView.musicArray = TEMPSessionData.queueMusic
+//        }
+//        setCollectionBackground()
+//        self.musicTableView.reloadData()
+//    }
     
 }

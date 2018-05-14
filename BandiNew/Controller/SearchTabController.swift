@@ -7,13 +7,13 @@
 //
 
 import UIKit
+import CoreData
 import LNPopupController
 
 class SearchTabController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         if let navBar = navigationController {
             navBar.navigationBar.prefersLargeTitles = true
@@ -26,12 +26,15 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         title = "Search"
+        updateRecentSearchesTable()
         setupViews()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    var searchCancelled = false
     
     lazy var searchController: SearchController = {
         let sb = SearchController(searchResultsController: nil)
@@ -47,6 +50,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     lazy var musicTableView: SearchMusicTableView = {
         let tv = SearchMusicTableView(frame: .zero, style: .grouped)
+        //tv.backgroundColor = .blue
         tv.handleMusicTapped = {
             self.searchController.searchBar.endEditing(true)
         }
@@ -74,6 +78,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     lazy var suggestionsTableView: SearchSuggestionsTableView = {
         let tv = SearchSuggestionsTableView(frame: .zero)
+        //tv.backgroundColor = .red
         tv.suggestionSelected = { suggestion in
             self.searchController.searchBar.text = suggestion
             self.searchController.searchBar.endEditing(true)
@@ -83,11 +88,30 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         return tv
     }()
     
+    lazy var recentSearchesTableView: RecentSearchesTableView = {
+        let tv = RecentSearchesTableView(frame: .zero, style: UITableViewStyle.grouped)
+        tv.rowSelected = { searchString in
+            self.searchController.searchBar.text = searchString
+            self.updateSearchResults()
+            self.suggestionsTableView.isHidden = true
+            tv.isHidden = true
+        }
+        tv.isHidden = true
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
+    }()
+    
     func setupViews() {
         view.addSubview(musicTableView)
+        view.addSubview(recentSearchesTableView)
         view.addSubview(suggestionsTableView)
         
         NSLayoutConstraint.activate([
+            recentSearchesTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            recentSearchesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            recentSearchesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            recentSearchesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
             suggestionsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             suggestionsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             suggestionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -102,7 +126,19 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     func updateSearchResults(for searchController: UISearchController) {
         updateSearchSuggestions()
-        suggestionsTableView.isHidden = false
+        if !searchCancelled {
+            suggestionsTableView.isHidden = false
+            recentSearchesTableView.isHidden = true
+        } else {
+            recentSearchesTableView.isHidden = false
+            suggestionsTableView.isHidden = true
+            searchCancelled = false
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        updateRecentSearchesTable()
+        searchCancelled = true
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -147,8 +183,55 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
 //        }
 //    }
     
+    func updateRecentSearchesTable() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        DispatchQueue.global(qos: .userInteractive).async {
+            let context = appDelegate.persistentContainer.viewContext
+            let fetchRequest: NSFetchRequest<RecentSearches> = RecentSearches.fetchRequest()
+            do {
+                let recentSearches = try context.fetch(fetchRequest)
+                var recentSearchStrings: [String] = []
+                for recentSearch in recentSearches {
+                    let recentSearch = recentSearch.recentSearch
+                    recentSearchStrings.append(recentSearch!)
+                }
+                print(recentSearchStrings)
+                self.recentSearchesTableView.recentSearches = recentSearchStrings
+                DispatchQueue.main.async {
+                    self.recentSearchesTableView.reloadData()
+                }
+            } catch let error {
+                print("error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     @objc func updateSearchResults() {
         let searchBarText = self.searchController.searchBar.text!
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        DispatchQueue.global(qos: .userInteractive).async {
+            let context = appDelegate.persistentContainer.viewContext
+            let fetchRequest: NSFetchRequest<RecentSearches> = RecentSearches.fetchRequest()
+            var searchFound = false
+            do {
+                let recentSearches = try context.fetch(fetchRequest)
+                for recentSearch in recentSearches {
+                    let recentSearch = recentSearch.recentSearch
+                    searchFound = searchBarText == recentSearch
+                    if searchFound { break }
+                }
+                if !searchFound {
+                    let entity = NSEntityDescription.entity(forEntityName: "RecentSearches", in: context)
+                    let newRecentSearch = NSManagedObject(entity: entity!, insertInto: context)
+                    newRecentSearch.setValue(searchBarText, forKey: "recentSearch")
+                    try context.save()
+                }
+            } catch let error {
+                print("error: \(error.localizedDescription)")
+            }
+        }
+        
         DispatchQueue.global(qos: .userInitiated).async {
             let dispatchGroup = DispatchGroup()
             dispatchGroup.enter()
@@ -159,6 +242,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
                 if let youtubeVideos = youtubeVideos {
                     self.musicTableView.musicArray = youtubeVideos
                     DispatchQueue.main.async {
+                        //self.musicTableView.setContentOffset(.zero, animated: false)
                         self.musicTableView.reloadData()
                         dispatchGroup.leave()
                     }

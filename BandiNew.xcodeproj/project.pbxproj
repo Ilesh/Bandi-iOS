@@ -41,6 +41,8 @@
 		3C8143DE20A122280086C1DA /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143DD20A122280086C1DA /* SearchController.swift */; };
 		3C99F6E52099AAE400DFA6AE /* PullUpTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C99F6E42099AAE400DFA6AE /* PullUpTabBarView.swift */; };
 		3C99F6F0209B8BD600DFA6AE /* MusicDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */; };
+		3CB9733B20A8EE09001272ED /* RecentSearchesTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB9733A20A8EE09001272ED /* RecentSearchesTableView.swift */; };
+		3CB9734220A9C87C001272ED /* RecentSearchesSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB9734120A9C87C001272ED /* RecentSearchesSectionHeader.swift */; };
 		3CDC6B6020A6643100AD4A60 /* SearchSuggestionsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDC6B5F20A6643100AD4A60 /* SearchSuggestionsTableView.swift */; };
 		3CDC6B6420A7C9DE00AD4A60 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CDC6B6320A7C9DE00AD4A60 /* LoadingTableViewCell.swift */; };
 		3CE21DF82095AECD0019CA13 /* GradientAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE21DF72095AECD0019CA13 /* GradientAnimation.swift */; };
@@ -143,6 +145,8 @@
 		3C8143DD20A122280086C1DA /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		3C99F6E42099AAE400DFA6AE /* PullUpTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullUpTabBarView.swift; sourceTree = "<group>"; };
 		3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicDetailsController.swift; sourceTree = "<group>"; };
+		3CB9733A20A8EE09001272ED /* RecentSearchesTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchesTableView.swift; sourceTree = "<group>"; };
+		3CB9734120A9C87C001272ED /* RecentSearchesSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchesSectionHeader.swift; sourceTree = "<group>"; };
 		3CDC6B5F20A6643100AD4A60 /* SearchSuggestionsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestionsTableView.swift; sourceTree = "<group>"; };
 		3CDC6B6320A7C9DE00AD4A60 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		3CE21DF72095AECD0019CA13 /* GradientAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientAnimation.swift; sourceTree = "<group>"; };
@@ -655,6 +659,7 @@
 				3C1FBE8520A3F78F00C72DF1 /* UpNextTableViewCell.swift */,
 				3C1FBE8720A3F83500C72DF1 /* UpNextHeaderTableViewCell.swift */,
 				3CDC6B6320A7C9DE00AD4A60 /* LoadingTableViewCell.swift */,
+				3CB9734120A9C87C001272ED /* RecentSearchesSectionHeader.swift */,
 			);
 			path = "Table View Cell";
 			sourceTree = "<group>";
@@ -667,6 +672,7 @@
 				3CFA8C7F209D712100EB7B04 /* QueueMusicTableView.swift */,
 				3C1FBE8020A3F6CA00C72DF1 /* UpNextTableView.swift */,
 				3CDC6B5F20A6643100AD4A60 /* SearchSuggestionsTableView.swift */,
+				3CB9733A20A8EE09001272ED /* RecentSearchesTableView.swift */,
 			);
 			path = "Table View";
 			sourceTree = "<group>";
@@ -901,6 +907,7 @@
 				3C6039942095305E0001E3A4 /* SearchTabController.swift in Sources */,
 				3C8143DC20A097FC0086C1DA /* PlaylistHeaderTableViewCell.swift in Sources */,
 				3C1FBE6720A16CF700C72DF1 /* QueueHeaderView.swift in Sources */,
+				3CB9734220A9C87C001272ED /* RecentSearchesSectionHeader.swift in Sources */,
 				3CDC6B6020A6643100AD4A60 /* SearchSuggestionsTableView.swift in Sources */,
 				3C60396220952F3E0001E3A4 /* ViewController.swift in Sources */,
 				3CFA8CC1209DB19900EB7B04 /* Helpers.swift in Sources */,
@@ -928,6 +935,7 @@
 				3C6039BB20957C4F0001E3A4 /* TEMPSessionData.swift in Sources */,
 				3CFA8C79209D6F1000EB7B04 /* QueueMusicTableViewCell.swift in Sources */,
 				3C6039A2209535310001E3A4 /* APIKeys.swift in Sources */,
+				3CB9733B20A8EE09001272ED /* RecentSearchesTableView.swift in Sources */,
 				3CE21DF82095AECD0019CA13 /* GradientAnimation.swift in Sources */,
 				3CE21E08209699780019CA13 /* PlatformPickerPopupView.swift in Sources */,
 				3C60396820952F3E0001E3A4 /* BandiNew.xcdatamodeld in Sources */,

@@ -104,9 +104,7 @@ class QueueMusicTableView: MusicTableView {
         } else {
             let cell = dequeueReusableCell(withIdentifier: musicCellId, for: indexPath) as! QueueMusicTableViewCell
             cell.music = musicArray[indexPath.row]
-            cell.swipeStarted = {
-                self.handleSwipeStarted?()
-            }
+            cell.contentView.backgroundColor = .red
             return cell
         }
     }
@@ -163,10 +161,9 @@ class QueueMusicTableView: MusicTableView {
                 self.musicArray.remove(at: indexPath.row)
                 TEMPSessionData.queueMusic = self.musicArray
                 self.performBatchUpdates({
-                    self.deleteRows(at: [indexPath as IndexPath], with: .left)
+                    self.deleteRows(at: [indexPath], with: .left)
                 }, completion: nil)
             }
-            
             return [remove]
         }
         return []

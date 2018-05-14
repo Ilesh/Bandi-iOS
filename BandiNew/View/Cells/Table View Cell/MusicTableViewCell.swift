@@ -49,6 +49,7 @@ class MusicTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         thumbnailImageView.image = UIImage()
     }
     
