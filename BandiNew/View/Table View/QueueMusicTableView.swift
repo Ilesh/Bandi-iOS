@@ -104,7 +104,6 @@ class QueueMusicTableView: MusicTableView {
         } else {
             let cell = dequeueReusableCell(withIdentifier: musicCellId, for: indexPath) as! QueueMusicTableViewCell
             cell.music = musicArray[indexPath.row]
-            cell.contentView.backgroundColor = .red
             return cell
         }
     }
@@ -197,3 +196,5 @@ class QueueMusicTableView: MusicTableView {
     }
 
 }
+
+

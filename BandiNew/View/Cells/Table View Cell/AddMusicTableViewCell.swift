@@ -8,11 +8,12 @@
 
 import UIKit
 
-class AddMusicTableViewCell: UITableViewCell {
+class AddMusicTableViewCell: BaseTableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        setUpTheming()
     }
     
     let addLabel: UILabel = {
@@ -32,6 +33,11 @@ class AddMusicTableViewCell: UITableViewCell {
             addLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             addLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
             ])
+    }
+    
+    override func applyTheme(_ theme: AppTheme) {
+        super.applyTheme(theme)
+        addLabel.textColor = theme.textColor
     }
     
     required init?(coder aDecoder: NSCoder) {

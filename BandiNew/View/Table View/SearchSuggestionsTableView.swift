@@ -16,10 +16,9 @@ class SearchSuggestionsTableView: UITableView, UITableViewDataSource, UITableVie
         dataSource = self
         delegate = self
         alwaysBounceVertical = true
-        backgroundColor = Constants.Colors().darkTableCell
         separatorInset = UIEdgeInsets(top: 0, left: 46, bottom: 0, right: 0)
-        separatorColor = Constants.Colors().darkTableSeparator
         allowsSelection = true
+        setUpTheming()
     }
     
     let searchSearchSuggestionsCellId = "searchSearchSuggestionsCellId"
@@ -35,21 +34,8 @@ class SearchSuggestionsTableView: UITableView, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = SuggestionTableViewCell()
         cell.textLabel?.text = suggestions[indexPath.row]
-        cell.textLabel?.textColor = .white
-        cell.selectionStyle = .none
-        let searchImage = UIImageView(image: #imageLiteral(resourceName: "search-90").withRenderingMode(.alwaysTemplate))
-        searchImage.tintColor = .lightGray
-        searchImage.contentMode = .scaleAspectFit
-        searchImage.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addSubview(searchImage)
-        NSLayoutConstraint.activate([
-            searchImage.widthAnchor.constraint(equalToConstant: 20),
-            searchImage.heightAnchor.constraint(equalToConstant: 20),
-            searchImage.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -15),
-            searchImage.topAnchor.constraint(equalTo: cell.topAnchor, constant: 20)
-            ])
         return cell
     }
     
@@ -65,12 +51,23 @@ class SearchSuggestionsTableView: UITableView, UITableViewDataSource, UITableVie
         suggestionSelected?(suggestions[indexPath.row])
     }
     
-//    func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
-//        <#code#>
-//    }
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        return indexPath
+    }
+    
+    func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
+        return indexPath
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+extension SearchSuggestionsTableView: Themed {
+    func applyTheme(_ theme: AppTheme) {
+        backgroundColor = theme.tableBackgroundColor
+        separatorColor = theme.tableSeparatorColor
+    }
 }

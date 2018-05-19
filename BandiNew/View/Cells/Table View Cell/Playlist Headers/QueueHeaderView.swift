@@ -43,10 +43,7 @@ class QueueHeaderViewCell: PlaylistHeaderView {
         return button
     }()
     
-    let editAlert: QueueEditAlertController = {
-        let alert = QueueEditAlertController()
-        return alert
-    }()
+    let editAlert = QueueEditAlertController()
     
     override func setupViews() {
         super.setupViews()

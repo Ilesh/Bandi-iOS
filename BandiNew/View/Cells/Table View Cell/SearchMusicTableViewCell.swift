@@ -29,7 +29,7 @@ class SearchMusicTableViewCell: MusicTableViewCell {
     override func setupViews() {
         super.setupViews()
         
-        contentView.backgroundColor = Constants.Colors().darkTableCell
+        //contentView.backgroundColor = Constants.Colors().darkTableCell
         
         contentView.addSubview(thumbnailImageView)
         thumbnailImageView.addSubview(durationLabel)

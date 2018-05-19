@@ -50,7 +50,14 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     lazy var musicTableView: SearchMusicTableView = {
         let tv = SearchMusicTableView(frame: .zero, style: .grouped)
-        //tv.backgroundColor = .blue
+        //tv.backgroundColor = .red
+        tv.queueMusic = { music in
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            DispatchQueue.global(qos: .userInteractive).async {
+                let context = appDelegate.persistentContainer.viewContext
+                let fetchRequest: NSFetchRequest<RecentSearches> = RecentSearches.fetchRequest()
+            }
+        }
         tv.handleMusicTapped = {
             self.searchController.searchBar.endEditing(true)
         }
@@ -78,7 +85,8 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     lazy var suggestionsTableView: SearchSuggestionsTableView = {
         let tv = SearchSuggestionsTableView(frame: .zero)
-        //tv.backgroundColor = .red
+        //tv.backgroundColor = .green
+        tv.isHidden = true
         tv.suggestionSelected = { suggestion in
             self.searchController.searchBar.text = suggestion
             self.searchController.searchBar.endEditing(true)
@@ -96,7 +104,6 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
             self.suggestionsTableView.isHidden = true
             tv.isHidden = true
         }
-        tv.isHidden = true
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
@@ -195,9 +202,9 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
                     let recentSearch = recentSearch.recentSearch
                     recentSearchStrings.append(recentSearch!)
                 }
-                print(recentSearchStrings)
                 self.recentSearchesTableView.recentSearches = recentSearchStrings
                 DispatchQueue.main.async {
+                    self.recentSearchesTableView.clearButton.isHidden = self.recentSearchesTableView.recentSearches.count == 0
                     self.recentSearchesTableView.reloadData()
                 }
             } catch let error {
@@ -242,7 +249,8 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
                 if let youtubeVideos = youtubeVideos {
                     self.musicTableView.musicArray = youtubeVideos
                     DispatchQueue.main.async {
-                        //self.musicTableView.setContentOffset(.zero, animated: false)
+                        print(2134)
+                        self.musicTableView.setContentOffset(.zero, animated: false)
                         self.musicTableView.reloadData()
                         dispatchGroup.leave()
                     }

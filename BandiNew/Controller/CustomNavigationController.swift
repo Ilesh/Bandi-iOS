@@ -23,13 +23,11 @@ class CustomNavigationController: UINavigationController {
     }
     
     override func viewDidLoad() {
-        navigationBar.barStyle = .blackOpaque
-        navigationBar.tintColor = Constants.Colors().primaryColor
         navigationBar.shouldRemoveShadow(true)
         
 //        let bgimage = imageWithGradient(startColor: Constants.Colors().secondaryColor, endColor: Constants.Colors().themeBlue, size: CGSize(width: UIScreen.main.bounds.size.width, height: 1))
 //        navigationBar.barTintColor = UIColor(patternImage: bgimage!)
-
+        setUpTheming()
     }
     
     func imageWithGradient(startColor:UIColor, endColor:UIColor, size:CGSize, horizontally:Bool = true) -> UIImage? {
@@ -56,4 +54,13 @@ class CustomNavigationController: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+extension CustomNavigationController: Themed {
+    func applyTheme(_ theme: AppTheme) {
+        navigationBar.isTranslucent = theme.isNavBarTranslucent
+        navigationBar.barStyle = theme.barStyle
+        navigationBar.tintColor = theme.tintColor
+        navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : theme.textColor]
+    }
 }

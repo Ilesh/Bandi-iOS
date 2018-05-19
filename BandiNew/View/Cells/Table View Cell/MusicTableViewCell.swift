@@ -9,11 +9,11 @@
 import UIKit
 import LayoutKit
 
-class MusicTableViewCell: UITableViewCell {
+class MusicTableViewCell: BaseTableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = Constants.Colors().darkTableCell
+        //backgroundColor = Constants.Colors().darkTableCell
         setupViews()
     }
     
@@ -105,8 +105,15 @@ class MusicTableViewCell: UITableViewCell {
     
     func setupViews(){ }
     
+    override func applyTheme(_ theme: AppTheme) {
+        super.applyTheme(theme)
+        titleLabel.textColor = theme.textColor
+        artistLabel.textColor = theme.subTextColor
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
 }
+

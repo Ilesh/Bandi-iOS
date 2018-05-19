@@ -8,14 +8,12 @@
 
 import UIKit
 
-class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
+class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate, Themed {
     
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame: frame, style: style)
         
-        backgroundColor = Constants.Colors().darkTableCell
         separatorInset = UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 0)
-        separatorColor = Constants.Colors().darkTableSeparator
         alwaysBounceVertical = true
         delegate = self
         dataSource = self
@@ -24,6 +22,7 @@ class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
         tableFooterView = UIView()
         
         setupViews()
+        setUpTheming()
     }
     
     let musicCellId = "musicCellId"
@@ -43,8 +42,11 @@ class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
         return view
     }()
     
-    func setupViews() {
-        
+    func setupViews() { }
+    
+    func applyTheme(_ theme: AppTheme) {
+        backgroundColor = theme.tableBackgroundColor
+        separatorColor = theme.tableSeparatorColor
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

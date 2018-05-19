@@ -16,8 +16,7 @@ class RecentSearchesTableView: UITableView, UITableViewDataSource, UITableViewDe
         dataSource = self
         delegate = self
         allowsSelection = true
-        backgroundColor = Constants.Colors().darkTableCell
-        separatorColor = Constants.Colors().darkTableSeparator
+        setUpTheming()
     }
     
     var recentSearches: [String] = []
@@ -32,6 +31,13 @@ class RecentSearchesTableView: UITableView, UITableViewDataSource, UITableViewDe
         button.addTarget(self, action: #selector(clearPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    lazy var recentSearchesHeader: RecentSearchesSectionHeader = {
+        let view = RecentSearchesSectionHeader()
+        view.label.text = "Recent"
+        view.addSubview(clearButton)
+        return view
     }()
     
     @objc func clearPressed() {
@@ -49,17 +55,17 @@ class RecentSearchesTableView: UITableView, UITableViewDataSource, UITableViewDe
                     let recentSearch = recentSearch.recentSearch
                     recentSearchStrings.append(recentSearch!)
                 }
-                print(recentSearchStrings)
                 self.recentSearches = recentSearchStrings
                 DispatchQueue.main.async {
+                    if self.recentSearches.count == 0 {
+                        self.clearButton.isHidden = true
+                    }
                     self.reloadData()
                 }
             } catch let error {
                 print("error: \(error)")
             }
         }
-        
-
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -67,9 +73,11 @@ class RecentSearchesTableView: UITableView, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = BaseTableViewCell()
         cell.textLabel?.text = recentSearches[indexPath.row]
-        cell.textLabel?.textColor = .white
+        let selectedView = UIView()
+        selectedView.backgroundColor = Constants.Colors().primaryColor
+        cell.selectedBackgroundView = selectedView
         return cell
     }
     
@@ -82,15 +90,12 @@ class RecentSearchesTableView: UITableView, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = RecentSearchesSectionHeader()
-        view.label.text = "Recent"
-        view.addSubview(clearButton)
         NSLayoutConstraint.activate([
-            clearButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
-            clearButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5),
+            clearButton.trailingAnchor.constraint(equalTo: recentSearchesHeader.trailingAnchor, constant: -15),
+            clearButton.bottomAnchor.constraint(equalTo: recentSearchesHeader.bottomAnchor, constant: -5),
             clearButton.widthAnchor.constraint(equalToConstant: 80)
             ])
-        return view
+        return recentSearchesHeader
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -105,4 +110,12 @@ class RecentSearchesTableView: UITableView, UITableViewDataSource, UITableViewDe
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+extension RecentSearchesTableView: Themed {
+    func applyTheme(_ theme: AppTheme) {
+        backgroundColor = theme.tableBackgroundColor
+        separatorColor = theme.tableSeparatorColor
+        recentSearchesHeader.label.textColor = theme.textColor
+    }
 }

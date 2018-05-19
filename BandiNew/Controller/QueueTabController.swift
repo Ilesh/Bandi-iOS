@@ -18,9 +18,12 @@ class QueueTabController: UIViewController {
         }
     
         navigationItem.rightBarButtonItem = self.editButtonItem
+        let barButton = UIBarButtonItem(title: "Theme", style: UIBarButtonItemStyle.plain, target: self, action: #selector(themeTapped))
+        navigationItem.leftBarButtonItem = barButton
         
         title = "Queue"
         setupViews()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -30,6 +33,11 @@ class QueueTabController: UIViewController {
     
     var searchBarShownHeight: NSLayoutConstraint?
     var searchBarHiddenHeight: NSLayoutConstraint?
+    
+    @objc func themeTapped() {
+        AppThemeProvider.shared.nextTheme()
+    }
+    
     
     lazy var musicTableView: QueueMusicTableView = {
         let cv = QueueMusicTableView(frame: .zero, style: UITableViewStyle.plain)

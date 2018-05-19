@@ -22,10 +22,17 @@ class SearchController: UISearchController {
     
     func setup() {
         searchBar.keyboardAppearance = .dark
+        setUpTheming()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+extension SearchController: Themed {
+    func applyTheme(_ theme: AppTheme) {
+        searchBar.keyboardAppearance = theme.keyboardAppearance
+    }
 }

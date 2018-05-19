@@ -33,15 +33,14 @@ class CustomTabBarController: UITabBarController {
             tabViewControllers.append(item.vc)
         }
         
-        setTransparentTabBar(isSet: false)
-        tabBar.layer.borderWidth = 0.5
+        tabBar.layer.borderWidth = 0
         //tabBar.clipsToBounds = true
         
         viewControllers = tabViewControllers
         selectedIndex = 1
         
         setupViews()
-        setupPopupStyle()
+        setUpTheming()
     }
     
     lazy var musicDetailsController: MusicDetailsController = {
@@ -53,31 +52,21 @@ class CustomTabBarController: UITabBarController {
         popupInteractionStyle = .drag
         popupBar.barStyle = .custom
         popupContentView.popupCloseButtonStyle = .chevron
-        popupBar.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1).withAlphaComponent(0.99)
         popupBar.isTranslucent = false
         popupBar.marqueeScrollEnabled = true
         popupBar.progressViewStyle = .default
-        popupBar.tintColor = Constants.Colors().primaryColor
     }
     
-    func setupPopupStyle() {
-        LNPopupBar.appearance(whenContainedInInstancesOf: [UIViewController.self]).titleTextAttributes = [.font: UIFont.systemFont(ofSize: 18) as Any, .foregroundColor: Constants.Colors().textGray]
-        LNPopupBar.appearance(whenContainedInInstancesOf: [UIViewController.self]).subtitleTextAttributes = [.font: UIFont.systemFont(ofSize: 13) as Any, .foregroundColor: UIColor.lightGray]
+}
+
+extension CustomTabBarController: Themed {
+    func applyTheme(_ theme: AppTheme) {
+        tabBar.barTintColor = theme.barBackgroundColor
+        tabBar.tintColor = theme.tintColor
+        tabBar.unselectedItemTintColor = theme.barUnselectedTextColor
+        popupBar.backgroundColor = .blue//theme.popupBarColor.withAlphaComponent(0.98)
+        popupBar.tintColor = theme.tintColor
+        LNPopupBar.appearance(whenContainedInInstancesOf: [UIViewController.self]).titleTextAttributes = [.font: UIFont.systemFont(ofSize: 18) as Any, .foregroundColor: theme.textColor]
+        LNPopupBar.appearance(whenContainedInInstancesOf: [UIViewController.self]).subtitleTextAttributes = [.font: UIFont.systemFont(ofSize: 13) as Any, .foregroundColor: theme.subTextColor]
     }
-    
-    func setTransparentTabBar(isSet: Bool) {
-        if isSet {
-            tabBar.barStyle = .default
-            tabBar.barTintColor = .clear
-            tabBar.backgroundImage = UIImage()
-            tabBar.unselectedItemTintColor = .black
-        }
-        else {
-            tabBar.barStyle = .blackOpaque
-            tabBar.barTintColor = #colorLiteral(red: 0.01568627451, green: 0.01568627451, blue: 0.01568627451, alpha: 1)
-            tabBar.backgroundImage = nil
-            tabBar.unselectedItemTintColor = .lightGray
-        }
-    }
-    
 }

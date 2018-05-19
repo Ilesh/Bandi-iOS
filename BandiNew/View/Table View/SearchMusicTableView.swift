@@ -19,6 +19,7 @@ class SearchMusicTableView: MusicTableView {
     let loadingCellId = "loadingCellId"
     var handleMusicTapped: (()->())?
     var bottomReached: (()->())?
+    var queueMusic: ((Song)->())?
     
     private let noResultsLabel: UILabel = {
         let label = UILabel()
@@ -37,6 +38,11 @@ class SearchMusicTableView: MusicTableView {
         return view
     }()
     
+    override func applyTheme(_ theme: AppTheme) {
+        super.applyTheme(theme)
+        loadingView.activityIndicatorViewStyle = theme.loadingCircleStyle
+    }
+    
     func showNoResults() {
         backgroundView = noResultsLabel
     }
@@ -49,7 +55,7 @@ class SearchMusicTableView: MusicTableView {
         let cell = dequeueReusableCell(withIdentifier: musicCellId, for: indexPath) as! SearchMusicTableViewCell
         cell.music = musicArray[indexPath.row]
         cell.addMusic = {
-            TEMPSessionData.queueMusic.append(cell.music!)
+            //TEMPSessionData.queueMusic.append(cell.music!)
         }
         cell.musicTapped = {
             self.handleMusicTapped?()
@@ -67,7 +73,7 @@ class SearchMusicTableView: MusicTableView {
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let queue = UITableViewRowAction(style: .destructive, title: "QUEUE", handler: { action, indexPath in
-            TEMPSessionData.queueMusic.append(self.musicArray[indexPath.row])
+            self.queueMusic?(self.musicArray[indexPath.row])
         })
         queue.backgroundColor = Constants.Colors().secondaryColor
         

@@ -12,9 +12,8 @@ class PlaylistHeaderView: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        backgroundColor = Constants.Colors().darkTableCell
         setupViews()
+        setUpTheming()
     }
 
     let playlistSideLength = UIScreen.main.bounds.width * 0.373
@@ -25,7 +24,6 @@ class PlaylistHeaderView: UITableViewCell {
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.darkGray.cgColor
         let gradient = StaticGradient()
         gradient.frame = CGRect(x: 0, y: 0, width: self.playlistSideLength, height: self.playlistSideLength)
         view.layer.addSublayer(gradient)
@@ -77,4 +75,11 @@ class PlaylistHeaderView: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+extension PlaylistHeaderView: Themed {
+    func applyTheme(_ theme: AppTheme) {
+        playlistName.textColor = theme.textColor
+        playlistImageContainer.layer.borderColor = theme.viewBorderColor
+    }
 }
