@@ -23,7 +23,9 @@ struct AppTheme {
     var textColor: UIColor
     var subTextColor: UIColor
     var viewBorderColor: CGColor
+    
     var popupBarColor: UIColor
+    var popBarBackgroundStyle: UIBlurEffectStyle
     
     var tableBackgroundColor: UIColor
     var tableSeparatorColor: UIColor
@@ -31,6 +33,9 @@ struct AppTheme {
     var keyboardAppearance: UIKeyboardAppearance
     
     var loadingCircleStyle: UIActivityIndicatorViewStyle
+    
+    var musicDetailsMainBackgroundColor: UIColor
+    var musicDetailsTopBackgroundColor: UIColor
 }
 
 extension AppTheme {
@@ -38,36 +43,32 @@ extension AppTheme {
         themeName: "light",
         tintColor: Constants.Colors().primaryColor,
         statusBarStyle: .`default`,
-        
         isNavBarTranslucent: false,
         barStyle: .default,
-        
         barBackgroundColor: .white,
         barUnselectedTextColor: .gray,
         buttonBackgroundColor:#colorLiteral(red: 0.9607843137, green: 0.9607843137, blue: 0.9607843137, alpha: 1),
         backgroundColor: UIColor(white: 1, alpha: 1),
         textColor: .black,
-        subTextColor: .darkGray,
+        subTextColor: .gray,
         viewBorderColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).cgColor,
         popupBarColor: .white,
-        
+        popBarBackgroundStyle: .extraLight,
         tableBackgroundColor: .white,
         tableSeparatorColor: .lightGray,
-        
         keyboardAppearance: .light,
-        
-        loadingCircleStyle: .gray
+        loadingCircleStyle: .gray,
+        musicDetailsMainBackgroundColor: .white,
+        musicDetailsTopBackgroundColor: #colorLiteral(red: 0.9215686275, green: 0.9215686275, blue: 0.9215686275, alpha: 1)
     )
     
     static let dark = AppTheme(
         themeName: "dark",
         tintColor: Constants.Colors().primaryColor,
         statusBarStyle: .lightContent,
-        
         isNavBarTranslucent: true,
         barStyle: .blackTranslucent,
-        
-        barBackgroundColor: UIColor(white: 0, alpha: 1),
+        barBackgroundColor: .black,
         barUnselectedTextColor: .lightGray,
         buttonBackgroundColor: #colorLiteral(red: 0.09411764706, green: 0.09411764706, blue: 0.09411764706, alpha: 1),
         backgroundColor: UIColor(white: 0, alpha: 1),
@@ -75,13 +76,13 @@ extension AppTheme {
         subTextColor: .lightGray,
         viewBorderColor: UIColor.darkGray.cgColor,
         popupBarColor: .black,
-        
+        popBarBackgroundStyle: .dark,
         tableBackgroundColor: UIColor(red: 0.11, green: 0.11, blue: 0.11, alpha: 1),
         tableSeparatorColor: .darkGray,
-        
         keyboardAppearance: .dark,
-        
-        loadingCircleStyle: .white
+        loadingCircleStyle: .white,
+        musicDetailsMainBackgroundColor: #colorLiteral(red: 0.0862745098, green: 0.0862745098, blue: 0.0862745098, alpha: 1),
+        musicDetailsTopBackgroundColor: Constants.Colors().darkTableCell
     )
 }
 
@@ -93,7 +94,8 @@ final class AppThemeProvider: ThemeProvider {
     
     var currentTheme: AppTheme {
         get {
-            return theme.value
+            return theme.value // TODO: Simultaneous accesses to 0x1c0184e10, but modification requires exclusive access.
+            // Did Exclusive Access to Memory = No Enforcement in Build Settings
         }
         set {
             setNewTheme(newValue)

@@ -41,7 +41,6 @@ class RecentSearchesTableView: UITableView, UITableViewDataSource, UITableViewDe
     }()
     
     @objc func clearPressed() {
-        print("sadfasdf")
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         DispatchQueue.global(qos: .userInitiated).async {
             let context = appDelegate.persistentContainer.viewContext

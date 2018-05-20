@@ -34,8 +34,6 @@ class CustomTabBarController: UITabBarController {
         }
         
         tabBar.layer.borderWidth = 0
-        //tabBar.clipsToBounds = true
-        
         viewControllers = tabViewControllers
         selectedIndex = 1
         
@@ -49,12 +47,14 @@ class CustomTabBarController: UITabBarController {
     }()
     
     func setupViews() {
+        popupBar.inheritsVisualStyleFromDockingView = true
+        popupBar.imageView.contentMode = .scaleAspectFill
+        popupBar.imageView.layer.cornerRadius = 5
+        popupBar.imageView.clipsToBounds = true
         popupInteractionStyle = .drag
-        popupBar.barStyle = .custom
         popupContentView.popupCloseButtonStyle = .chevron
-        popupBar.isTranslucent = false
         popupBar.marqueeScrollEnabled = true
-        popupBar.progressViewStyle = .default
+        popupBar.progressViewStyle = .top
     }
     
 }
@@ -64,9 +64,12 @@ extension CustomTabBarController: Themed {
         tabBar.barTintColor = theme.barBackgroundColor
         tabBar.tintColor = theme.tintColor
         tabBar.unselectedItemTintColor = theme.barUnselectedTextColor
-        popupBar.backgroundColor = .blue//theme.popupBarColor.withAlphaComponent(0.98)
-        popupBar.tintColor = theme.tintColor
-        LNPopupBar.appearance(whenContainedInInstancesOf: [UIViewController.self]).titleTextAttributes = [.font: UIFont.systemFont(ofSize: 18) as Any, .foregroundColor: theme.textColor]
-        LNPopupBar.appearance(whenContainedInInstancesOf: [UIViewController.self]).subtitleTextAttributes = [.font: UIFont.systemFont(ofSize: 13) as Any, .foregroundColor: theme.subTextColor]
+        popupBar.backgroundColor = theme.barBackgroundColor
+        popupBar.barTintColor = theme.barBackgroundColor
+        popupBar.tintColor = theme.textColor
+        popupBar.backgroundStyle = theme.popBarBackgroundStyle
+        popupBar.titleTextAttributes = [.font: UIFont.systemFont(ofSize: 18) as Any, .foregroundColor: theme.textColor]
+        popupBar.subtitleTextAttributes = [.font: UIFont.systemFont(ofSize: 13) as Any, .foregroundColor: theme.subTextColor]
+        updatePopupBarAppearance()
     }
 }

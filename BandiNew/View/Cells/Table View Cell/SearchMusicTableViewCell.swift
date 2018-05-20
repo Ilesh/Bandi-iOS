@@ -73,7 +73,6 @@ class SearchMusicTableViewCell: MusicTableViewCell {
     }
     
     @objc func cellTapped() {
-        print("here")
         musicTapped?()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let tabBar = appDelegate.mainTabBarController

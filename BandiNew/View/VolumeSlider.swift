@@ -19,7 +19,6 @@ class VolumeSlider: UIView {
     lazy var volumeSlider: MPVolumeView = {
         let view = MPVolumeView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.tintColor = .darkGray
         if let volumeSliderView = view.subviews.first as? UISlider {
             let imageSize = CGSize(width: 20, height: 20)
             volumeSliderView.minimumValueImage = self.imageWithImage(image: #imageLiteral(resourceName: "lowvolume-96"), scaledToSize: imageSize).withRenderingMode(.alwaysTemplate)

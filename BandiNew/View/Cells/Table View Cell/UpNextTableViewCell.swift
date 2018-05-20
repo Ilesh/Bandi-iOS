@@ -18,8 +18,6 @@ class UpNextTableViewCell: MusicTableViewCell {
     override func setupViews() {
         super.setupViews()
         
-        contentView.backgroundColor = Constants.Colors().darkTableCell
-        
         contentView.addSubview(thumbnailImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(artistLabel)

@@ -52,11 +52,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         let tv = SearchMusicTableView(frame: .zero, style: .grouped)
         //tv.backgroundColor = .red
         tv.queueMusic = { music in
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            DispatchQueue.global(qos: .userInteractive).async {
-                let context = appDelegate.persistentContainer.viewContext
-                let fetchRequest: NSFetchRequest<RecentSearches> = RecentSearches.fetchRequest()
-            }
+            TEMPSessionData.queueMusic.append(music)
         }
         tv.handleMusicTapped = {
             self.searchController.searchBar.endEditing(true)
@@ -249,7 +245,6 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
                 if let youtubeVideos = youtubeVideos {
                     self.musicTableView.musicArray = youtubeVideos
                     DispatchQueue.main.async {
-                        print(2134)
                         self.musicTableView.setContentOffset(.zero, animated: false)
                         self.musicTableView.reloadData()
                         dispatchGroup.leave()

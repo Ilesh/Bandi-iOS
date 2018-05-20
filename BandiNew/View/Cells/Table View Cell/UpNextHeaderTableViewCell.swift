@@ -13,6 +13,7 @@ class UpNextHeaderTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        setUpTheming()
     }
     
     var scrollDownTapped: (()->())?
@@ -21,7 +22,6 @@ class UpNextHeaderTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = "Up Next"
         label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -29,7 +29,6 @@ class UpNextHeaderTableViewCell: UITableViewCell {
     let scrollDownButton: UIButton = {
         let button = UIButton()
         button.setImage(#imageLiteral(resourceName: "downtriangle-100").withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = .white
         button.imageView?.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -48,8 +47,6 @@ class UpNextHeaderTableViewCell: UITableViewCell {
     }()
     
     func setupViews() {
-        contentView.backgroundColor = Constants.Colors().darkTableCell
-        
         contentView.addSubview(upNextLabel)
         contentView.addSubview(scrollDownButton)
         contentView.addSubview(shuffleButton)
@@ -86,4 +83,11 @@ class UpNextHeaderTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+extension UpNextHeaderTableViewCell: Themed {
+    func applyTheme(_ theme: AppTheme) {
+        upNextLabel.textColor = theme.textColor
+        scrollDownButton.tintColor = theme.textColor
+    }
 }

@@ -16,10 +16,17 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        popupItem.title = "Not Playing"
         setupViews()
-        
-        view.backgroundColor = #colorLiteral(red: 0.0862745098, green: 0.0862745098, blue: 0.0862745098, alpha: 1)//UIColor.black.withAlphaComponent(0.9)
-        popupItem.title = "sdfasdf"
+        setUpTheming()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if AppThemeProvider.shared.currentTheme.themeName == "light" {
+            return .default
+        } else {
+            return .lightContent
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,13 +39,12 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
         self.youtubePlayerFrame.frame = videoContainer.bounds
     }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
+//
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        return .lightContent
+//    }
     
     var playingMusic: Song? {
         didSet {
@@ -51,12 +57,12 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         }
     }
     
-    let backgroundView: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: .dark)
-        let view = UIVisualEffectView(effect: effect)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+//    let backgroundView: UIVisualEffectView = {
+//        let effect = UIBlurEffect(style: .dark)
+//        let view = UIVisualEffectView(effect: effect)
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//        return view
+//    }()
     
     lazy var youtubePlayerFrame: AVPlayerLayer = {
         let avpLayer = AVPlayerLayer(player: avp)
@@ -82,7 +88,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     private let loadingView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(activityIndicatorStyle: .white)
         view.startAnimating()
-        view.backgroundColor = .black
         view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -136,7 +141,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(named: "play-100")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
-        button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -145,7 +149,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         let button = UIButton()
         button.setImage(UIImage(named: "pause-100")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
-        button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -155,7 +158,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         button.setImage(UIImage(named: "rewind-96")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.adjustsImageWhenHighlighted = false
-        button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -165,7 +167,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         button.setImage(UIImage(named: "forward-96")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.adjustsImageWhenHighlighted = false
-        button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -200,12 +201,14 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         return view
     }()
     
-    var contentView = UIView(frame: .zero)
+    let topBackground = UIView()
+    let bottomBackground = UIView()
+    var contentView = UIView()
     var contentTopInset = CGFloat(55)
     
     func setupViews() {
         
-        view.addSubview(backgroundView)
+        //view.addSubview(backgroundView)
         
         let musicDetailsSubview = UIView()
         musicDetailsSubview.translatesAutoresizingMaskIntoConstraints = false
@@ -245,13 +248,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         screenContainer.addSubview(remainingTimeLabel)
         //screenContainer.addSubview(loadingView)
         
-        let bottomBackground = UIView()
-        bottomBackground.backgroundColor = Constants.Colors().darkTableCell
-        bottomBackground.translatesAutoresizingMaskIntoConstraints = false
-        mainScrollView.addSubview(bottomBackground)
-        
-        let topBackground = UIView()
-        topBackground.backgroundColor = #colorLiteral(red: 0.0862745098, green: 0.0862745098, blue: 0.0862745098, alpha: 1)
         topBackground.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(topBackground)
         contentView.addSubview(screenContainer)
@@ -259,22 +255,17 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         contentView.addSubview(upNextTableView)
         
         NSLayoutConstraint.activate([
-            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
+//            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+//            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             mainScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mainScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            bottomBackground.topAnchor.constraint(equalTo: mainScrollView.topAnchor),
-            bottomBackground.bottomAnchor.constraint(equalTo: mainScrollView.bottomAnchor),
-            bottomBackground.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor),
-            bottomBackground.trailingAnchor.constraint(equalTo: mainScrollView.trailingAnchor),
-            
-            topBackground.topAnchor.constraint(equalTo: contentView.topAnchor),
-            topBackground.bottomAnchor.constraint(equalTo: upNextTableView.topAnchor),
+            topBackground.topAnchor.constraint(equalTo: upNextTableView.topAnchor),
+            topBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             topBackground.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             topBackground.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
@@ -426,18 +417,17 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         avp.replaceCurrentItem(with: AVPlayerItem(url: url!))
     }
     
+    var playBarButton: UIBarButtonItem?
+    var pauseBarButton: UIBarButtonItem?
+    
     func setPlayBarButton() {
-        let playBarButton = UIBarButtonItem(image: UIImage(named: "play-mini"), style: .plain, target: self, action: #selector(play))
-        playBarButton.tintColor = .white
-        
-        popupItem.leftBarButtonItems = [playBarButton]
+        playBarButton = UIBarButtonItem(image: UIImage(named: "play-mini"), style: .plain, target: self, action: #selector(play))
+        popupItem.rightBarButtonItems = [playBarButton!]
     }
     
     func setPauseBarButton() {
-        let pauseBarButton = UIBarButtonItem(image: UIImage(named: "pause-mini"), style: .plain, target: self, action: #selector(pause))
-        pauseBarButton.tintColor = .white
-        
-        popupItem.leftBarButtonItems = [pauseBarButton]
+        pauseBarButton = UIBarButtonItem(image: UIImage(named: "pause-mini"), style: .plain, target: self, action: #selector(pause))
+        popupItem.rightBarButtonItems = [pauseBarButton!]
     }
     
     @objc func play() {
@@ -459,5 +449,28 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         var sysinfo = utsname()
         uname(&sysinfo) // ignore return value
         return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+    }
+}
+
+extension MusicDetailsController: Themed {
+    func applyTheme(_ theme: AppTheme) {
+        view.backgroundColor = theme.musicDetailsMainBackgroundColor
+        topBackground.backgroundColor = theme.musicDetailsTopBackgroundColor
+        upNextTableView.backgroundColor = theme.musicDetailsTopBackgroundColor
+        currentTimeLabel.textColor = theme.subTextColor
+        remainingTimeLabel.textColor = theme.subTextColor
+        titleLabel.textColor = theme.textColor
+        volumeSliderView.volumeSlider.tintColor = theme.subTextColor
+        for view in volumeSliderView.volumeSlider.subviews {
+            if view.isKind(of: UIButton.self) {
+                let buttonOnVolumeView : UIButton = view as! UIButton
+                volumeSliderView.volumeSlider.setRouteButtonImage(buttonOnVolumeView.currentImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+                break;
+            }
+        }
+        playButton.tintColor = theme.textColor
+        pauseButton.tintColor = theme.textColor
+        rewindButton.tintColor = theme.textColor
+        forwardButton.tintColor = theme.textColor
     }
 }
