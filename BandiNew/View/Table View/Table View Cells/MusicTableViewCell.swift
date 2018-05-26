@@ -13,7 +13,6 @@ class MusicTableViewCell: BaseTableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        //backgroundColor = Constants.Colors().darkTableCell
         setupViews()
     }
     
@@ -75,7 +74,7 @@ class MusicTableViewCell: BaseTableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = Constants.Colors().textGray
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
     

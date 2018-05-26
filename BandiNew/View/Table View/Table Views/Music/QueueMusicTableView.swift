@@ -56,7 +56,8 @@ class QueueMusicTableView: MusicTableView {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        print (musicArray.count == 0 ? 1 : 2)
+        return musicArray.count == 0 ? 1 : 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -96,9 +97,13 @@ class QueueMusicTableView: MusicTableView {
                 return cell
             } else {
                 if !isEditing {
-                    return dequeueReusableCell(withIdentifier: playlistControlsCellId) as! PlaylistControlsTableViewCell
+                    let cell = dequeueReusableCell(withIdentifier: playlistControlsCellId) as! PlaylistControlsTableViewCell
+                    cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+                    return cell
                 } else {
-                    return dequeueReusableCell(withIdentifier: addMusicCellId) as! AddMusicTableViewCell
+                    let cell = dequeueReusableCell(withIdentifier: addMusicCellId) as! AddMusicTableViewCell
+                    cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+                    return cell
                 }
             }
         } else {

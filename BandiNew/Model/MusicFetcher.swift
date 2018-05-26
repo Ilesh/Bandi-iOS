@@ -8,14 +8,14 @@
 
 import UIKit
 
-class MusicFetcher {
+final class MusicFetcher {
     
-    static let baseYoutubeApiUrlString = "https://www.googleapis.com/youtube/v3/"
-    static let youtubeApiKey = APIKeys().youtubeKey
+    private static let baseYoutubeApiUrlString = "https://www.googleapis.com/youtube/v3/"
+    private static let youtubeApiKey = APIKeys().youtubeKey
+    private static var nextPageToken: String?
+    private static var lastSearchQuery: String?
+    private static let maxYoutubeResults = "14"
     static let songsCache = NSCache<NSString, Song>()
-    static var nextPageToken: String?
-    static var lastSearchQuery: String?
-    static let maxYoutubeResults = "14"
     
     static func fetchYoutubeNextPage(handler: @escaping (_ music: [Song]?) -> Void) {
         if nextPageToken != nil && lastSearchQuery != nil {

@@ -21,7 +21,6 @@ class SearchController: UISearchController {
     }
     
     func setup() {
-        searchBar.keyboardAppearance = .dark
         setUpTheming()
     }
     

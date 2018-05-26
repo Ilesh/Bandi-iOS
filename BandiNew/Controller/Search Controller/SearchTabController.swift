@@ -26,7 +26,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         title = "Search"
-        updateRecentSearchesTable()
+        //updateRecentSearchesTable()
         setupViews()
     }
     
@@ -140,7 +140,8 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        updateRecentSearchesTable()
+        recentSearchesTableView.reloadData()
+        //updateRecentSearchesTable()
         searchCancelled = true
     }
     
@@ -186,54 +187,31 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
 //        }
 //    }
     
-    func updateRecentSearchesTable() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        DispatchQueue.global(qos: .userInteractive).async {
-            let context = appDelegate.persistentContainer.viewContext
-            let fetchRequest: NSFetchRequest<RecentSearches> = RecentSearches.fetchRequest()
-            do {
-                let recentSearches = try context.fetch(fetchRequest)
-                var recentSearchStrings: [String] = []
-                for recentSearch in recentSearches {
-                    let recentSearch = recentSearch.recentSearch
-                    recentSearchStrings.append(recentSearch!)
-                }
-                self.recentSearchesTableView.recentSearches = recentSearchStrings
-                DispatchQueue.main.async {
-                    self.recentSearchesTableView.clearButton.isHidden = self.recentSearchesTableView.recentSearches.count == 0
-                    self.recentSearchesTableView.reloadData()
-                }
-            } catch let error {
-                print("error: \(error.localizedDescription)")
-            }
-        }
-    }
+//    func updateRecentSearchesTable() {
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        DispatchQueue.global(qos: .userInteractive).async {
+//            let context = appDelegate.persistentContainer.viewContext
+//            let fetchRequest: NSFetchRequest<RecentSearches> = RecentSearches.fetchRequest()
+//            do {
+//                let recentSearches = try context.fetch(fetchRequest)
+//                var recentSearchStrings: [String] = []
+//                for recentSearch in recentSearches {
+//                    let recentSearch = recentSearch.recentSearch
+//                    recentSearchStrings.append(recentSearch!)
+//                }
+//                self.recentSearchesTableView.recentSearches = recentSearchStrings
+//                DispatchQueue.main.async {
+//                    self.recentSearchesTableView.clearButton.isHidden = self.recentSearchesTableView.recentSearches.count == 0
+//                    self.recentSearchesTableView.reloadData()
+//                }
+//            } catch let error {
+//                print("error: \(error.localizedDescription)")
+//            }
+//        }
+//    }
     
     @objc func updateSearchResults() {
         let searchBarText = self.searchController.searchBar.text!
-        
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        DispatchQueue.global(qos: .userInteractive).async {
-            let context = appDelegate.persistentContainer.viewContext
-            let fetchRequest: NSFetchRequest<RecentSearches> = RecentSearches.fetchRequest()
-            var searchFound = false
-            do {
-                let recentSearches = try context.fetch(fetchRequest)
-                for recentSearch in recentSearches {
-                    let recentSearch = recentSearch.recentSearch
-                    searchFound = searchBarText == recentSearch
-                    if searchFound { break }
-                }
-                if !searchFound {
-                    let entity = NSEntityDescription.entity(forEntityName: "RecentSearches", in: context)
-                    let newRecentSearch = NSManagedObject(entity: entity!, insertInto: context)
-                    newRecentSearch.setValue(searchBarText, forKey: "recentSearch")
-                    try context.save()
-                }
-            } catch let error {
-                print("error: \(error.localizedDescription)")
-            }
-        }
         
         DispatchQueue.global(qos: .userInitiated).async {
             let dispatchGroup = DispatchGroup()
@@ -255,6 +233,8 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
                 //self.setCollectionBackground()
             }
         }
+        
+        recentSearchesTableView.addSearch(searchBarText)
     }
     
 }

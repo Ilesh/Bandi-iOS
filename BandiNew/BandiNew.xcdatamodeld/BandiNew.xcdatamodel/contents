@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17C88" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Library" representedClassName="Library" syncable="YES" codeGenerationType="class">
-        <relationship name="playlistsContained" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Playlist" syncable="YES"/>
-        <relationship name="songsContained" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongData" syncable="YES"/>
+        <relationship name="playlists" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Playlist" syncable="YES"/>
+        <relationship name="queue" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Queue" syncable="YES"/>
+        <relationship name="songs" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongRENAME" syncable="YES"/>
     </entity>
     <entity name="Playlist" representedClassName="Playlist" syncable="YES" codeGenerationType="class">
         <attribute name="dateCreated" optional="YES" attributeType="String" syncable="YES"/>
@@ -11,15 +12,16 @@
         <attribute name="kind" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="playlistDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="songsContained" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongData" inverseName="inPlaylists" inverseEntity="SongData" syncable="YES"/>
+        <relationship name="songs" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongRENAME" inverseName="playlists" inverseEntity="SongRENAME" syncable="YES"/>
     </entity>
     <entity name="Queue" representedClassName="Queue" syncable="YES" codeGenerationType="class">
-        <relationship name="songsContained" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongData" syncable="YES"/>
+        <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="songs" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongRENAME" syncable="YES"/>
     </entity>
     <entity name="RecentSearches" representedClassName="RecentSearches" syncable="YES" codeGenerationType="class">
         <attribute name="recentSearch" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="SongData" representedClassName="SongData" syncable="YES" codeGenerationType="class">
+    <entity name="SongRENAME" representedClassName="SongRENAME" syncable="YES" codeGenerationType="class">
         <attribute name="album" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="artist" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dateAdded" optional="YES" attributeType="String" syncable="YES"/>
@@ -29,13 +31,13 @@
         <attribute name="liveBroadcastContent" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnails" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="inPlaylists" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Playlist" inverseName="songsContained" inverseEntity="Playlist" syncable="YES"/>
+        <relationship name="playlists" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Playlist" inverseName="songs" inverseEntity="Playlist" syncable="YES"/>
     </entity>
     <elements>
-        <element name="RecentSearches" positionX="-63" positionY="41" width="128" height="58"/>
-        <element name="SongData" positionX="-216" positionY="360" width="128" height="193"/>
-        <element name="Playlist" positionX="-218" positionY="113" width="128" height="148"/>
-        <element name="Library" positionX="-218" positionY="38" width="128" height="73"/>
-        <element name="Queue" positionX="-99" positionY="315" width="128" height="60"/>
+        <element name="Library" positionX="-218" positionY="38" width="128" height="88"/>
+        <element name="Playlist" positionX="-522" positionY="207" width="128" height="148"/>
+        <element name="Queue" positionX="-92" positionY="243" width="128" height="73"/>
+        <element name="RecentSearches" positionX="25" positionY="59" width="128" height="58"/>
+        <element name="SongRENAME" positionX="-263" positionY="468" width="128" height="193"/>
     </elements>
 </model>

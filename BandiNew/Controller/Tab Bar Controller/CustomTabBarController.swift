@@ -41,10 +41,7 @@ class CustomTabBarController: UITabBarController {
         setUpTheming()
     }
     
-    lazy var musicDetailsController: MusicDetailsController = {
-        let yp = MusicDetailsController()
-        return yp
-    }()
+    lazy var musicDetailsController = MusicDetailsController()
     
     func setupViews() {
         popupBar.inheritsVisualStyleFromDockingView = true

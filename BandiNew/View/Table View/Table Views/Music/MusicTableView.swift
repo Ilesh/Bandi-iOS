@@ -86,7 +86,6 @@ class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate, T
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueReusableCell(withIdentifier: musicCellId, for: indexPath) as! MusicTableViewCell
-        print("makingbad")
         cell.music = musicArray[indexPath.row]
         return cell
     }

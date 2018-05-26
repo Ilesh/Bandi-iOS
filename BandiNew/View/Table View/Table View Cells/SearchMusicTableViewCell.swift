@@ -50,12 +50,12 @@ class SearchMusicTableViewCell: MusicTableViewCell {
             titleLabel.heightAnchor.constraint(equalToConstant: 25),
             titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
             titleLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
-            titleLabel.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: -5),
+            titleLabel.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: 0),
             
             artistLabel.heightAnchor.constraint(equalToConstant: 25),
             artistLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             artistLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
-            artistLabel.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: -5),
+            artistLabel.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: 0),
             
             interactionButton.topAnchor.constraint(equalTo: self.topAnchor),
             interactionButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
