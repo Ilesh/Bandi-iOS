@@ -52,7 +52,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             titleLabel.text = playingMusic?.title
             popupItem.subtitle = playingMusic?.artist
             artistLabel.text = playingMusic?.artist
-            popupItem.image = playingMusic?.thumbnailImages["small"]
+            popupItem.image = playingMusic?.thumbnailImages!["small"] as! UIImage
             popupItem.progress = 0.34
         }
     }

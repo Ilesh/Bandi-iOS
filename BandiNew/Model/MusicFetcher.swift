@@ -98,11 +98,8 @@ final class MusicFetcher {
                         //print(jsonResult)
                         if let items = jsonResult["items"] as? [AnyObject]? {
                             for item in items! {
-                                let id  = [
-                                    "type" : "youtube#video",
-                                    "id" : item["id"] as! String,
-                                    ]
-                                if let cachedSong = songsCache.object(forKey: id["id"]! as NSString) {
+                                let id = item["id"] as! String
+                                if let cachedSong = songsCache.object(forKey: id as NSString) {
                                     songs.append(cachedSong)
                                     continue
                                 }
@@ -124,8 +121,18 @@ final class MusicFetcher {
                                     "large" : (thumbnails["high"] as! Dictionary<String, Any>)["url"] as! String,
                                     ]
                                 
-                                let song = Song(title: title, artist: artist, id: id, liveBroadcastContent: liveBroadcastContent, duration: duration, thumbnails: thumbnailsDetail)
-                                songs.append(song)
+                                DispatchQueue.main.async {
+                                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                    let song = Song(context: appDelegate.persistentContainer.viewContext)
+                                    song.title = title
+                                    song.artist = artist
+                                    song.id = id
+                                    song.liveBroadcastContent = liveBroadcastContent
+                                    song.length = duration
+                                    song.thumbnails = thumbnailsDetail
+                                    song.thumbnailImages = [:]
+                                    songs.append(song)
+                                }
                             }
                             handler(songs)
                         }

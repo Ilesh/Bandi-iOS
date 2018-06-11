@@ -27,7 +27,6 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
                 self.fetchRecentSearches()
             }
         })
-        
     }
     
     let recentSearchCellId = "recentSearchCellId"
@@ -96,7 +95,6 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
         DispatchQueue.global(qos: .userInitiated).async {
             var searchFound = false
             if let fetchedObjects = self.fetchedResultsController.fetchedObjects {
-                print(fetchedObjects.count)
                 for object in fetchedObjects {
                     let recentSearch = object.recentSearch
                     searchFound = searchString == recentSearch

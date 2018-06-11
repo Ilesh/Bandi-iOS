@@ -56,8 +56,7 @@ class QueueMusicTableView: MusicTableView {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        print (musicArray.count == 0 ? 1 : 2)
-        return musicArray.count == 0 ? 1 : 2
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -50,7 +50,6 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     lazy var musicTableView: SearchMusicTableView = {
         let tv = SearchMusicTableView(frame: .zero, style: .grouped)
-        //tv.backgroundColor = .red
         tv.queueMusic = { music in
             TEMPSessionData.queueMusic.append(music)
         }

@@ -394,12 +394,12 @@
 			path = "Music Details Controller";
 			sourceTree = "<group>";
 		};
-		3C0E44BA20B6497300596ACE /* LIbrary Controller */ = {
+		3C0E44BA20B6497300596ACE /* Library Controller */ = {
 			isa = PBXGroup;
 			children = (
 				3C1FBE7920A2CB0900C72DF1 /* LibraryTabController.swift */,
 			);
-			path = "LIbrary Controller";
+			path = "Library Controller";
 			sourceTree = "<group>";
 		};
 		3C0E44BB20B649FC00596ACE /* Up next */ = {
@@ -510,7 +510,7 @@
 				3C0E44B420B6491300596ACE /* Tab Bar Controller */,
 				3C0E44B520B6492100596ACE /* Navigation Controller */,
 				3CE21DF22095A7BF0019CA13 /* Search Bar  */,
-				3C0E44BA20B6497300596ACE /* LIbrary Controller */,
+				3C0E44BA20B6497300596ACE /* Library Controller */,
 				3C0E44B620B6493500596ACE /* Search Controller */,
 				3C0E44B720B6494A00596ACE /* Queue Controller */,
 				3C0E44B920B6496800596ACE /* Music Details Controller */,

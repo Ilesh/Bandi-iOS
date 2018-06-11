@@ -28,21 +28,22 @@ class MusicTableViewCell: BaseTableViewCell {
                 print("LIVE VIDEO FOUND")
                 self.durationLabel.text = "LIVE"
             } else {
-                self.durationLabel.text = self.music?.duration?.decodeYoutubeTime()
+                self.durationLabel.text = self.music?.length?.decodeYoutubeTime()
+                //self.durationLabel.text = self.music?.duration?.decodeYoutubeTime()
             }
             let requestedImageType = "wide"
-            if self.music?.thumbnailImages[requestedImageType] == nil {
+            if self.music?.thumbnailImages![requestedImageType] == nil {
                 DispatchQueue.global(qos: .userInitiated).async {
                     self.music?.fetchThumbnail(requestedImageType: requestedImageType, completionHandler: { success in
                         if success {
                             DispatchQueue.main.async {
-                                self.thumbnailImageView.image = self.music?.thumbnailImages[requestedImageType]
+                                self.thumbnailImageView.image = self.music?.thumbnailImages![requestedImageType] as! UIImage
                             }
                         }
                     })
                 }
             } else {
-                self.thumbnailImageView.image = self.music?.thumbnailImages[requestedImageType]
+                self.thumbnailImageView.image = self.music?.thumbnailImages![requestedImageType] as! UIImage
             }
         }
     }
