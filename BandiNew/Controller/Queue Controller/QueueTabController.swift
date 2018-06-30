@@ -23,11 +23,9 @@ class QueueTabController: UIViewController {
         
         title = "Queue"
         setupViews()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.musicTableView.musicArray = TEMPSessionData.queueMusic
         self.musicTableView.reloadData()
     }
     
@@ -38,15 +36,8 @@ class QueueTabController: UIViewController {
         AppThemeProvider.shared.nextTheme()
     }
     
-    
     lazy var musicTableView: QueueMusicTableView = {
         let cv = QueueMusicTableView(frame: .zero, style: UITableViewStyle.plain)
-        cv.musicArray = TEMPSessionData.queueMusic
-        cv.handleScroll = { (isUp) -> () in
-            if TEMPSessionData.queueMusic.count != 0 {
-                //self.showSearchBar(show: !isUp)
-            }
-        }
         cv.handleLinkTapped = {
             //let activityVC = UIActivityViewController(title: nil, message: nil, preferredStyle: UIActivityIndicatorViewStyle.gray, blurStyle: .dark)
             let activityVC = UIActivityViewController(activityItems: ["REPLACE THIS LINK"], applicationActivities: nil)
@@ -56,9 +47,6 @@ class QueueTabController: UIViewController {
         cv.handleEditTapped = {
             let alert = QueueEditAlertController(title: nil, message: nil, preferredStyle: .actionSheet) //QueueEditAlertController(title: nil, message: nil, preferredStyle: .actionSheet, blurStyle: .dark)
             self.present(alert, animated: true, completion: nil)
-        }
-        cv.handleSwipeStarted = {
-            //self.showSearchBar(show: false)
         }
         cv.handleMusicRemoved = {
             //self.setCollectionBackground()

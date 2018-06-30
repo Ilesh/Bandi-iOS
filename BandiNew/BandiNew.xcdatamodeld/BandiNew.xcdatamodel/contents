@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17C88" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Library" representedClassName="Library" syncable="YES" codeGenerationType="class">
-        <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Playlist" syncable="YES"/>
-        <relationship name="queue" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Queue" syncable="YES"/>
-        <relationship name="songs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Song" syncable="YES"/>
-    </entity>
     <entity name="Playlist" representedClassName="Playlist" syncable="YES" codeGenerationType="class">
-        <attribute name="dateCreated" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dateModified" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="dateModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="firstSong" optional="YES" attributeType="Transformable" customClassName="SongToPlaylist" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastSong" optional="YES" attributeType="Transformable" customClassName="SongToPlaylist" syncable="YES"/>
         <attribute name="playlistDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="size" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="songs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Song" inverseName="playlists" inverseEntity="Song" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="song" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongToPlaylist" inverseName="playlist" inverseEntity="SongToPlaylist" syncable="YES"/>
     </entity>
-    <entity name="Queue" representedClassName="Queue" syncable="YES" codeGenerationType="class">
-        <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="songs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Song" syncable="YES"/>
-    </entity>
-    <entity name="RecentSearches" representedClassName="RecentSearches" syncable="YES" codeGenerationType="class">
+    <entity name="RecentSearch" representedClassName="RecentSearch" syncable="YES" codeGenerationType="class">
         <attribute name="recentSearch" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Song" representedClassName="Song" syncable="YES" codeGenerationType="class">
         <attribute name="album" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="artist" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dateAdded" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="length" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="liveBroadcastContent" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnailImages" optional="YES" transient="YES" attributeType="Transformable" customClassName="Dictionary&lt;String,AnyObject&gt;" syncable="YES"/>
         <attribute name="thumbnails" optional="YES" attributeType="Transformable" customClassName="Dictionary&lt;String,String&gt;" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Playlist" inverseName="songs" inverseEntity="Playlist" syncable="YES"/>
+        <relationship name="songToPlaylists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SongToPlaylist" inverseName="song" inverseEntity="SongToPlaylist" syncable="YES"/>
+    </entity>
+    <entity name="SongToPlaylist" representedClassName="SongToPlaylist" syncable="YES" codeGenerationType="class">
+        <attribute name="dateModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="nextSong" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongToPlaylist" inverseName="previousSong" inverseEntity="SongToPlaylist" syncable="YES"/>
+        <relationship name="playlist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Playlist" inverseName="song" inverseEntity="Playlist" syncable="YES"/>
+        <relationship name="previousSong" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongToPlaylist" inverseName="nextSong" inverseEntity="SongToPlaylist" syncable="YES"/>
+        <relationship name="song" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Song" inverseName="songToPlaylists" inverseEntity="Song" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Library" positionX="-218" positionY="38" width="128" height="88"/>
-        <element name="Playlist" positionX="-522" positionY="207" width="128" height="133"/>
-        <element name="Queue" positionX="-92" positionY="243" width="128" height="73"/>
-        <element name="RecentSearches" positionX="-2" positionY="95" width="128" height="58"/>
-        <element name="Song" positionX="-281" positionY="290" width="128" height="193"/>
+        <element name="Playlist" positionX="-389" positionY="194" width="128" height="195"/>
+        <element name="RecentSearch" positionX="-225" positionY="203" width="128" height="58"/>
+        <element name="Song" positionX="-801" positionY="198" width="128" height="178"/>
+        <element name="SongToPlaylist" positionX="-612" positionY="306" width="128" height="118"/>
     </elements>
 </model>

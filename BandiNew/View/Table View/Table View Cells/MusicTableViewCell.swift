@@ -37,13 +37,13 @@ class MusicTableViewCell: BaseTableViewCell {
                     self.music?.fetchThumbnail(requestedImageType: requestedImageType, completionHandler: { success in
                         if success {
                             DispatchQueue.main.async {
-                                self.thumbnailImageView.image = self.music?.thumbnailImages![requestedImageType] as! UIImage
+                                self.thumbnailImageView.image = (self.music?.thumbnailImages![requestedImageType] as! UIImage)
                             }
                         }
                     })
                 }
             } else {
-                self.thumbnailImageView.image = self.music?.thumbnailImages![requestedImageType] as! UIImage
+                self.thumbnailImageView.image = (self.music?.thumbnailImages![requestedImageType] as! UIImage)
             }
         }
     }

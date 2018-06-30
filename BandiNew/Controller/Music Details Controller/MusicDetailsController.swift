@@ -30,7 +30,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        upNextTableView.musicArray = TEMPSessionData.queueMusic
+        upNextTableView.musicArray = (CoreDataHelper.shared.queue?.getSongsArray())!
         upNextTableView.reloadData()
         let calculatedHeight = view.bounds.height - contentTopInset - 105 + CGFloat(upNextTableView.getCalculatedHeight())
         contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: calculatedHeight)
@@ -52,7 +52,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             titleLabel.text = playingMusic?.title
             popupItem.subtitle = playingMusic?.artist
             artistLabel.text = playingMusic?.artist
-            popupItem.image = playingMusic?.thumbnailImages!["small"] as! UIImage
+            popupItem.image = (playingMusic?.thumbnailImages!["small"] as! UIImage)
             popupItem.progress = 0.34
         }
     }
@@ -184,12 +184,12 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     }()
     
     lazy var upNextTableView: UpNextTableView = {
-        let tv = UpNextTableView(frame: .zero, style: .plain)
+        // TODO: change upnext to show currently playing playlist
+        let playlist = CoreDataHelper.shared.queue
+        let tv = UpNextTableView(frame: .zero, style: .plain, playlist: playlist)
         tv.handleScrollDownTapped = {
             self.mainScrollView.scrollToView(view: tv, animated: true)
         }
-        // TODO: UPDATE DATA
-        tv.musicArray = TEMPSessionData.queueMusic
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
@@ -396,7 +396,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "rate" {
             if avp.rate > 0 {
-                print(avp.rate)
+                //print(avp.rate)
                 hideLoading()
             }
         }

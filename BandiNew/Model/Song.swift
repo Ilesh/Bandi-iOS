@@ -8,10 +8,9 @@
 
 import UIKit
 
+//TODO: crahsed when loading search
 extension Song {
-    
     func fetchThumbnail(requestedImageType: String, completionHandler: (Bool)->()) {
-        
         do {
             thumbnailImages![requestedImageType] = try UIImage(data: Data(contentsOf: URL(string: thumbnails![requestedImageType]!)!))
             completionHandler(true)
@@ -21,8 +20,8 @@ extension Song {
                     thumbnailImages![imageType] = try UIImage(data: Data(contentsOf: URL(string: thumbnails![imageType]!)!))
                 }
             }
-            if (MusicFetcher.songsCache.object(forKey: id! as NSString) == nil) {
-                MusicFetcher.songsCache.setObject(self, forKey: id! as NSString)
+            if (MusicFetcher.shared.songsCache.object(forKey: id! as NSString) == nil) {
+                MusicFetcher.shared.songsCache.setObject(self, forKey: id! as NSString)
             }
         } catch {
             print("thumbnail image fetching error")

@@ -10,15 +10,23 @@ import UIKit
 
 class UpNextTableView: MusicTableView {
     
-    override init(frame: CGRect, style: UITableViewStyle) {
+    init(frame: CGRect, style: UITableViewStyle, playlist: Playlist?) {
         super.init(frame: frame, style: style)
+        self.playlist = playlist
+        
         isEditing = true
         isScrollEnabled = false
+        
         register(UpNextHeaderTableViewCell.self, forCellReuseIdentifier: upNextHeaderId)
         register(UpNextTableViewCell.self, forCellReuseIdentifier: upNextCellId)
         setupViews()
     }
     
+    var playlist: Playlist?
+    var playlistSize: Int {
+        guard let playlist = self.playlist else { return 0 }
+        return Int(playlist.size)
+    }
     var handleScrollDownTapped: (()->())?
     let upNextHeaderId = "upNextHeaderId"
     let upNextCellId = "upNextCellId"
@@ -39,18 +47,18 @@ class UpNextTableView: MusicTableView {
     }
     
     func getCalculatedHeight() -> Int {
-        return musicArray.count * 60 + 105
+        return playlistSize * 60 + 105
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return musicArray.count == 0 ? 1 : 2
+        return playlistSize == 0 ? 1 : 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         } else {
-            return musicArray.count
+            return playlistSize
         }
     }
     
@@ -68,12 +76,12 @@ class UpNextTableView: MusicTableView {
             cell.scrollDownTapped = {
                 self.handleScrollDownTapped?()
             }
-            cell.scrollDownButton.isHidden = musicArray.count == 0
+            cell.scrollDownButton.isHidden = playlistSize == 0
             cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
             return cell
         } else {
             let cell = dequeueReusableCell(withIdentifier: upNextCellId) as! UpNextTableViewCell
-            cell.music = musicArray[indexPath.row]
+            cell.music = playlist?.getSongNode(at: indexPath.row)?.song
             return cell
         }
     }
@@ -106,10 +114,8 @@ class UpNextTableView: MusicTableView {
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if destinationIndexPath.section == 1 {
-            let movedObject = self.musicArray[sourceIndexPath.row]
-            musicArray.remove(at: sourceIndexPath.row)
-            musicArray.insert(movedObject, at: destinationIndexPath.row)
-            TEMPSessionData.queueMusic = musicArray
+            guard let playlist = self.playlist else { return }
+            playlist.moveSong(from: sourceIndexPath.row, to: destinationIndexPath.row)
         }
     }
     

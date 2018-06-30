@@ -7,17 +7,24 @@
 //
 
 import UIKit
+import CoreData
 
 final class MusicFetcher {
     
-    private static let baseYoutubeApiUrlString = "https://www.googleapis.com/youtube/v3/"
-    private static let youtubeApiKey = APIKeys().youtubeKey
-    private static var nextPageToken: String?
-    private static var lastSearchQuery: String?
-    private static let maxYoutubeResults = "14"
-    static let songsCache = NSCache<NSString, Song>()
+    static let shared = MusicFetcher()
     
-    static func fetchYoutubeNextPage(handler: @escaping (_ music: [Song]?) -> Void) {
+    private let baseYoutubeApiUrlString = "https://www.googleapis.com/youtube/v3/"
+    private let youtubeApiKey = APIKeys().youtubeKey
+    private var nextPageToken: String?
+    private var lastSearchQuery: String?
+    private let maxYoutubeResults = "14"
+    let songsCache = NSCache<NSString, Song>()
+    
+    let context: NSManagedObjectContext = {
+        return CoreDataHelper.shared.getContext()
+    }()
+    
+    func fetchYoutubeNextPage(handler: @escaping (_ music: [Song]?) -> Void) {
         if nextPageToken != nil && lastSearchQuery != nil {
             let urlParameters: Dictionary<String, String> = [
                 "q" : lastSearchQuery!,
@@ -28,12 +35,12 @@ final class MusicFetcher {
             ]
             let urlString = baseYoutubeApiUrlString + "search?" + parametersToString(parameters: urlParameters)
             getVideoList(urlString: urlString, handler: { videoIds in
-                getVideoDetails(videoIds: videoIds, handler: handler)
+                self.getVideoDetails(videoIds: videoIds, handler: handler)
             })
         }
     }
     
-    static func fetchYoutube(keywords: String, handler: @escaping (_ music: [Song]?) -> Void) {
+    func fetchYoutube(keywords: String, handler: @escaping (_ music: [Song]?) -> Void) {
         let keywordsReplaced = keywords.replacingOccurrences(of: " ", with: "+")
         lastSearchQuery = keywordsReplaced
         let urlParameters: Dictionary<String, String> = [
@@ -46,11 +53,11 @@ final class MusicFetcher {
         ]
         let urlString = baseYoutubeApiUrlString + "search?" + parametersToString(parameters: urlParameters)
         getVideoList(urlString: urlString, handler: { videoIds in
-            getVideoDetails(videoIds: videoIds, handler: handler)
+            self.getVideoDetails(videoIds: videoIds, handler: handler)
         })
     }
     
-    static func getVideoList(urlString: String, handler: @escaping (_ videoIds: [String]) -> Void) {
+    func getVideoList(urlString: String, handler: @escaping (_ videoIds: [String]) -> Void) {
         var videoIds: [String] = []
         let url = URL(string: urlString)
         URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) -> Void in
@@ -58,7 +65,7 @@ final class MusicFetcher {
                 if data != nil {
                     if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] {
                         //print(jsonResult)
-                        nextPageToken = jsonResult["nextPageToken"] as? String
+                        self.nextPageToken = jsonResult["nextPageToken"] as? String
                         if let items = jsonResult["items"] as? [AnyObject]? {
                             for item in items! {
                                 let id = item["id"] as! Dictionary<String, Any>
@@ -80,7 +87,7 @@ final class MusicFetcher {
         }).resume()
     }
     
-    static func getVideoDetails(videoIds: [String], handler: @escaping (_ music: [Song]?) -> Void) {
+    func getVideoDetails(videoIds: [String], handler: @escaping (_ music: [Song]?) -> Void) {
         let videoIdsAppended = videoIds.joined(separator: ",")
         let urlParameters: Dictionary<String, String>  = [
             "id" : videoIdsAppended,
@@ -99,7 +106,7 @@ final class MusicFetcher {
                         if let items = jsonResult["items"] as? [AnyObject]? {
                             for item in items! {
                                 let id = item["id"] as! String
-                                if let cachedSong = songsCache.object(forKey: id as NSString) {
+                                if let cachedSong = self.songsCache.object(forKey: id as NSString) {
                                     songs.append(cachedSong)
                                     continue
                                 }
@@ -121,9 +128,8 @@ final class MusicFetcher {
                                     "large" : (thumbnails["high"] as! Dictionary<String, Any>)["url"] as! String,
                                     ]
                                 
-                                DispatchQueue.main.async {
-                                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                                    let song = Song(context: appDelegate.persistentContainer.viewContext)
+                                self.context.perform({
+                                    let song = Song(context: self.context)
                                     song.title = title
                                     song.artist = artist
                                     song.id = id
@@ -132,7 +138,8 @@ final class MusicFetcher {
                                     song.thumbnails = thumbnailsDetail
                                     song.thumbnailImages = [:]
                                     songs.append(song)
-                                }
+                                })
+                                
                             }
                             handler(songs)
                         }
@@ -147,7 +154,7 @@ final class MusicFetcher {
         }).resume()
     }
     
-    static func fetchYoutubeVideoUrl(videoID: String, quality: String, handler: @escaping (_ videoURL: String?) -> Void) {
+    func fetchYoutubeVideoUrl(videoID: String, quality: String, handler: @escaping (_ videoURL: String?) -> Void) {
         let urlParameters = [
             "url" : "www.youtube.com/watch?v=\(videoID)",
             ]
@@ -166,7 +173,7 @@ final class MusicFetcher {
         }).resume()
     }
     
-    static func fetchYoutubeAutocomplete(searchQuery: String, handler: @escaping (_ suggestions: [String]) -> Void) {
+    func fetchYoutubeAutocomplete(searchQuery: String, handler: @escaping (_ suggestions: [String]) -> Void) {
         let updatedSearch = searchQuery.replacingOccurrences(of: " ", with: "+")
         let urlParameters = [
             "client" : "firefox",
@@ -176,7 +183,7 @@ final class MusicFetcher {
         ]
         let requestString = "https://suggestqueries.google.com/complete/search?" + parametersToString(parameters: urlParameters)
         let requestURL = URL(string: requestString)
-        URLSession.shared.downloadTask(with: requestURL!) { (data, response, error) in
+        URLSession.shared.downloadTask(with: requestURL!, completionHandler: { (data, response, error) -> Void in
             do {
                 if data != nil {
                     let text = try String(contentsOf: data!.absoluteURL, encoding: .utf8)
@@ -190,10 +197,10 @@ final class MusicFetcher {
             catch {
                 print("error: \(error)")
             }
-        }.resume()
+        }).resume()
     }
     
-    static func parametersToString(parameters: Dictionary<String, String>) -> String {
+    func parametersToString(parameters: Dictionary<String, String>) -> String {
         return (parameters.compactMap({ (key, value) -> String in
             return "\(key)=\(value)"
         }) as Array).joined(separator: "&")

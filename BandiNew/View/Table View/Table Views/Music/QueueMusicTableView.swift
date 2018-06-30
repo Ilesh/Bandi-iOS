@@ -19,6 +19,7 @@ class QueueMusicTableView: MusicTableView {
         register(QueueMusicTableViewCell.self, forCellReuseIdentifier: musicCellId)
     }
     
+    let queue = CoreDataHelper.shared.queue
     let queueMainCellId = "queueMainCellId"
     let playlistControlsCellId = "playlistControlsCellId"
     let addMusicCellId = "addMusicCellId"
@@ -63,7 +64,7 @@ class QueueMusicTableView: MusicTableView {
         if section == 0 {
             return 2
         } else if section == 1 {
-            return musicArray.count
+            return Int((queue?.size)!)
         }
         return 0
     }
@@ -107,7 +108,7 @@ class QueueMusicTableView: MusicTableView {
             }
         } else {
             let cell = dequeueReusableCell(withIdentifier: musicCellId, for: indexPath) as! QueueMusicTableViewCell
-            cell.music = musicArray[indexPath.row]
+            cell.music = queue?.getSongNode(at: indexPath.row)?.song
             return cell
         }
     }
@@ -161,8 +162,7 @@ class QueueMusicTableView: MusicTableView {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         if indexPath.section == 1 {
             let remove = UITableViewRowAction(style: .destructive, title: "REMOVE") { (action, indexPath) in
-                self.musicArray.remove(at: indexPath.row)
-                TEMPSessionData.queueMusic = self.musicArray
+                self.queue?.removeSong(at: indexPath.row)
                 self.performBatchUpdates({
                     self.deleteRows(at: [indexPath], with: .left)
                 }, completion: nil)
@@ -187,11 +187,9 @@ class QueueMusicTableView: MusicTableView {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        print("source: \(sourceIndexPath.row)    destination: \(destinationIndexPath.row)")
         if destinationIndexPath.section == 1 {
-            let movedObject = self.musicArray[sourceIndexPath.row]
-            musicArray.remove(at: sourceIndexPath.row)
-            musicArray.insert(movedObject, at: destinationIndexPath.row)
-            TEMPSessionData.queueMusic = musicArray
+            self.queue?.moveSong(from: sourceIndexPath.row, to: destinationIndexPath.row)
         }
     }
     
@@ -200,5 +198,3 @@ class QueueMusicTableView: MusicTableView {
     }
 
 }
-
-

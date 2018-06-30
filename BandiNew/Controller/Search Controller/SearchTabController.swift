@@ -50,8 +50,11 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     lazy var musicTableView: SearchMusicTableView = {
         let tv = SearchMusicTableView(frame: .zero, style: .grouped)
-        tv.queueMusic = { music in
-            TEMPSessionData.queueMusic.append(music)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        tv.queueMusic = { song in
+            guard let queue = CoreDataHelper.shared.queue else { print("queue missing"); return }
+            CoreDataHelper.shared.queue?.insertSongAtEnd(song: song)
         }
         tv.handleMusicTapped = {
             self.searchController.searchBar.endEditing(true)
@@ -61,7 +64,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         }
         tv.bottomReached = {
             DispatchQueue.global(qos: .userInitiated).async {
-                MusicFetcher.fetchYoutubeNextPage(handler: { (youtubeVideos) -> Void in
+                MusicFetcher.shared.fetchYoutubeNextPage(handler: { (youtubeVideos) -> Void in
                     if let youtubeVideos = youtubeVideos {
                         let filteredVideos = youtubeVideos.filter({ song in
                             return !self.musicTableView.musicArray.contains(song)
@@ -168,7 +171,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         let searchBarText = self.searchController.searchBar.text!
         if !searchBarText.isEmpty {
             DispatchQueue.global(qos: .userInitiated).async {
-                MusicFetcher.fetchYoutubeAutocomplete(searchQuery: searchBarText, handler: { suggestions in
+                MusicFetcher.shared.fetchYoutubeAutocomplete(searchQuery: searchBarText, handler: { suggestions in
                     self.suggestionsTableView.suggestions = suggestions
                     DispatchQueue.main.async {
                         self.suggestionsTableView.reloadData()
@@ -215,7 +218,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         DispatchQueue.global(qos: .userInitiated).async {
             let dispatchGroup = DispatchGroup()
             dispatchGroup.enter()
-            MusicFetcher.fetchYoutube(keywords: searchBarText) { (youtubeVideos) -> Void in
+            MusicFetcher.shared.fetchYoutube(keywords: searchBarText) { (youtubeVideos) -> Void in
                 //                    DispatchQueue.main.async {
                 //                        self.musicTableView.showLoading()
                 //                    }

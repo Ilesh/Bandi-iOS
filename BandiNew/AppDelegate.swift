@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    lazy var mainTabBarController = CustomTabBarController()
+    let mainTabBarController = CustomTabBarController()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
@@ -37,6 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Used to prevent white background when removing tableviewcell
         UITableViewCell.appearance().backgroundColor = .clear
+        
+        CoreDataHelper.shared.initialCoreDataSetup()
         
         return true
     }

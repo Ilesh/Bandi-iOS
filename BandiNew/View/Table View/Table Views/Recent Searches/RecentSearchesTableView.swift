@@ -19,23 +19,16 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
         register(BaseTableViewCell.self, forCellReuseIdentifier: recentSearchCellId)
         setUpTheming()
         
-        persistentContainer.loadPersistentStores(completionHandler: { (persistentStoreDescription, error) in
-            if let error = error {
-                print("Unable to Add Persistent Store")
-                print("\(error), \(error.localizedDescription)")
-            } else {
-                self.fetchRecentSearches()
-            }
-        })
+        self.fetchRecentSearches()
     }
     
     let recentSearchCellId = "recentSearchCellId"
     var rowSelected: ((String)->())?
     
-    private var persistentContainer = NSPersistentContainer(name: "BandiNew")
-    private lazy var context = persistentContainer.viewContext
-    private lazy var fetchedResultsController: NSFetchedResultsController<RecentSearches> = {
-        let fetchRequest: NSFetchRequest<RecentSearches> = RecentSearches.fetchRequest()
+    private var persistentContainer = CoreDataHelper.shared.getPersistentContainer()
+    private lazy var context = CoreDataHelper.shared.getContext()
+    private lazy var fetchedResultsController: NSFetchedResultsController<RecentSearch> = {
+        let fetchRequest: NSFetchRequest<RecentSearch> = RecentSearch.fetchRequest()
         fetchRequest.sortDescriptors = []
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: context,
@@ -101,8 +94,10 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
                     if searchFound { break }
                 }
                 if !searchFound {
-                    let newRecentSearch = RecentSearches(context: self.context)
-                    newRecentSearch.recentSearch = searchString
+                    self.context.perform({
+                        let newRecentSearch = RecentSearch(context: self.context)
+                        newRecentSearch.recentSearch = searchString
+                    })
                     do {
                         try self.context.save()
                     } catch let error {

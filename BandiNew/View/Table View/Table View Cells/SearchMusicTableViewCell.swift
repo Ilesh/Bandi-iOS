@@ -81,7 +81,7 @@ class SearchMusicTableViewCell: MusicTableViewCell {
         musicDetails.pause()
         tabBar.presentPopupBar(withContentViewController: musicDetails, openPopup: true, animated: true, completion: nil)
         let videoId = music?.id
-        MusicFetcher.fetchYoutubeVideoUrl(videoID: videoId!, quality: "CHANGE THIS", handler: { (videoURL) in
+        MusicFetcher.shared.fetchYoutubeVideoUrl(videoID: videoId!, quality: "CHANGE THIS", handler: { (videoURL) in
             DispatchQueue.main.async {
                 if let trimmedURL = videoURL?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
                     musicDetails.playingMusic = self.music
