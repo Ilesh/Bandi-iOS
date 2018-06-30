@@ -30,7 +30,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        upNextTableView.musicArray = (CoreDataHelper.shared.queue?.getSongsArray())!
         upNextTableView.reloadData()
         let calculatedHeight = view.bounds.height - contentTopInset - 105 + CGFloat(upNextTableView.getCalculatedHeight())
         contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: calculatedHeight)

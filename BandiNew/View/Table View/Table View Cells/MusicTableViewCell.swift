@@ -32,7 +32,7 @@ class MusicTableViewCell: BaseTableViewCell {
                 //self.durationLabel.text = self.music?.duration?.decodeYoutubeTime()
             }
             let requestedImageType = "wide"
-            if self.music?.thumbnailImages![requestedImageType] == nil {
+            if self.music?.thumbnailImages == nil || self.music?.thumbnailImages![requestedImageType] == nil {
                 DispatchQueue.global(qos: .userInitiated).async {
                     self.music?.fetchThumbnail(requestedImageType: requestedImageType, completionHandler: { success in
                         if success {

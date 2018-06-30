@@ -187,7 +187,7 @@ class QueueMusicTableView: MusicTableView {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        print("source: \(sourceIndexPath.row)    destination: \(destinationIndexPath.row)")
+        //print("source: \(sourceIndexPath.row)    destination: \(destinationIndexPath.row)")
         if destinationIndexPath.section == 1 {
             self.queue?.moveSong(from: sourceIndexPath.row, to: destinationIndexPath.row)
         }

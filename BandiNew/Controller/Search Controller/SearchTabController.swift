@@ -55,6 +55,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         tv.queueMusic = { song in
             guard let queue = CoreDataHelper.shared.queue else { print("queue missing"); return }
             CoreDataHelper.shared.queue?.insertSongAtEnd(song: song)
+            //print(CoreDataHelper.shared.queue)
         }
         tv.handleMusicTapped = {
             self.searchController.searchBar.endEditing(true)

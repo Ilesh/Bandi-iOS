@@ -32,6 +32,7 @@
 		3C6627C420AFDC3400921181 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6627C320AFDC3400921181 /* Theme.swift */; };
 		3C6627C920AFFC0B00921181 /* SuggestionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6627C820AFFC0B00921181 /* SuggestionTableViewCell.swift */; };
 		3C6627CD20B0048800921181 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6627CC20B0048800921181 /* BaseTableViewCell.swift */; };
+		3C76694520E8206A00235A35 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C76694420E8206A00235A35 /* SessionData.swift */; };
 		3C8143D3209ED0DA0086C1DA /* TrackSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143D2209ED0DA0086C1DA /* TrackSlider.swift */; };
 		3C8143D820A006D50086C1DA /* PlaylistHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143D720A006D50086C1DA /* PlaylistHeaderView.swift */; };
 		3C8143DA20A00E850086C1DA /* StaticGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143D920A00E850086C1DA /* StaticGradient.swift */; };
@@ -133,6 +134,7 @@
 		3C6627C320AFDC3400921181 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		3C6627C820AFFC0B00921181 /* SuggestionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionTableViewCell.swift; sourceTree = "<group>"; };
 		3C6627CC20B0048800921181 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		3C76694420E8206A00235A35 /* SessionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionData.swift; sourceTree = "<group>"; };
 		3C8143D2209ED0DA0086C1DA /* TrackSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackSlider.swift; sourceTree = "<group>"; };
 		3C8143D720A006D50086C1DA /* PlaylistHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderView.swift; sourceTree = "<group>"; };
 		3C8143D920A00E850086C1DA /* StaticGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticGradient.swift; sourceTree = "<group>"; };
@@ -528,8 +530,6 @@
 				3C6039A1209535310001E3A4 /* APIKeys.swift */,
 				3CFA8CC0209DB19900EB7B04 /* Helpers.swift */,
 				3C6627C320AFDC3400921181 /* Theme.swift */,
-				3C84A49920CF159800149A34 /* CoreDataHelper.swift */,
-				3CBFD0FD20E5B73300C43FB2 /* Playlist.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -564,10 +564,13 @@
 		3C6039AC209541E00001E3A4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3C84A49920CF159800149A34 /* CoreDataHelper.swift */,
 				3C6039B1209543F50001E3A4 /* MusicFetcher.swift */,
+				3CBFD0FD20E5B73300C43FB2 /* Playlist.swift */,
 				3C6039B3209545330001E3A4 /* Song.swift */,
 				3CB9734320AA8E6D001272ED /* Thumbnails.swift */,
 				3CB9734520AA8E90001272ED /* Thumbnail.swift */,
+				3C76694420E8206A00235A35 /* SessionData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1026,6 +1029,7 @@
 				3C84A49A20CF159800149A34 /* CoreDataHelper.swift in Sources */,
 				3C1FBE7A20A2CB0900C72DF1 /* LibraryTabController.swift in Sources */,
 				3C8143DA20A00E850086C1DA /* StaticGradient.swift in Sources */,
+				3C76694520E8206A00235A35 /* SessionData.swift in Sources */,
 				3C1FBE7520A2C0C800C72DF1 /* PlaylistControlButton.swift in Sources */,
 				3CFA8C73209D6E2400EB7B04 /* MusicTableViewCell.swift in Sources */,
 				3C8143DE20A122280086C1DA /* SearchController.swift in Sources */,

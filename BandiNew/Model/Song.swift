@@ -10,22 +10,28 @@ import UIKit
 
 //TODO: crahsed when loading search
 extension Song {
+    
     func fetchThumbnail(requestedImageType: String, completionHandler: (Bool)->()) {
         do {
+            if thumbnailImages == nil { thumbnailImages = [:] }
+            
             thumbnailImages![requestedImageType] = try UIImage(data: Data(contentsOf: URL(string: thumbnails![requestedImageType]!)!))
-            completionHandler(true)
+            let success = thumbnailImages![requestedImageType] != nil
+            completionHandler(success)
+            
             let imageTypes = ["small", "wide", "large"]
             for imageType in imageTypes {
                 if imageType != requestedImageType {
                     thumbnailImages![imageType] = try UIImage(data: Data(contentsOf: URL(string: thumbnails![imageType]!)!))
                 }
             }
-            if (MusicFetcher.shared.songsCache.object(forKey: id! as NSString) == nil) {
-                MusicFetcher.shared.songsCache.setObject(self, forKey: id! as NSString)
+            if (SessionData.songsCache.object(forKey: id! as NSString) == nil) {
+                SessionData.songsCache.setObject(self, forKey: id! as NSString)
             }
         } catch {
             print("thumbnail image fetching error")
             completionHandler(false)
         }
     }
+    
 }

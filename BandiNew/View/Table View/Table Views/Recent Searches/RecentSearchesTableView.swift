@@ -29,7 +29,10 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
     private lazy var context = CoreDataHelper.shared.getContext()
     private lazy var fetchedResultsController: NSFetchedResultsController<RecentSearch> = {
         let fetchRequest: NSFetchRequest<RecentSearch> = RecentSearch.fetchRequest()
-        fetchRequest.sortDescriptors = []
+        let dateSort = NSSortDescriptor(key: "searchDate", ascending: false)
+        fetchRequest.sortDescriptors = [dateSort]
+        fetchRequest.fetchLimit = 4
+        
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: context,
                                                                   sectionNameKeyPath: nil,
@@ -70,6 +73,7 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
     }
     
     @objc func clearPressed() {
+        print("here")
         DispatchQueue.global(qos: .userInteractive).async {
             let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: self.fetchedResultsController.fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
             do {
@@ -86,25 +90,26 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
     
     func addSearch(_ searchString: String) {
         DispatchQueue.global(qos: .userInitiated).async {
-            var searchFound = false
-            if let fetchedObjects = self.fetchedResultsController.fetchedObjects {
-                for object in fetchedObjects {
-                    let recentSearch = object.recentSearch
-                    searchFound = searchString == recentSearch
-                    if searchFound { break }
-                }
-                if !searchFound {
-                    self.context.perform({
-                        let newRecentSearch = RecentSearch(context: self.context)
-                        newRecentSearch.recentSearch = searchString
-                    })
-                    do {
-                        try self.context.save()
-                    } catch let error {
-                        print("error: \(error)")
-                    }
+            guard let fetchedSearches = self.fetchedResultsController.fetchedObjects else { return }
+            for recentSearch in fetchedSearches {
+                if searchString == recentSearch.searchText {
+                    recentSearch.searchDate = Date()
+                    return
                 }
             }
+            self.context.perform({
+                if fetchedSearches.count + 1 > 4 {
+                    self.context.delete(fetchedSearches.last!)
+                }
+                let newRecentSearch = RecentSearch(context: self.context)
+                newRecentSearch.searchText = searchString
+                newRecentSearch.searchDate = Date()
+                do {
+                    try self.context.save()
+                } catch {
+                    print(error)
+                }
+            })
         }
     }
     
@@ -114,7 +119,7 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let fetchedObject = fetchedResultsController.object(at: indexPath)
-        rowSelected?(fetchedObject.recentSearch!)
+        rowSelected?(fetchedObject.searchText!)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -143,10 +148,11 @@ extension RecentSearchesTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let fetchedObjects = fetchedResultsController.fetchedObjects {
-            return fetchedObjects.count
-        }
-        return 0
+        guard let fetchedObjects = fetchedResultsController.fetchedObjects else { return 0 }
+        let count = fetchedObjects.count
+        clearButton.isHidden = count == 0
+        //return count
+        return count > 4 ? 4 : count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -157,7 +163,7 @@ extension RecentSearchesTableView: UITableViewDataSource {
     
     func configure(_ cell: BaseTableViewCell, at indexPath: IndexPath) {
         let recentSearch = fetchedResultsController.object(at: indexPath)
-        cell.textLabel?.text = recentSearch.recentSearch
+        cell.textLabel?.text = recentSearch.searchText
         let selectedView = UIView()
         selectedView.backgroundColor = Constants.Colors().primaryColor
         cell.selectedBackgroundView = selectedView

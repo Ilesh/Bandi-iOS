@@ -3,17 +3,18 @@
     <entity name="Playlist" representedClassName="Playlist" syncable="YES" codeGenerationType="class">
         <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="dateModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="firstSong" optional="YES" attributeType="Transformable" customClassName="SongToPlaylist" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastSong" optional="YES" attributeType="Transformable" customClassName="SongToPlaylist" syncable="YES"/>
         <attribute name="playlistDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="size" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="song" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongToPlaylist" inverseName="playlist" inverseEntity="SongToPlaylist" syncable="YES"/>
+        <relationship name="firstSong" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongToPlaylist" syncable="YES"/>
+        <relationship name="lastSong" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongToPlaylist" syncable="YES"/>
+        <relationship name="songs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SongToPlaylist" inverseName="playlist" inverseEntity="SongToPlaylist" syncable="YES"/>
     </entity>
     <entity name="RecentSearch" representedClassName="RecentSearch" syncable="YES" codeGenerationType="class">
-        <attribute name="recentSearch" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="searchDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="searchText" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Song" representedClassName="Song" syncable="YES" codeGenerationType="class">
         <attribute name="album" optional="YES" attributeType="String" syncable="YES"/>
@@ -29,13 +30,13 @@
     <entity name="SongToPlaylist" representedClassName="SongToPlaylist" syncable="YES" codeGenerationType="class">
         <attribute name="dateModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="nextSong" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongToPlaylist" inverseName="previousSong" inverseEntity="SongToPlaylist" syncable="YES"/>
-        <relationship name="playlist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Playlist" inverseName="song" inverseEntity="Playlist" syncable="YES"/>
+        <relationship name="playlist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Playlist" inverseName="songs" inverseEntity="Playlist" syncable="YES"/>
         <relationship name="previousSong" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SongToPlaylist" inverseName="nextSong" inverseEntity="SongToPlaylist" syncable="YES"/>
         <relationship name="song" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Song" inverseName="songToPlaylists" inverseEntity="Song" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Playlist" positionX="-389" positionY="194" width="128" height="195"/>
-        <element name="RecentSearch" positionX="-225" positionY="203" width="128" height="58"/>
+        <element name="Playlist" positionX="-389" positionY="194" width="128" height="193"/>
+        <element name="RecentSearch" positionX="-225" positionY="203" width="128" height="73"/>
         <element name="Song" positionX="-801" positionY="198" width="128" height="178"/>
         <element name="SongToPlaylist" positionX="-612" positionY="306" width="128" height="118"/>
     </elements>

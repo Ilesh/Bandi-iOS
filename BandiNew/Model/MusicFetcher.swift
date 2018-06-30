@@ -15,14 +15,11 @@ final class MusicFetcher {
     
     private let baseYoutubeApiUrlString = "https://www.googleapis.com/youtube/v3/"
     private let youtubeApiKey = APIKeys().youtubeKey
+    private let maxYoutubeResults = "14"
     private var nextPageToken: String?
     private var lastSearchQuery: String?
-    private let maxYoutubeResults = "14"
-    let songsCache = NSCache<NSString, Song>()
     
-    let context: NSManagedObjectContext = {
-        return CoreDataHelper.shared.getContext()
-    }()
+    let context = CoreDataHelper.shared.getContext()
     
     func fetchYoutubeNextPage(handler: @escaping (_ music: [Song]?) -> Void) {
         if nextPageToken != nil && lastSearchQuery != nil {
@@ -106,7 +103,7 @@ final class MusicFetcher {
                         if let items = jsonResult["items"] as? [AnyObject]? {
                             for item in items! {
                                 let id = item["id"] as! String
-                                if let cachedSong = self.songsCache.object(forKey: id as NSString) {
+                                if let cachedSong = SessionData.songsCache.object(forKey: id as NSString) {
                                     songs.append(cachedSong)
                                     continue
                                 }

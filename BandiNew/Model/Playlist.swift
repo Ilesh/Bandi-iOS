@@ -11,7 +11,6 @@ import Foundation
 extension Playlist {
     
     func getSongsArray() -> [Song] {
-        print("\n+++++++++++++++++++")
         var songs: [Song] = []
         var currentSongNode = firstSong
         while currentSongNode != nil {
@@ -21,7 +20,6 @@ extension Playlist {
             }
             currentSongNode = currentSongNode?.nextSong
         }
-        print("-------------------\n")
         return songs
     }
     
@@ -48,7 +46,6 @@ extension Playlist {
         
         guard let song = tempSongNode?.song else { return }
         removeSong(at: from)
-        print(from >= to)
         insertSong(song: song, at: (from >= to ? to : to))
         
     }
@@ -89,14 +86,12 @@ extension Playlist {
     
     func insertSong(song: Song, at index: Int) {
         
-        print("index: \(index)     size: \(size)")
+        //print("index: \(index)     size: \(size)")
         if index == 0 {
-            print(1)
             insertSongAtStart(song: song)
             return
         }
         else if index == size {
-            print(2)
             insertSongAtEnd(song: song)
             return
         }
@@ -104,8 +99,8 @@ extension Playlist {
         let songToInsert = CoreDataHelper.shared.createSongToPlaylist(song: song, playlist: self)
 
         guard let tempSongNode = getSongNode(at: index - 1) else { return }
-        print("temp: \(tempSongNode.song?.title)")
-        print("temp-next: \(tempSongNode.nextSong?.song?.title)")
+        //print("temp: \(tempSongNode.song?.title)")
+        //print("temp-next: \(tempSongNode.nextSong?.song?.title)")
         songToInsert.nextSong = tempSongNode.nextSong
         tempSongNode.nextSong = songToInsert
         
