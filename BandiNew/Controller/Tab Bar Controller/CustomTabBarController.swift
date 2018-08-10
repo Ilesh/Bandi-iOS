@@ -16,8 +16,8 @@ class CustomTabBarController: UITabBarController {
         super.viewDidLoad()
         
         let libraryTabController = CustomNavigationController(rootViewController: LibraryTabController())
-        let searchTabController = CustomNavigationController(rootViewController: SearchTabController())
-        let queueTabController = CustomNavigationController(rootViewController: QueueTabController())
+        let searchTabController = CustomNavigationController(rootViewController: SearchYoutubeController(style: .plain))
+        let queueTabController = CustomNavigationController(rootViewController: QueueDetailsController(style: .plain))
         
         let vcData: [(vc: UIViewController, title: String)] = [
             (libraryTabController, "Library"),
@@ -41,32 +41,42 @@ class CustomTabBarController: UITabBarController {
         setUpTheming()
     }
     
-    lazy var musicDetailsController = MusicDetailsController()
+    // TODO: doing this made search table red gone?
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        popupItem.title = "Not Playing"
+        popupItem.progress = 0
+        presentPopupBar(withContentViewController: musicDetailsController, openPopup: false, animated: false, completion: nil)
+    }
+    
+    let musicDetailsController = MusicDetailsController()
     
     func setupViews() {
-        popupBar.inheritsVisualStyleFromDockingView = true
+        popupBar.inheritsVisualStyleFromDockingView = false
         popupBar.imageView.contentMode = .scaleAspectFill
         popupBar.imageView.layer.cornerRadius = 5
         popupBar.imageView.clipsToBounds = true
         popupInteractionStyle = .drag
         popupContentView.popupCloseButtonStyle = .chevron
-        popupBar.marqueeScrollEnabled = true
+        popupBar.marqueeScrollEnabled = false
         popupBar.progressViewStyle = .top
     }
     
 }
 
+// MARK: - Theme
 extension CustomTabBarController: Themed {
     func applyTheme(_ theme: AppTheme) {
         tabBar.barTintColor = theme.barBackgroundColor
         tabBar.tintColor = theme.tintColor
         tabBar.unselectedItemTintColor = theme.barUnselectedTextColor
-        popupBar.backgroundColor = theme.barBackgroundColor
-        popupBar.barTintColor = theme.barBackgroundColor
+        popupBar.isTranslucent = false
+        popupBar.backgroundColor = theme.tableBackgroundColor
+        popupBar.barTintColor = theme.tableBackgroundColor
         popupBar.tintColor = theme.textColor
         popupBar.backgroundStyle = theme.popBarBackgroundStyle
         popupBar.titleTextAttributes = [.font: UIFont.systemFont(ofSize: 18) as Any, .foregroundColor: theme.textColor]
         popupBar.subtitleTextAttributes = [.font: UIFont.systemFont(ofSize: 13) as Any, .foregroundColor: theme.subTextColor]
-        updatePopupBarAppearance()
+        //updatePopupBarAppearance()
     }
 }

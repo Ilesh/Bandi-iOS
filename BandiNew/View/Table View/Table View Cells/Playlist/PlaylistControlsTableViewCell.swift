@@ -15,6 +15,9 @@ class PlaylistControlsTableViewCell: UITableViewCell {
         setupViews()
     }
     
+    var play: (()->())?
+    var shuffle: (()->())?
+    
     let playButton: PlaylistControlButton = {
         let button = PlaylistControlButton(frame: .zero, title: "Play", image: UIImage(named: "play-100")!)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +46,17 @@ class PlaylistControlsTableViewCell: UITableViewCell {
             shuffleButton.heightAnchor.constraint(equalToConstant: 50),
             shuffleButton.centerYAnchor.constraint(equalTo: centerYAnchor)
             ])
+        
+        playButton.addTarget(self, action: #selector(playPressed), for: .touchUpInside)
+        shuffleButton.addTarget(self, action: #selector(shufflePressed), for: .touchUpInside)
+    }
+    
+    @objc func playPressed(){
+        self.play?()
+    }
+    
+    @objc func shufflePressed() {
+        self.shuffle?()
     }
     
     required init?(coder aDecoder: NSCoder) {

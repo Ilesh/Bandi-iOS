@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import LNPopupController
 
 class SearchTabController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating {
 
@@ -31,10 +30,11 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        return AppThemeProvider.shared.currentTheme.statusBarStyle
     }
     
     var searchCancelled = false
+    var previousSearch = ""
     
     lazy var searchController: SearchController = {
         let sb = SearchController(searchResultsController: nil)
@@ -50,14 +50,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     lazy var musicTableView: SearchMusicTableView = {
         let tv = SearchMusicTableView(frame: .zero, style: .grouped)
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        tv.queueMusic = { song in
-            guard let queue = CoreDataHelper.shared.queue else { print("queue missing"); return }
-            CoreDataHelper.shared.queue?.insertSongAtEnd(song: song)
-            //print(CoreDataHelper.shared.queue)
-        }
-        tv.handleMusicTapped = {
+        tv.handleMusicTapped = { song in
             self.searchController.searchBar.endEditing(true)
         }
         tv.handleScroll = { isUp in
@@ -84,7 +77,6 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     lazy var suggestionsTableView: SearchSuggestionsTableView = {
         let tv = SearchSuggestionsTableView(frame: .zero)
-        //tv.backgroundColor = .green
         tv.isHidden = true
         tv.suggestionSelected = { suggestion in
             self.searchController.searchBar.text = suggestion
@@ -96,7 +88,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     }()
     
     lazy var recentSearchesTableView: RecentSearchesTableView = {
-        let tv = RecentSearchesTableView(frame: .zero, style: UITableViewStyle.grouped)
+        let tv = RecentSearchesTableView(frame: .zero, style: .grouped)
         tv.rowSelected = { searchString in
             self.searchController.searchBar.text = searchString
             self.updateSearchResults()
@@ -215,6 +207,8 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     
     @objc func updateSearchResults() {
         let searchBarText = self.searchController.searchBar.text!
+        guard previousSearch != searchBarText else { return }
+        previousSearch = searchBarText
         
         DispatchQueue.global(qos: .userInitiated).async {
             let dispatchGroup = DispatchGroup()
@@ -237,7 +231,7 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
             }
         }
         
-        recentSearchesTableView.addSearch(searchBarText)
+        //recentSearchesTableView.addSearch(searchBarText)
     }
     
 }

@@ -35,7 +35,6 @@ class SearchMusicTableViewCell: MusicTableViewCell {
         thumbnailImageView.addSubview(durationLabel)
         contentView.addSubview(titleLabel)
         contentView.addSubview(artistLabel)
-        contentView.addSubview(interactionButton)
         contentView.addSubview(addButton)
         
         NSLayoutConstraint.activate([
@@ -57,39 +56,17 @@ class SearchMusicTableViewCell: MusicTableViewCell {
             artistLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
             artistLabel.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: 0),
             
-            interactionButton.topAnchor.constraint(equalTo: self.topAnchor),
-            interactionButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            interactionButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            interactionButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            
             addButton.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
             addButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -16),
-            addButton.widthAnchor.constraint(equalToConstant: 30),
-            addButton.heightAnchor.constraint(equalToConstant: 30)
+            addButton.widthAnchor.constraint(equalToConstant: 25),
+            addButton.heightAnchor.constraint(equalToConstant: 25)
             ])
         
-        interactionButton.addTarget(self, action: #selector(cellTapped), for: .touchUpInside)
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
     }
     
     @objc func cellTapped() {
         musicTapped?()
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let tabBar = appDelegate.mainTabBarController
-        let musicDetails = tabBar.musicDetailsController
-        musicDetails.showLoading()
-        musicDetails.pause()
-        tabBar.presentPopupBar(withContentViewController: musicDetails, openPopup: true, animated: true, completion: nil)
-        let videoId = music?.id
-        MusicFetcher.shared.fetchYoutubeVideoUrl(videoID: videoId!, quality: "CHANGE THIS", handler: { (videoURL) in
-            DispatchQueue.main.async {
-                if let trimmedURL = videoURL?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
-                    musicDetails.playingMusic = self.music
-                    musicDetails.updateVideo(videoURLString: trimmedURL)
-                    musicDetails.play()
-                }
-            }
-        })
     }
     
     @objc func addButtonTapped() {

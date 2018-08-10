@@ -20,6 +20,10 @@ class SearchController: UISearchController {
         setup()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return AppThemeProvider.shared.currentTheme.statusBarStyle
+    }
+    
     func setup() {
         setUpTheming()
     }
@@ -30,6 +34,7 @@ class SearchController: UISearchController {
     
 }
 
+// MARK: - Theme
 extension SearchController: Themed {
     func applyTheme(_ theme: AppTheme) {
         searchBar.keyboardAppearance = theme.keyboardAppearance

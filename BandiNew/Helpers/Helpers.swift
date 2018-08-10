@@ -8,6 +8,72 @@
 
 import UIKit
 
+// MARK: Array rearrange
+extension Array {
+    mutating func rearrange(from: Int, to: Int) {
+        precondition(from != to && indices.contains(from) && indices.contains(to), "invalid indexes")
+        insert(remove(at: from), at: to)
+    }
+}
+
+// MARK: shuffling
+extension MutableCollection {
+    /// Shuffles the contents of this collection.
+    mutating func shuffle() {
+        let c = count
+        guard c > 1 else { return }
+        
+        for (firstUnshuffled, unshuffledCount) in zip(indices, stride(from: c, to: 1, by: -1)) {
+            // Change `Int` in the next line to `IndexDistance` in < Swift 4.1
+            let d: Int = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
+            let i = index(firstUnshuffled, offsetBy: d)
+            swapAt(firstUnshuffled, i)
+        }
+    }
+}
+
+extension Sequence {
+    /// Returns an array with the contents of this sequence, shuffled.
+    func shuffled() -> [Element] {
+        var result = Array(self)
+        result.shuffle()
+        return result
+    }
+}
+
+// MARK: Notification.Name
+extension Notification.Name {
+    static let newUpNextPlaylist = Notification.Name("newUpNextPlaylist")
+    static let songFinished = Notification.Name("songFinished")
+    static let currentlyPlayingIndexChanged = Notification.Name("currentlyPlayingIndexChanged")
+    static let currentlyPlayingPlaylistChanged = Notification.Name("currentlyPlayingPlaylistChanged")
+}
+
+extension UITableView {
+    
+    // created to reduce if/else code for row and sections in table
+    static func getArrayResult<T: Any>(type: T.Type, array: [Any], indexPath: IndexPath) -> T {
+        if let arrayElement = array[indexPath.section] as? [T] {
+            return arrayElement[indexPath.row]
+        }
+        else {
+            let element = array[indexPath.section] as! T
+            return element
+        }
+    }
+    
+    func scrollToFirstRow(animated: Bool) {
+        if numberOfRows(inSection: 0) > 0 {
+            let indexPath = IndexPath(row: 0, section: 0)
+            DispatchQueue.main.async {
+                self.setContentOffset(CGPoint(x: 0, y: -self.contentInset.top), animated: animated)
+                //self.scrollToRow(at: indexPath, at: .top, animated: animated)
+            }
+        }
+    }
+    
+}
+
 class PaddingLabel: UILabel {
     
     @IBInspectable var topInset: CGFloat = 5.0
@@ -110,12 +176,6 @@ extension UIScrollView {
             // Scroll to a rectangle starting at the Y of your subview, with a height of the scrollview
             self.scrollRectToVisible(CGRect(x:0, y:childStartPoint.y,width: 1,height: self.frame.height), animated: animated)
         }
-    }
-    
-    // Bonus: Scroll to top
-    func scrollToTop(animated: Bool) {
-        let topOffset = CGPoint(x: 0, y: -contentInset.top)
-        setContentOffset(topOffset, animated: animated)
     }
     
     // Bonus: Scroll to bottom

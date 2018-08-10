@@ -6,23 +6,27 @@
 //  Copyright © 2018 Siddha Tiwari. All rights reserved.
 //
 
+// TODO: https://www.reddit.com/r/iOSProgramming/comments/8wqy2m/coredata_vs_userdefaults_for_photos/
+
 import UIKit
 import CoreData
 import AVFoundation
-import LNPopupController
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    let mainTabBarController = CustomTabBarController()
+    lazy var mainTabBarController = CustomTabBarController()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        CoreDataHelper.shared.initialCoreDataSetup()
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.tintColor = Constants.Colors().primaryColor
+        window?.backgroundColor = AppTheme.dark.tableBackgroundColor
         
         window?.rootViewController = mainTabBarController
         
@@ -35,10 +39,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(error)
         }
         
+        let savedThemeName = UserDefaults.standard.getSavedTheme()
+        if savedThemeName == nil {
+            UserDefaults.standard.setSavedTheme(value: "light")
+        } else {
+            if savedThemeName == "dark" {
+                AppThemeProvider.shared.nextTheme()
+            }
+        }
+        
         // Used to prevent white background when removing tableviewcell
         UITableViewCell.appearance().backgroundColor = .clear
         
-        CoreDataHelper.shared.initialCoreDataSetup()
+        setUpTheming()
         
         return true
     }
@@ -52,7 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         self.saveContext()
-        print("saving")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -67,7 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
-        print("saving2")
     }
 
     // MARK: - Core Data stack
@@ -102,10 +113,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data Saving support
 
     func saveContext () {
-        let context = CoreDataHelper.shared.getContext()
+        let context = persistentContainer.viewContext
         if context.hasChanges {
             do {
                 try context.save()
+                print("saved")
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -115,5 +127,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+}
+
+// MARK: - Theme
+extension AppDelegate: Themed {
+    func applyTheme(_ theme: AppTheme) {
+        window?.backgroundColor = theme.tableBackgroundColor
+    }
 }
 

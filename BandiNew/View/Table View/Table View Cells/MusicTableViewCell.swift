@@ -19,6 +19,7 @@ class MusicTableViewCell: BaseTableViewCell {
     var panRecognizer: UIPanGestureRecognizer?
     var swipeStarted: (()->())?
     var thumbnailImage: UIImage?
+    var reuseId = 1
     
     var music: Song? {
         didSet {
@@ -29,37 +30,22 @@ class MusicTableViewCell: BaseTableViewCell {
                 self.durationLabel.text = "LIVE"
             } else {
                 self.durationLabel.text = self.music?.length?.decodeYoutubeTime()
-                //self.durationLabel.text = self.music?.duration?.decodeYoutubeTime()
             }
-            let requestedImageType = "wide"
-            if self.music?.thumbnailImages == nil || self.music?.thumbnailImages![requestedImageType] == nil {
-                DispatchQueue.global(qos: .userInitiated).async {
-                    self.music?.fetchThumbnail(requestedImageType: requestedImageType, completionHandler: { success in
-                        if success {
-                            DispatchQueue.main.async {
-                                self.thumbnailImageView.image = (self.music?.thumbnailImages![requestedImageType] as! UIImage)
-                            }
-                        }
-                    })
+            let currentReuseId = reuseId
+            music?.fetchAThumbnail(requestedImageType: "wide", completion: { image in
+                guard currentReuseId == self.reuseId else { return }
+                DispatchQueue.main.async {
+                    self.thumbnailImageView.image = image
                 }
-            } else {
-                self.thumbnailImageView.image = (self.music?.thumbnailImages![requestedImageType] as! UIImage)
-            }
+            })
         }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        reuseId = reuseId + 1
         thumbnailImageView.image = UIImage()
     }
-    
-    let interactionButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.clipsToBounds = true
-        button.backgroundColor = .clear
-        return button
-    }()
     
     let thumbnailImageView: UIImageView = {
         let iv = UIImageView()

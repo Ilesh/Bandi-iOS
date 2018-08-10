@@ -16,8 +16,8 @@ class PlaylistHeaderTableViewCell: UITableViewHeaderFooterView {
         setupViews()
     }
     
-    let test: PlaylistHeaderView = {
-        let view = PlaylistHeaderView()
+    let test: PlaylistHeaderCell = {
+        let view = PlaylistHeaderCell()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

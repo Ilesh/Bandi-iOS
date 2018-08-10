@@ -16,13 +16,15 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
         dataSource = self
         delegate = self
         allowsSelection = true
+        estimatedRowHeight = 55
+        tableFooterView = UIView()
         register(BaseTableViewCell.self, forCellReuseIdentifier: recentSearchCellId)
         setUpTheming()
-        
-        self.fetchRecentSearches()
+        fetchRecentSearches()
     }
     
-    let recentSearchCellId = "recentSearchCellId"
+    private let recentSearchCellId = "recentSearchCellId"
+    private let sectionHeaders = ["Recent"]
     var rowSelected: ((String)->())?
     
     private var persistentContainer = CoreDataHelper.shared.getPersistentContainer()
@@ -31,7 +33,6 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
         let fetchRequest: NSFetchRequest<RecentSearch> = RecentSearch.fetchRequest()
         let dateSort = NSSortDescriptor(key: "searchDate", ascending: false)
         fetchRequest.sortDescriptors = [dateSort]
-        fetchRequest.fetchLimit = 4
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: context,
@@ -46,24 +47,6 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
         return fetchedObjects.count > 0
     }
     
-    let clearButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Clear", for: .normal)
-        button.setTitleColor(Constants.Colors().primaryColor, for: .normal)
-        button.contentHorizontalAlignment = .right
-        button.tintColor = Constants.Colors().primaryColor
-        button.addTarget(self, action: #selector(clearPressed), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    lazy var recentSearchesHeader: RecentSearchesSectionHeader = {
-        let view = RecentSearchesSectionHeader()
-        view.label.text = "Recent"
-        view.addSubview(clearButton)
-        return view
-    }()
-    
     private func fetchRecentSearches() {
         do {
             try fetchedResultsController.performFetch()
@@ -73,48 +56,13 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
     }
     
     @objc func clearPressed() {
-        print("here")
-        DispatchQueue.global(qos: .userInteractive).async {
-            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: self.fetchedResultsController.fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
-            do {
-                try self.context.execute(batchDeleteRequest)
-                try self.fetchedResultsController.performFetch()
-                DispatchQueue.main.async {
-                    self.reloadData()
-                }
-            } catch {
-                print("error: \(error)")
-            }
-        }
-    }
-    
-    func addSearch(_ searchString: String) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            guard let fetchedSearches = self.fetchedResultsController.fetchedObjects else { return }
-            for recentSearch in fetchedSearches {
-                if searchString == recentSearch.searchText {
-                    recentSearch.searchDate = Date()
-                    return
-                }
-            }
-            self.context.perform({
-                if fetchedSearches.count + 1 > 4 {
-                    self.context.delete(fetchedSearches.last!)
-                }
-                let newRecentSearch = RecentSearch(context: self.context)
-                newRecentSearch.searchText = searchString
-                newRecentSearch.searchDate = Date()
-                do {
-                    try self.context.save()
-                } catch {
-                    print(error)
-                }
-            })
-        }
+        CoreDataHelper.shared.clearRecentSearches()
+        self.fetchRecentSearches()
+        self.reloadData()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 55
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -123,16 +71,23 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        NSLayoutConstraint.activate([
-            clearButton.trailingAnchor.constraint(equalTo: recentSearchesHeader.trailingAnchor, constant: -15),
-            clearButton.bottomAnchor.constraint(equalTo: recentSearchesHeader.bottomAnchor, constant: -5),
-            clearButton.widthAnchor.constraint(equalToConstant: 80)
-            ])
+        // TODO: Make header without clear button
+        guard let fetchedObjects = fetchedResultsController.fetchedObjects else { return UIView() }
+        let count = fetchedObjects.count
+        let recentSearchesHeader = RecentSearchesSectionHeader()
+        recentSearchesHeader.clearButton.isHidden = count == 0
+        recentSearchesHeader.clearPressed = {
+            self.clearPressed()
+        }
+        recentSearchesHeader.label.text = sectionHeaders[section]
+        if section == 0 {
+            
+        }
         return recentSearchesHeader
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 75
+        return 65
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -141,18 +96,16 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
     
 }
 
+// MARK: - Table View Data Source
 extension RecentSearchesTableView: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return sectionHeaders.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let fetchedObjects = fetchedResultsController.fetchedObjects else { return 0 }
-        let count = fetchedObjects.count
-        clearButton.isHidden = count == 0
-        //return count
-        return count > 4 ? 4 : count
+        guard let section = fetchedResultsController.sections?[section] else { return 0 }
+        return section.numberOfObjects
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -162,6 +115,9 @@ extension RecentSearchesTableView: UITableViewDataSource {
     }
     
     func configure(_ cell: BaseTableViewCell, at indexPath: IndexPath) {
+        cell.textLabel?.font = cell.textLabel?.font.withSize(22)
+        cell.textLabel?.textColor = Constants.Colors().primaryColor
+        cell.textLabel?.highlightedTextColor = .white
         let recentSearch = fetchedResultsController.object(at: indexPath)
         cell.textLabel?.text = recentSearch.searchText
         let selectedView = UIView()
@@ -171,14 +127,15 @@ extension RecentSearchesTableView: UITableViewDataSource {
     
 }
 
+// MARK: - Fetched Results Controller Delegate
 extension RecentSearchesTableView: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        self.beginUpdates()
+        beginUpdates()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        self.endUpdates()
+        endUpdates()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -208,10 +165,10 @@ extension RecentSearchesTableView: NSFetchedResultsControllerDelegate {
     
 }
 
+// MARK: - Themed
 extension RecentSearchesTableView: Themed {
     func applyTheme(_ theme: AppTheme) {
         backgroundColor = theme.tableBackgroundColor
         separatorColor = theme.tableSeparatorColor
-        recentSearchesHeader.label.textColor = theme.textColor
     }
 }

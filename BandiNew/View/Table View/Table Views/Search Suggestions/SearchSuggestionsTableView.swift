@@ -13,6 +13,7 @@ class SearchSuggestionsTableView: UITableView, UITableViewDataSource, UITableVie
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame: frame, style: style)
         
+        keyboardDismissMode = .onDrag
         dataSource = self
         delegate = self
         alwaysBounceVertical = true
@@ -40,7 +41,7 @@ class SearchSuggestionsTableView: UITableView, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 55
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {

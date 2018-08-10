@@ -1,14 +1,14 @@
 //
-//  QueueEditAlertController.swift
+//  PlaylistEditAlertController.swift
 //  BandiNew
 //
-//  Created by Siddha Tiwari on 5/8/18.
+//  Created by Siddha Tiwari on 7/2/18.
 //  Copyright © 2018 Siddha Tiwari. All rights reserved.
 //
 
 import UIKit
 
-class QueueEditAlertController: UIAlertController {
+class PlaylistEditAlertController: UIAlertController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,15 +19,11 @@ class QueueEditAlertController: UIAlertController {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
             print("Alert canceled")
         })
-        let newLinkAction = UIAlertAction(title: "New Queue Link", style: .default, handler: { action in
-            print("New link requested")
-        })
-        let shareLinkAction = UIAlertAction(title: "Share Queue Link", style: .default, handler: { action in
+        let shareLinkAction = UIAlertAction(title: "Share Playlist", style: .default, handler: { action in
             print("New link requested")
         })
         
         addAction(shareLinkAction)
-        addAction(newLinkAction)
         addAction(cancelAction)
     }
     

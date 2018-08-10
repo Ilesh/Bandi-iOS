@@ -12,28 +12,37 @@ class UpNextTableView: MusicTableView {
     
     init(frame: CGRect, style: UITableViewStyle, playlist: Playlist?) {
         super.init(frame: frame, style: style)
-        self.playlist = playlist
         
-        isEditing = true
+        setEditing(true, animated: false)
         isScrollEnabled = false
+        
+        allowsSelectionDuringEditing = true
         
         register(UpNextHeaderTableViewCell.self, forCellReuseIdentifier: upNextHeaderId)
         register(UpNextTableViewCell.self, forCellReuseIdentifier: upNextCellId)
         setupViews()
     }
     
-    var playlist: Playlist?
-    var playlistSize: Int {
-        guard let playlist = self.playlist else { return 0 }
-        return Int(playlist.size)
+    override var musicArray: [Song] {
+        get {
+            return UpNextWrapper.shared.getUpNextSongs()
+        }
+        set { }
     }
+    
+    var upNextIndex: Int {
+        return UpNextWrapper.shared.getCurrentlyPlayingIndex() + 1
+    }
+    
+    var selectedRow: ((Int)->())?
     var handleScrollDownTapped: (()->())?
+    var recalculateFrame: (()->())?
     let upNextHeaderId = "upNextHeaderId"
     let upNextCellId = "upNextCellId"
     
     override var contentSize:CGSize {
         didSet {
-            self.invalidateIntrinsicContentSize()   
+            self.invalidateIntrinsicContentSize()
         }
     }
     
@@ -47,18 +56,18 @@ class UpNextTableView: MusicTableView {
     }
     
     func getCalculatedHeight() -> Int {
-        return playlistSize * 60 + 105
+        return (musicArray.count - upNextIndex) * 60 + 105
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return playlistSize == 0 ? 1 : 2
+        return musicArray.count == 0 ? 1 : 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         } else {
-            return playlistSize
+            return musicArray.count - upNextIndex
         }
     }
     
@@ -76,14 +85,18 @@ class UpNextTableView: MusicTableView {
             cell.scrollDownTapped = {
                 self.handleScrollDownTapped?()
             }
-            cell.scrollDownButton.isHidden = playlistSize == 0
+            cell.scrollDownButton.isHidden = musicArray.count == 0
             cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
             return cell
         } else {
             let cell = dequeueReusableCell(withIdentifier: upNextCellId) as! UpNextTableViewCell
-            cell.music = playlist?.getSongNode(at: indexPath.row)?.song
+            cell.music = musicArray[indexPath.row + upNextIndex]
             return cell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedRow?(indexPath.row + upNextIndex)
     }
     
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
@@ -95,7 +108,33 @@ class UpNextTableView: MusicTableView {
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return UITableViewCellEditingStyle.none
+        return .none
+    }
+    
+    //    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    //        let remove = UIContextualAction(style: .destructive, title: "REMOVE", handler: { (action, view, completion) in
+    //            guard let playlist = self.playlist else { return }
+    //            CoreDataHelper.shared.getContext().performAndWait({
+    //                playlist.removeSong(at: indexPath.row)
+    //            })
+    //            CoreDataHelper.shared.appDelegate.saveContext()
+    //            tableView.performBatchUpdates({
+    //                tableView.deleteRows(at: [indexPath], with: .none)
+    //            }, completion: nil)
+    //            self.recalculateFrame?()
+    //            completion(true)
+    //        })
+    //        return UISwipeActionsConfiguration(actions: [remove])
+    //    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let removeAction = UITableViewRowAction(style: .destructive, title: "REMOVE", handler: { (action, indexPath) in
+            self.musicArray.remove(at: indexPath.row)
+            tableView.performBatchUpdates({
+                tableView.deleteRows(at: [indexPath], with: .left)
+            }, completion: nil)
+        })
+        return [removeAction]
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
@@ -114,8 +153,7 @@ class UpNextTableView: MusicTableView {
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if destinationIndexPath.section == 1 {
-            guard let playlist = self.playlist else { return }
-            playlist.moveSong(from: sourceIndexPath.row, to: destinationIndexPath.row)
+            musicArray.rearrange(from: sourceIndexPath.row, to: destinationIndexPath.row)
         }
     }
     

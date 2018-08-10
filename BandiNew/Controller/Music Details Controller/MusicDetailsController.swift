@@ -14,11 +14,49 @@ import MarqueeLabelSwift
 
 class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateSong(_:)), name: .currentlyPlayingIndexChanged, object: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         popupItem.title = "Not Playing"
         setupViews()
         setUpTheming()
+    }
+    
+    @objc func updateSong(_ notification: Notification) {
+        redrawUpNext()
+        showLoading()
+        pause()
+        playVideo(video: UpNextWrapper.shared.getCurrentSong())
+    }
+    
+    func redrawUpNext() {
+        upNextTableView.reloadData()
+        recalculateUpNextFrame()
+    }
+    
+    func playVideo(video: Song) {
+        guard let videoId = video.id else { return }
+        MusicFetcher.shared.fetchYoutubeVideoUrl(videoID: videoId, quality: "CHANGE THIS", handler: { (videoURL) in
+            if videoURL == nil {
+                UpNextWrapper.shared.incrementCurrentIndex()
+                return
+            }
+            DispatchQueue.main.async {
+                if let trimmedURL = videoURL?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) {
+                    self.playingMusic = video
+                    self.updateVideo(videoURLString: trimmedURL)
+                    self.play()
+                }
+            }
+        })
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -30,7 +68,10 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        upNextTableView.reloadData()
+        redrawUpNext()
+    }
+    
+    func recalculateUpNextFrame() {
         let calculatedHeight = view.bounds.height - contentTopInset - 105 + CGFloat(upNextTableView.getCalculatedHeight())
         contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: calculatedHeight)
         mainScrollView.contentSize = contentView.frame.size
@@ -40,7 +81,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         super.viewDidLayoutSubviews()
         self.youtubePlayerFrame.frame = videoContainer.bounds
     }
-//
+
 //    override var preferredStatusBarStyle: UIStatusBarStyle {
 //        return .lightContent
 //    }
@@ -51,17 +92,14 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             titleLabel.text = playingMusic?.title
             popupItem.subtitle = playingMusic?.artist
             artistLabel.text = playingMusic?.artist
-            popupItem.image = (playingMusic?.thumbnailImages!["small"] as! UIImage)
+            playingMusic?.fetchAThumbnail(requestedImageType: "small", completion: { image in
+                DispatchQueue.main.async {
+                    self.popupItem.image = image
+                }
+            })
             popupItem.progress = 0.34
         }
     }
-    
-//    let backgroundView: UIVisualEffectView = {
-//        let effect = UIBlurEffect(style: .dark)
-//        let view = UIVisualEffectView(effect: effect)
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        return view
-//    }()
     
     lazy var youtubePlayerFrame: AVPlayerLayer = {
         let avpLayer = AVPlayerLayer(player: avp)
@@ -118,9 +156,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     }()
     
     let titleLabel: MarqueeLabel = {
-        let label = MarqueeLabel(frame: .zero, duration: 20, fadeLength: 10)
-        label.fadeLength = 10
-        label.textColor = Constants.Colors().textGray
+        let label = MarqueeLabel(frame: .zero, duration: 20, fadeLength: 0)
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 24)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -183,11 +219,17 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     }()
     
     lazy var upNextTableView: UpNextTableView = {
-        // TODO: change upnext to show currently playing playlist
         let playlist = CoreDataHelper.shared.queue
         let tv = UpNextTableView(frame: .zero, style: .plain, playlist: playlist)
         tv.handleScrollDownTapped = {
             self.mainScrollView.scrollToView(view: tv, animated: true)
+        }
+        tv.recalculateFrame = {
+            self.recalculateUpNextFrame()
+        }
+        tv.selectedRow = { index in
+            //self.mainScrollView.scrollToView(view: self.videoContainer, animated: true)
+            UpNextWrapper.shared.setCurrentlyPlayingIndex(index: index)
         }
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
@@ -206,8 +248,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
     var contentTopInset = CGFloat(55)
     
     func setupViews() {
-        
-        //view.addSubview(backgroundView)
         
         let musicDetailsSubview = UIView()
         musicDetailsSubview.translatesAutoresizingMaskIntoConstraints = false
@@ -254,10 +294,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         contentView.addSubview(upNextTableView)
         
         NSLayoutConstraint.activate([
-//            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-//            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             mainScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mainScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -341,6 +377,8 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         
         avp.addObserver(self, forKeyPath: "rate", options: .new, context: nil)
         avp.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: .new, context: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didPlayToEnd), name: .AVPlayerItemDidPlayToEndTime, object: nil)
+        avp.addObserver(self, forKeyPath: "playerDidFinishPlaying", options: .new, context: nil)
         
         let interval = CMTime(value: 1, timescale: 2)
         avp.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main, using: { (progressTime) in
@@ -364,7 +402,9 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
                     self.remainingTimeLabel.text = "-\(rMinutesString):\(rSecondsString)"
                     self.currentTimeLabel.text = "\(minutesString):\(secondsString)"
                     
-                    self.trackSlider.value = Float(seconds / durationSeconds)
+                    let progress = Float(seconds / durationSeconds)
+                    self.trackSlider.value = progress
+                    self.popupItem.progress = progress
                 }
             }
         })
@@ -375,6 +415,8 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         
         playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
         pauseButton.addTarget(self, action: #selector(pause), for: .touchUpInside)
+        forwardButton.addTarget(self, action: #selector(forward), for: .touchUpInside)
+        rewindButton.addTarget(self, action: #selector(back), for: .touchUpInside)
     }
     
     @objc func handleSliderChange() {
@@ -390,6 +432,11 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             }
             
         }
+    }
+    
+    @objc func didPlayToEnd() {
+        NotificationCenter.default.post(name: .songFinished, object: nil)
+        print("SONG FINISHED")
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -443,6 +490,14 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         pauseButton.isHidden = true
     }
     
+    @objc func forward() {
+        UpNextWrapper.shared.incrementCurrentIndex()
+    }
+    
+    @objc func back() {
+        UpNextWrapper.shared.decrementCurrentIndex()
+    }
+    
     func modelIdentifier() -> String {
         if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] { return simulatorModelIdentifier }
         var sysinfo = utsname()
@@ -464,7 +519,7 @@ extension MusicDetailsController: Themed {
             if view.isKind(of: UIButton.self) {
                 let buttonOnVolumeView : UIButton = view as! UIButton
                 volumeSliderView.volumeSlider.setRouteButtonImage(buttonOnVolumeView.currentImage?.withRenderingMode(.alwaysTemplate), for: .normal)
-                break;
+                break
             }
         }
         playButton.tintColor = theme.textColor

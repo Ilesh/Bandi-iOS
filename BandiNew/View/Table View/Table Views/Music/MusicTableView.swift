@@ -50,7 +50,8 @@ class MusicTableView: UITableView, UITableViewDataSource, UITableViewDelegate, T
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let translation = scrollView.panGestureRecognizer.translation(in: scrollView.superview!)
+        guard let superview = scrollView.superview else { return }
+        let translation = scrollView.panGestureRecognizer.translation(in: superview)
         if (translation.y != lastTranslation) {
             if (self.lastContentOffset > scrollView.contentOffset.y) {
                 if !scrolledUp {

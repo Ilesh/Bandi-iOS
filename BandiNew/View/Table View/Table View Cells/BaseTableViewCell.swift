@@ -12,15 +12,34 @@ class BaseTableViewCell: UITableViewCell, Themed {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectedBackgroundView = selectedBackground
         setUpTheming()
+        tintColor = baseTintColor
+    }
+    
+    let selectedBackground = UIView()
+    var baseTintColor: UIColor = .blue
+    var baseBackgroundColor: UIColor = .clear
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func applyTheme(_ theme: AppTheme) {
         textLabel?.textColor = theme.textColor
+        baseTintColor = theme.subTextColor
+        selectedBackground.backgroundColor = theme.tableCellBackgroundColor
+        baseBackgroundColor = theme.tableBackgroundColor
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func configureSelected(_ selected: Bool) {
+        tintColor = selected ? Constants.Colors().primaryColor : baseTintColor
+        textLabel?.textColor = AppThemeProvider.shared.currentTheme.textColor
+        if selected {
+            backgroundColor = selectedBackground.backgroundColor
+        } else {
+            backgroundColor = baseBackgroundColor
+        }
     }
     
 }

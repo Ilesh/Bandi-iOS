@@ -56,11 +56,13 @@ class CustomNavigationController: UINavigationController {
     
 }
 
+// MARK: - Theme
 extension CustomNavigationController: Themed {
     func applyTheme(_ theme: AppTheme) {
         navigationBar.isTranslucent = theme.isNavBarTranslucent
         navigationBar.barStyle = theme.barStyle
         navigationBar.tintColor = theme.tintColor
         navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : theme.textColor]
+        navigationBar.barTintColor = theme.navBarTintColor
     }
 }

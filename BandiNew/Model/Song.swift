@@ -8,30 +8,52 @@
 
 import UIKit
 
-//TODO: crahsed when loading search
 extension Song {
     
-    func fetchThumbnail(requestedImageType: String, completionHandler: (Bool)->()) {
-        do {
-            if thumbnailImages == nil { thumbnailImages = [:] }
-            
-            thumbnailImages![requestedImageType] = try UIImage(data: Data(contentsOf: URL(string: thumbnails![requestedImageType]!)!))
-            let success = thumbnailImages![requestedImageType] != nil
-            completionHandler(success)
-            
-            let imageTypes = ["small", "wide", "large"]
-            for imageType in imageTypes {
-                if imageType != requestedImageType {
-                    thumbnailImages![imageType] = try UIImage(data: Data(contentsOf: URL(string: thumbnails![imageType]!)!))
-                }
-            }
-            if (SessionData.songsCache.object(forKey: id! as NSString) == nil) {
-                SessionData.songsCache.setObject(self, forKey: id! as NSString)
-            }
-        } catch {
-            print("thumbnail image fetching error")
-            completionHandler(false)
+    func setSaved(saved: Bool, retain: Bool) {
+        if retain && self.saved { return }
+        else {
+            self.saved = saved
         }
+    }
+    
+    func fetchAThumbnail(requestedImageType: String, completion: ((UIImage?)->())?) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            
+            let imageId = "\(self.id!)-\(requestedImageType)"
+            
+            if let image = SessionData.imagesCache.object(forKey: imageId as NSString) {
+                completion?(image)
+                return
+            }
+            
+            do {
+                
+                guard self.thumbnails != nil &&
+                    self.thumbnails![requestedImageType] != nil,
+                    let imageUrl = URL(string: self.thumbnails![requestedImageType]!)
+                    else {
+                        completion?(nil)
+                        return
+                }
+                
+                let imageData = try Data(contentsOf: imageUrl)
+                guard let image = UIImage(data: imageData) else {
+                    completion?(nil)
+                    return
+                }
+                
+                SessionData.imagesCache.setObject(image, forKey: imageId as NSString)
+                completion?(image)
+                
+            } catch {
+                print(error)
+                completion?(nil)
+            }
+            
+        }
+        
     }
     
 }

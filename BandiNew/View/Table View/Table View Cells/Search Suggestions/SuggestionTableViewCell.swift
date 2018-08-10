@@ -16,11 +16,9 @@ class SuggestionTableViewCell: BaseTableViewCell {
         setUpTheming()
     }
     
-    let selectedView = UIView()
     let searchImage = UIImageView(image: #imageLiteral(resourceName: "search-90").withRenderingMode(.alwaysTemplate))
     
     func setupViews() {
-        selectedBackgroundView = selectedView
         
         searchImage.contentMode = .scaleAspectFit
         searchImage.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +34,6 @@ class SuggestionTableViewCell: BaseTableViewCell {
     override func applyTheme(_ theme: AppTheme) {
         super.applyTheme(theme)
         textLabel?.textColor = theme.textColor
-        selectedView.backgroundColor = theme.tintColor
         searchImage.tintColor = theme.subTextColor
     }
     

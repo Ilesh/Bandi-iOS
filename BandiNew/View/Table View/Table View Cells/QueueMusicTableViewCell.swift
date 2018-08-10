@@ -20,7 +20,6 @@ class QueueMusicTableViewCell: MusicTableViewCell {
         contentView.addSubview(thumbnailImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(artistLabel)
-        contentView.addSubview(interactionButton)
         
         NSLayoutConstraint.activate([
             thumbnailImageView.heightAnchor.constraint(equalToConstant: 50),
@@ -37,11 +36,6 @@ class QueueMusicTableViewCell: MusicTableViewCell {
             artistLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             artistLabel.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10),
             artistLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -15),
-            
-            interactionButton.topAnchor.constraint(equalTo: self.topAnchor),
-            interactionButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            interactionButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            interactionButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             ])
     }
     
