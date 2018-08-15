@@ -66,6 +66,11 @@ class CreatePlaylistHeaderTableViewCell: BaseTableViewCell {
             ])
         
         titleField.sizeToFit()
+        titleField.addTarget(self, action: #selector(titleDidChange), for: UIControlEvents.editingChanged)
+    }
+    
+    @objc func titleDidChange() {
+        playlistNameUpdated?(getPlaylistTitle())
     }
     
     override func applyTheme(_ theme: AppTheme) {
@@ -82,10 +87,6 @@ extension CreatePlaylistHeaderTableViewCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
         return true
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        playlistNameUpdated?(getPlaylistTitle())
     }
     
 }

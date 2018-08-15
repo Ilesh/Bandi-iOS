@@ -84,8 +84,6 @@ class PlaylistDetailsController: UITableViewController {
         return animation
     }()
     
-    let playlistEditAlert = PlaylistEditAlertController()
-    
     var swipeIsActive = false
     
     var playlist: Playlist? {
@@ -228,7 +226,9 @@ extension PlaylistDetailsController {
         //                    self.handleLinkTapped?()
         //                }
         cell.editButtonTapped = {
-            self.present(self.playlistEditAlert, animated: true, completion: nil)
+            let playlistEditAlert = PlaylistEditAlertController()
+            playlistEditAlert.playlist = self.playlist
+            self.present(playlistEditAlert, animated: true, completion: nil)
         }
         cell.playlist = playlist
         cell.layoutMargins = UIEdgeInsets.zero

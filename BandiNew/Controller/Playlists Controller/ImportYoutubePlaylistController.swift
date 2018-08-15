@@ -52,7 +52,6 @@ class ImportYoutubePlaylistController: CreatePlaylistController {
         })
         
         tableView.tableFooterView = loading
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

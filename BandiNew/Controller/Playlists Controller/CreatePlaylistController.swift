@@ -16,7 +16,7 @@ class CreatePlaylistController: UITableViewController {
         if let navBar = navigationController {
             navBar.navigationBar.prefersLargeTitles = false
         }
-        
+                
         let doneBarButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(completePlaylistCreation))
         navigationItem.rightBarButtonItem = doneBarButton
         
@@ -61,6 +61,7 @@ class CreatePlaylistController: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        tableView.endEditing(true)
         if self.isMovingFromParentViewController && playlist != nil {
             let context = CoreDataHelper.shared.getContext()
             context.perform({

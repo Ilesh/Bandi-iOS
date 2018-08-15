@@ -262,7 +262,6 @@ extension AllSongsController {
                 
                 guard let playlists = playlistFetchedResultsController.fetchedObjects else { return }
                 context.performAndWait {
-                    print("here")
                     song.setSaved(saved: false, retain: false)
                     for playlist in playlists {
                         playlist.removeSong(song: song)

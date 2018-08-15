@@ -48,12 +48,13 @@
 		3C6627C920AFFC0B00921181 /* SuggestionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6627C820AFFC0B00921181 /* SuggestionTableViewCell.swift */; };
 		3C6627CD20B0048800921181 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6627CC20B0048800921181 /* BaseTableViewCell.swift */; };
 		3C76694520E8206A00235A35 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C76694420E8206A00235A35 /* SessionData.swift */; };
+		3C7FDC562124D07100E75F0A /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7FDC552124D07100E75F0A /* CoreDataHelper.swift */; };
+		3C7FDC5B2124D0FD00E75F0A /* DeleteAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7FDC5A2124D0FD00E75F0A /* DeleteAlertController.swift */; };
 		3C8143D3209ED0DA0086C1DA /* TrackSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143D2209ED0DA0086C1DA /* TrackSlider.swift */; };
 		3C8143D820A006D50086C1DA /* PlaylistHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143D720A006D50086C1DA /* PlaylistHeaderCell.swift */; };
 		3C8143DA20A00E850086C1DA /* StaticGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143D920A00E850086C1DA /* StaticGradient.swift */; };
 		3C8143DC20A097FC0086C1DA /* PlaylistHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143DB20A097FC0086C1DA /* PlaylistHeaderTableViewCell.swift */; };
 		3C8143DE20A122280086C1DA /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8143DD20A122280086C1DA /* SearchController.swift */; };
-		3C84A49A20CF159800149A34 /* SongDeleteAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84A49920CF159800149A34 /* SongDeleteAlertController.swift */; };
 		3C99F6F0209B8BD600DFA6AE /* MusicDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */; };
 		3C9AD4A520B929040058AE40 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C9AD4A420B929040058AE40 /* Main.storyboard */; };
 		3CAB8075211694C300E0AA3C /* AddSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CAB8074211694C300E0AA3C /* AddSongsView.swift */; };
@@ -168,12 +169,13 @@
 		3C6627C820AFFC0B00921181 /* SuggestionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionTableViewCell.swift; sourceTree = "<group>"; };
 		3C6627CC20B0048800921181 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		3C76694420E8206A00235A35 /* SessionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionData.swift; sourceTree = "<group>"; };
+		3C7FDC552124D07100E75F0A /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
+		3C7FDC5A2124D0FD00E75F0A /* DeleteAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAlertController.swift; sourceTree = "<group>"; };
 		3C8143D2209ED0DA0086C1DA /* TrackSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackSlider.swift; sourceTree = "<group>"; };
 		3C8143D720A006D50086C1DA /* PlaylistHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderCell.swift; sourceTree = "<group>"; };
 		3C8143D920A00E850086C1DA /* StaticGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticGradient.swift; sourceTree = "<group>"; };
 		3C8143DB20A097FC0086C1DA /* PlaylistHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		3C8143DD20A122280086C1DA /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
-		3C84A49920CF159800149A34 /* SongDeleteAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SongDeleteAlertController.swift; path = "../Controller/Alert Controller/SongDeleteAlertController.swift"; sourceTree = "<group>"; };
 		3C99F6EF209B8BD600DFA6AE /* MusicDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicDetailsController.swift; sourceTree = "<group>"; };
 		3C9AD4A420B929040058AE40 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		3CAB8074211694C300E0AA3C /* AddSongsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSongsView.swift; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 			children = (
 				3C1FBE6320A16BBA00C72DF1 /* QueueEditAlertController.swift */,
 				3C630C8520EAD70F00D5C1DD /* PlaylistEditAlertController.swift */,
+				3C7FDC5A2124D0FD00E75F0A /* DeleteAlertController.swift */,
 			);
 			path = "Alert Controller";
 			sourceTree = "<group>";
@@ -638,12 +641,12 @@
 		3C6039AC209541E00001E3A4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3C84A49920CF159800149A34 /* SongDeleteAlertController.swift */,
 				3C6039B1209543F50001E3A4 /* MusicFetcher.swift */,
 				3CBFD0FD20E5B73300C43FB2 /* Playlist.swift */,
 				3C6039B3209545330001E3A4 /* Song.swift */,
 				3C76694420E8206A00235A35 /* SessionData.swift */,
 				3CFD45D120F4A9E4004E33B0 /* DocumentsHelper.swift */,
+				3C7FDC552124D07100E75F0A /* CoreDataHelper.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1102,10 +1105,10 @@
 				3C1FBE6720A16CF700C72DF1 /* QueueHeaderView.swift in Sources */,
 				3CB9734220A9C87C001272ED /* RecentSearchesSectionHeader.swift in Sources */,
 				3CDC6B6020A6643100AD4A60 /* SearchSuggestionsTableView.swift in Sources */,
+				3C7FDC562124D07100E75F0A /* CoreDataHelper.swift in Sources */,
 				3CFA8CC1209DB19900EB7B04 /* Helpers.swift in Sources */,
 				3C1FBE6420A16BBA00C72DF1 /* QueueEditAlertController.swift in Sources */,
 				3C6627CD20B0048800921181 /* BaseTableViewCell.swift in Sources */,
-				3C84A49A20CF159800149A34 /* SongDeleteAlertController.swift in Sources */,
 				3CB6967320F6D55E000A7768 /* ImportYoutubePlaylistController.swift in Sources */,
 				3C1FBE7A20A2CB0900C72DF1 /* LibraryTabController.swift in Sources */,
 				3C08542120EF6CB800CBBF6E /* SongPreviewView.swift in Sources */,
@@ -1121,6 +1124,7 @@
 				3C2384D720E97D950037D2B3 /* AddPlaylistController.swift in Sources */,
 				3C2384D520E97B5C0037D2B3 /* AddPlaylistTableViewCell.swift in Sources */,
 				3C8143D820A006D50086C1DA /* PlaylistHeaderCell.swift in Sources */,
+				3C7FDC5B2124D0FD00E75F0A /* DeleteAlertController.swift in Sources */,
 				3CDC6B6420A7C9DE00AD4A60 /* LoadingTableViewCell.swift in Sources */,
 				3CFA8C7E209D707F00EB7B04 /* SearchMusicTableView.swift in Sources */,
 				3CFA8C70209D5D8400EB7B04 /* VolumeSlider.swift in Sources */,

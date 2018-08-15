@@ -228,16 +228,12 @@ final class MusicFetcher {
                     }
                     
                     // Check if Song already exists in CoreData
-                    let predicate = NSPredicate(format: "id = %d", id)
+                    let predicate = NSPredicate(format: "%K == %@", "id", id)
                     self.songsFetchRequest.predicate = predicate
                     do {
                         let fetchedSongs = try self.context.fetch(self.songsFetchRequest)
                         if fetchedSongs.count > 0 {
-                            let song = fetchedSongs[0]
-                            songs.append(song)
-                            if (SessionData.songsCache.object(forKey: id as NSString) == nil) {
-                                SessionData.songsCache.setObject(song, forKey: id as NSString)
-                            }
+                            songs.append(fetchedSongs[0])
                             continue
                         }
                     } catch {
