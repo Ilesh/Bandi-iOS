@@ -311,16 +311,16 @@ static UIBlurEffectStyle _LNBlurEffectStyleForSystemBarStyle(UIBarStyle systemBa
 	[self _layoutImageView];
 	
 	[UIView performWithoutAnimation:^{
-		_toolbar.frame = CGRectMake(0, 0, self.bounds.size.width, _LNPopupBarHeightForBarStyle(_resolvedStyle, _customBarViewController));
-		[_toolbar layoutIfNeeded];
+        self->_toolbar.frame = CGRectMake(0, 0, self.bounds.size.width, _LNPopupBarHeightForBarStyle(self->_resolvedStyle, self->_customBarViewController));
+        [self->_toolbar layoutIfNeeded];
 		
-		[self bringSubviewToFront:_highlightView];
-		[self bringSubviewToFront:_toolbar];
+        [self bringSubviewToFront:self->_highlightView];
+        [self bringSubviewToFront:self->_toolbar];
 		//	[_toolbar bringSubviewToFront:_imageView];
 		//	[_toolbar bringSubviewToFront:_titlesView];
-		[self bringSubviewToFront:_shadowView];
+        [self bringSubviewToFront:self->_shadowView];
 		
-		_shadowView.frame = CGRectMake(0, 0, self.toolbar.bounds.size.width, 1 / self.window.screen.nativeScale);
+        self->_shadowView.frame = CGRectMake(0, 0, self.toolbar.bounds.size.width, 1 / self.window.screen.nativeScale);
 		
 		[self _layoutTitles];
 	}];
@@ -564,8 +564,8 @@ static UIBlurEffectStyle _LNBlurEffectStyleForSystemBarStyle(UIBarStyle systemBa
 	if(NSProcessInfo.processInfo.operatingSystemVersion.majorVersion <= 10)
 	{
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[_toolbar setNeedsLayout];
-			[_toolbar layoutIfNeeded];
+            [self->_toolbar setNeedsLayout];
+            [self->_toolbar layoutIfNeeded];
 		});
 	}
 }

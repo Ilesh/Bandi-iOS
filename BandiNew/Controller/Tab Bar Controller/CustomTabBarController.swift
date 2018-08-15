@@ -47,6 +47,7 @@ class CustomTabBarController: UITabBarController {
         popupItem.title = "Not Playing"
         popupItem.progress = 0
         presentPopupBar(withContentViewController: musicDetailsController, openPopup: false, animated: false, completion: nil)
+        musicDetailsController.viewDidLoad()
     }
     
     let musicDetailsController = MusicDetailsController()

@@ -97,7 +97,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
                     self.popupItem.image = image
                 }
             })
-            popupItem.progress = 0.34
+            popupItem.progress = 0
         }
     }
     

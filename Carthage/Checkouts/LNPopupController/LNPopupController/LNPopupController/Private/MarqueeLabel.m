@@ -1181,10 +1181,11 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
 
 #pragma mark - Modified UILabel Methods/Getters/Setters
 
-- (UIView *)viewForBaselineLayout {
-    // Use subLabel view for handling baseline layouts
-    return self.subLabel;
-}
+// MARK: DEPRECATED?
+//- (UIView *)viewForBaselineLayout {
+//    // Use subLabel view for handling baseline layouts
+//    return self.subLabel;
+//}
 
 - (UIView *)viewForLastBaselineLayout {
     // Use subLabel view for handling baseline layouts
@@ -1308,9 +1309,10 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
     [super setAdjustsFontSizeToFitWidth:NO];
 }
 
-- (void)setMinimumFontSize:(CGFloat)minimumFontSize {
-    [super setMinimumFontSize:0.0];
-}
+// MARK: DEPRECATED?
+//- (void)setMinimumFontSize:(CGFloat)minimumFontSize {
+//    [super setMinimumFontSize:0.0];
+//}
 
 - (UIBaselineAdjustment)baselineAdjustment {
     return self.subLabel.baselineAdjustment;
@@ -1341,10 +1343,11 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
     return contentSize;
 }
 
-- (void)setAdjustsLetterSpacingToFitWidth:(BOOL)adjustsLetterSpacingToFitWidth {
-    // By the nature of MarqueeLabel, this is NO
-    [super setAdjustsLetterSpacingToFitWidth:NO];
-}
+// MARK: DEPRECATED?
+//- (void)setAdjustsLetterSpacingToFitWidth:(BOOL)adjustsLetterSpacingToFitWidth {
+//    // By the nature of MarqueeLabel, this is NO
+//    [super setAdjustsLetterSpacingToFitWidth:NO];
+//}
 
 - (void)setMinimumScaleFactor:(CGFloat)minimumScaleFactor {
     [super setMinimumScaleFactor:0.0f];

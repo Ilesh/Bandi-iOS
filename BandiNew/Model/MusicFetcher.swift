@@ -18,6 +18,7 @@ final class MusicFetcher {
     private var nextPageToken: String?
     private var lastSearchQuery: String?
     private let context = CoreDataHelper.shared.getContext()
+    private let songsFetchRequest: NSFetchRequest<Song> = Song.fetchRequest()
     
     // MARK: - Playlists
     
@@ -86,7 +87,7 @@ final class MusicFetcher {
             if nextPageToken != nil {
                 urlParameters["pageToken"] = nextPageToken
             }
-            print(nextPageToken)
+            //print(nextPageToken)
             
             let dataTaskDispatchGroup = DispatchGroup()
             dataTaskDispatchGroup.enter()
@@ -219,9 +220,28 @@ final class MusicFetcher {
                 //print(jsonResult)
                 for item in items {
                     let id = item["id"] as! String
+                    
+                    // Check if Song exists in Song cache
                     if let cachedSong = SessionData.songsCache.object(forKey: id as NSString) {
                         songs.append(cachedSong)
                         continue
+                    }
+                    
+                    // Check if Song already exists in CoreData
+                    let predicate = NSPredicate(format: "id = %d", id)
+                    self.songsFetchRequest.predicate = predicate
+                    do {
+                        let fetchedSongs = try self.context.fetch(self.songsFetchRequest)
+                        if fetchedSongs.count > 0 {
+                            let song = fetchedSongs[0]
+                            songs.append(song)
+                            if (SessionData.songsCache.object(forKey: id as NSString) == nil) {
+                                SessionData.songsCache.setObject(song, forKey: id as NSString)
+                            }
+                            continue
+                        }
+                    } catch {
+                        print("No song with id found")
                     }
                     
                     let snippet = item["snippet"] as! Dictionary<String, Any>
