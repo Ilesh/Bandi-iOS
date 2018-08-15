@@ -198,6 +198,28 @@ extension PlaylistsController {
         nav.pushViewController(playlistDetailsController, animated: true)
     }
     
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .normal, title: "REMOVE", handler: { (action, view, completion) in
+            let playlistDeleteAlert = DeleteAlertController(message: "Are you sure you want to delete this playlist?", actionName: "Delete Playlist")
+            playlistDeleteAlert.deletePressed = {
+                let playlist = self.fetchedResultsController.object(at: indexPath)
+                self.context.delete(playlist)
+                CoreDataHelper.shared.appDelegate.saveContext()
+                tableView.reloadData()
+            }
+            playlistDeleteAlert.willDisappear = {
+                completion(true)
+            }
+            self.present(playlistDeleteAlert, animated: true, completion: nil)
+        })
+        delete.backgroundColor = .red
+        
+        let config = UISwipeActionsConfiguration(actions: [delete])
+        config.performsFirstActionWithFullSwipe = false
+        
+        return config
+    }
+    
     @objc func addPlaylist() {
         guard let nav = navigationController else { return }
         let addPlaylistController = AddPlaylistController(style: .plain)

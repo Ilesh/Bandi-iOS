@@ -233,7 +233,7 @@ extension AllSongsController {
         add.backgroundColor = Constants.Colors().primaryColor
         
         let delete = UIContextualAction(style: .normal, title: "DELETE", handler: { (action, view, completion) in
-            let songDeleteAlert = SongDeleteAlertController()
+            let songDeleteAlert = DeleteAlertController(message: "Deleting a song also deletes it from all playlists", actionName: "Delete Song")
             songDeleteAlert.deletePressed = {
                 let context = CoreDataHelper.shared.getContext()
                 
@@ -269,17 +269,6 @@ extension AllSongsController {
                     }
                     CoreDataHelper.shared.appDelegate.saveContext()
                 }
-                
-//                do {
-//                    try playlistFetchedResultsController.performFetch()
-//                } catch {
-//                    print(error)
-//                }
-//
-//                self.songs.remove(at: indexPath.row)
-//
-//                tableView.deleteRows(at: [indexPath], with: .left)
-//                //tableView.reloadData()
                 
             }
             songDeleteAlert.willDisappear = {
