@@ -1,0 +1,35 @@
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch master
+# Your branch is up to date with 'master/master'.
+#
+adfasdfas
+df
+
+ Changes to be committed:
+#	modified:   BandiNew.xcodeproj/project.pbxproj
+#	modified:   BandiNew/BandiNew.xcdatamodeld/BandiNew.xcdatamodel/contents
+#	renamed:    BandiNew/Controller/LIbrary Controller/LibraryTabController.swift -> BandiNew/Controller/Library Controller/LibraryTabController.swift
+#	modified:   BandiNew/Controller/Music Details Controller/MusicDetailsController.swift
+#	modified:   BandiNew/Controller/Search Controller/SearchTabController.swift
+#	modified:   BandiNew/Model/MusicFetcher.swift
+#	modified:   BandiNew/Model/Song.swift
+#	modified:   BandiNew/View/Table View/Table View Cells/MusicTableViewCell.swift
+#	modified:   BandiNew/View/Table View/Table View Cells/SearchMusicTableViewCell.swift
+#	modified:   BandiNew/View/Table View/Table Views/Music/QueueMusicTableView.swift
+#	modified:   BandiNew/View/Table View/Table Views/Recent Searches/RecentSearchesTableView.swift
+#
+# Untracked files:
+#	BandiNew.xcodeproj/xcuserdata/siddhatiwari.xcuserdatad/xcdebugger/
+#	BandiNew.xcworkspace/
+#	BandiNew/Helpers/APIKeys.swift
+#	BandiNew/Model/Video.swift
+#	Cartfile
+#	Cartfile.resolved
+#	Carthage/
+#	PodFile
+#	Podfile.lock
+#	Pods/
+#

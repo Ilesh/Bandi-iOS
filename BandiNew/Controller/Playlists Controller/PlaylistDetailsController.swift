@@ -22,12 +22,18 @@ class PlaylistDetailsController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.allowsSelection = true
         tableView.alwaysBounceVertical = false
+        tableView.allowsMultipleSelection = true
         
         tableView.register(PlaylistHeaderCell.self, forCellReuseIdentifier: detailsCellId)
         tableView.register(PlaylistControlsTableViewCell.self, forCellReuseIdentifier: controlsCellId)
         tableView.register(AddMusicTableViewCell.self, forCellReuseIdentifier: addMusicCellId)
         tableView.register(QueueMusicTableViewCell.self, forCellReuseIdentifier: songCellId)
         setUpTheming()
+    }
+    
+    @objc func test() {
+        setEditing(true, animated: true)
+        tableView.setEditing(true, animated: true)
     }
     
     // TODO: fix large title appearance when going back and forth swiping nav
@@ -80,6 +86,8 @@ class PlaylistDetailsController: UITableViewController {
     
     let playlistEditAlert = PlaylistEditAlertController()
     
+    var swipeIsActive = false
+    
     var playlist: Playlist? {
         didSet {
             guard let playlist = playlist else { return }
@@ -129,12 +137,9 @@ class PlaylistDetailsController: UITableViewController {
         true
     ]
     
-    // TODO: fix swipe remove shouldnt start editing mode
     override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-//        tableView.setEditing(!editing, animated: false)
-//        tableView.setEditing(editing, animated: animated)
-        if playlistSize > 0 {
+        if playlistSize > 0 && !swipeIsActive {
+            super.setEditing(editing, animated: true)
             if editing {
                 let insertIndexPath = [IndexPath(row: 1, section: 0)]
                 tableView.performBatchUpdates({
@@ -148,6 +153,8 @@ class PlaylistDetailsController: UITableViewController {
                     tableView.insertRows(at: insertIndexPath, with: .fade)
                 }, completion: nil)
             }
+        } else {
+            super.setEditing(false, animated: false)
         }
     }
     
@@ -239,13 +246,6 @@ extension PlaylistDetailsController {
         return false
     }
     
-    //    override func setEditing(_ editing: Bool, animated: Bool) {
-    //        super.setEditing(editing, animated: animated)
-    //        // Reset to handle case where cell is swiped to be edited
-    //        tableView.setEditing(!editing, animated: false)
-    //        tableView.setEditing(editing, animated: animated)
-    //    }
-    
 }
 
 // MARK: - Table View Delegate
@@ -277,20 +277,13 @@ extension PlaylistDetailsController {
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        //return UITableView.getArrayResult(type: [UITableViewRowAction].self, array: editActionsForRowAt, indexPath: indexPath)
-        return nil
+        return UITableView.getArrayResult(type: [UITableViewRowAction].self, array: editActionsForRowAt, indexPath: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
         guard let song = playlist?.getSongNode(at: indexPath.row)?.song else { return nil }
-        
-        let queue = UIContextualAction(style: .normal, title: "QUEUE", handler: { (action, view, completion) in
-            CoreDataHelper.shared.queue?.insertSongAtEnd(song: song)
-            song.setSaved(saved: false, retain: true)
-            completion(true)
-        })
-        queue.backgroundColor = Constants.Colors().secondaryColor
-        
+
         let add = UIContextualAction(style: .normal, title: "ADD", handler: { (action, view, completion) in
             guard let nav = self.navigationController else { return }
             let addSongController = AddController()
@@ -301,22 +294,36 @@ extension PlaylistDetailsController {
         })
         add.backgroundColor = Constants.Colors().primaryColor
         
+        let queue = UIContextualAction(style: .normal, title: "QUEUE", handler: { (action, view, completion) in
+            CoreDataHelper.shared.queue?.insertSongAtEnd(song: song)
+            song.setSaved(saved: false, retain: true)
+            completion(true)
+        })
+        queue.backgroundColor = Constants.Colors().secondaryColor
+
         let delete = UIContextualAction(style: .normal, title: "REMOVE", handler: { (action, view, completion) in
             guard let playlist = self.playlist else { return }
             CoreDataHelper.shared.getContext().performAndWait({
                 playlist.removeSong(at: indexPath.row)
             })
             CoreDataHelper.shared.appDelegate.saveContext()
-            self.tableView.performBatchUpdates({
-                self.tableView.deleteRows(at: [indexPath], with: .left)
-            }, completion: nil)
+            tableView.reloadData()
             completion(true)
         })
         delete.backgroundColor = .red
-        
+
         let config = UISwipeActionsConfiguration(actions: [delete, queue, add])
-        
+        config.performsFirstActionWithFullSwipe = false
+
         return config
+    }
+    
+    override func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+        swipeIsActive = true
+    }
+
+    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        swipeIsActive = false
     }
     
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {

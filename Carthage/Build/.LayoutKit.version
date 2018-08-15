@@ -1,0 +1,32 @@
+{
+  "Mac" : [
+    {
+      "name" : "LayoutKit",
+      "hash" : "b95080d94b407ba3cd388020080787ee6b4dcd9694c03b0b17bb113abaebe325"
+    }
+  ],
+  "watchOS" : [
+
+  ],
+  "tvOS" : [
+    {
+      "name" : "LayoutKit",
+      "hash" : "abde172ee0f96c1bc514a7735829ed29d45c6072c8d5d13944d48fa2544cb54f"
+    }
+  ],
+  "commitish" : "7.0.3",
+  "iOS" : [
+    {
+      "name" : "ExampleLayouts",
+      "hash" : "b05356c56a1ee90b19921de15273beabd447044e313db28cc79370cc3c1120cb"
+    },
+    {
+      "name" : "LayoutKit",
+      "hash" : "ab4db12a650b8e4929ef685e83b71058a318d47f5995a9b810f35a4b8e614898"
+    },
+    {
+      "name" : "LayoutKit",
+      "hash" : "ab4db12a650b8e4929ef685e83b71058a318d47f5995a9b810f35a4b8e614898"
+    }
+  ]
+}

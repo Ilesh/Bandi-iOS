@@ -1,0 +1,11 @@
+framework module ExampleLayouts {
+  umbrella header "ExampleLayouts.h"
+
+  export *
+  module * { export * }
+}
+
+module ExampleLayouts.Swift {
+    header "ExampleLayouts-Swift.h"
+    requires objc
+}
