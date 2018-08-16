@@ -32,14 +32,13 @@ class SearchYoutubeController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let navBar = navigationController {
-            navBar.navigationBar.prefersLargeTitles = true
-        }
+        tableView.reloadData()
+        guard let navBar = navigationController else { return }
+        navBar.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tableView.reloadData()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -63,11 +62,11 @@ class SearchYoutubeController: UITableViewController {
     
     lazy var recentSearchesTableView: RecentSearchesTableView = {
         let tv = RecentSearchesTableView(frame: .zero, style: .grouped)
-        tv.backgroundColor = .red
         tv.rowSelected = { searchString in
             self.searchController.searchBar.text = searchString
             self.searchController.searchBar.endEditing(true)
             self.updateYoutubeResults()
+            self.toggleSearchActive(true)
             self.tableView = self.musicTableView
         }
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -169,20 +168,11 @@ class SearchYoutubeController: UITableViewController {
         tableView.reloadData()
     }
     
+    func toggleSearchActive(_ isActive: Bool) {
+        self.searchController.isActive = isActive
+    }
+    
 }
-
-//// MARK: - Table View Delegate
-//extension SearchYoutubeController {
-//
-//    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        return 0
-//    }
-//
-//    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 0
-//    }
-//
-//}
 
 // MARK: - Search Controller Delegate
 extension SearchYoutubeController: UISearchControllerDelegate {
@@ -217,6 +207,7 @@ extension SearchYoutubeController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         tableView = recentSearchesTableView
+        toggleSearchActive(false)
     }
     
 }

@@ -105,18 +105,13 @@ final class CoreDataHelper {
     // MARK: - Recent Search
     
     func addRecentSearch(searchString: String) {
-        recentSearchesFetchRequest.sortDescriptors = []
+        let dateSort = NSSortDescriptor(key: "searchDate", ascending: true)
+        recentSearchesFetchRequest.sortDescriptors = [dateSort]
         do {
             let fetchedSearches = try context.fetch(recentSearchesFetchRequest)
-            for recentSearch in fetchedSearches {
-                if searchString == recentSearch.searchText {
-                    recentSearch.searchDate = Date()
-                    return
-                }
-            }
             self.context.perform({
                 if fetchedSearches.count + 1 > self.MAX_RECENT_SEARCHES {
-                    self.context.delete(fetchedSearches.last!)
+                    self.context.delete(fetchedSearches.first!)
                 }
                 let newRecentSearch = RecentSearch(context: self.context)
                 newRecentSearch.searchText = searchString

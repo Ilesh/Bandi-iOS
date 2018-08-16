@@ -25,8 +25,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.tintColor = Constants.Colors().primaryColor
-        window?.backgroundColor = AppTheme.dark.tableBackgroundColor
+        
+        let savedThemeName = UserDefaults.standard.getSavedTheme()
+        if savedThemeName == nil {
+            UserDefaults.standard.setSavedTheme(value: "light")
+        } else {
+            if savedThemeName == "dark" {
+                AppThemeProvider.shared.nextTheme()
+            }
+        }
+        setUpTheming()
         
         window?.rootViewController = mainTabBarController
         
@@ -39,19 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(error)
         }
         
-        let savedThemeName = UserDefaults.standard.getSavedTheme()
-        if savedThemeName == nil {
-            UserDefaults.standard.setSavedTheme(value: "light")
-        } else {
-            if savedThemeName == "dark" {
-                AppThemeProvider.shared.nextTheme()
-            }
-        }
-        
         // Used to prevent white background when removing tableviewcell
         UITableViewCell.appearance().backgroundColor = .clear
-        
-        setUpTheming()
         
         return true
     }
@@ -133,6 +130,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: Themed {
     func applyTheme(_ theme: AppTheme) {
         window?.backgroundColor = theme.tableBackgroundColor
+        window?.tintColor = theme.tintColor
     }
 }
 

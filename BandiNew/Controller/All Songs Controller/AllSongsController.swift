@@ -22,6 +22,7 @@ class AllSongsController: UITableViewController {
         
         title = "All Songs"
         
+        tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         tableView.register(QueueMusicTableViewCell.self, forCellReuseIdentifier: songCellId)
         tableView.register(PlaylistControlsTableViewCell.self, forCellReuseIdentifier: controlsCellId)
@@ -34,6 +35,7 @@ class AllSongsController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tableView.reloadData()
         if let nav = navigationController {
             nav.navigationBar.prefersLargeTitles = true
         }
@@ -169,7 +171,6 @@ extension AllSongsController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: controlsCellId) as! PlaylistControlsTableViewCell
-        cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         cell.play = {
             UpNextWrapper.shared.setUpNextSongs(songs: self.songs)
             UpNextWrapper.shared.setCurrentlyPlayingIndex(index: 0)
@@ -180,13 +181,18 @@ extension AllSongsController {
             UpNextWrapper.shared.setUpNextSongs(songs: playlistSongs)
             UpNextWrapper.shared.setCurrentlyPlayingIndex(index: 0)
         }
+        let view = UIView(frame: CGRect(x: 15, y: 74, width: tableView.frame.width, height: 0.5))
+        view.backgroundColor = AppThemeProvider.shared.currentTheme.tableSeparatorColor
+        cell.addSubview(view)
         return cell
     }
     
     func configure(_ cell: QueueMusicTableViewCell, at indexPath: IndexPath) {
         let song = isFiltering() ? filteredSongs[indexPath.row] : songs[indexPath.row]
         cell.music = song
-        cell.separatorInset = UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 0)
+        let view = UIView(frame: CGRect(x: 90, y: cell.frame.height, width: tableView.frame.width, height: 0.5))
+        view.backgroundColor = AppThemeProvider.shared.currentTheme.tableSeparatorColor
+        cell.addSubview(view)
     }
     
 }
@@ -195,7 +201,7 @@ extension AllSongsController {
 extension AllSongsController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 55
+        return 60
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -203,6 +209,10 @@ extension AllSongsController {
             return 0
         }
         return 74
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

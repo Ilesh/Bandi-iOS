@@ -19,13 +19,14 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
             navBar.extendedLayoutIncludesOpaqueBars = true
         }
         definesPresentationContext = true
+        
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         title = "Search"
-        //updateRecentSearchesTable()
         setupViews()
     }
     
@@ -41,10 +42,10 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         sb.delegate = self
         sb.searchBar.delegate = self
         sb.searchResultsUpdater = self
-        sb.obscuresBackgroundDuringPresentation = false
+        sb.obscuresBackgroundDuringPresentation = true
         sb.hidesNavigationBarDuringPresentation = true
         sb.searchBar.placeholder = "Search Youtube"
-        sb.dimsBackgroundDuringPresentation = false
+        sb.dimsBackgroundDuringPresentation = true
         return sb
     }()
     
@@ -135,8 +136,9 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        recentSearchesTableView.reloadData()
-        //updateRecentSearchesTable()
+        DispatchQueue.main.async {
+            self.recentSearchesTableView.reloadData()
+        }
         searchCancelled = true
     }
     
@@ -174,64 +176,22 @@ class SearchTabController: UIViewController, UISearchControllerDelegate, UISearc
         }
     }
     
-//    func setCollectionBackground() {
-//        if self.musicTableView.musicArray.count == 0 {
-//            self.musicTableView.showNoResults()
-//        } else {
-//            self.musicTableView.backgroundView = nil
-//        }
-//    }
-    
-//    func updateRecentSearchesTable() {
-//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        DispatchQueue.global(qos: .userInteractive).async {
-//            let context = appDelegate.persistentContainer.viewContext
-//            let fetchRequest: NSFetchRequest<RecentSearches> = RecentSearches.fetchRequest()
-//            do {
-//                let recentSearches = try context.fetch(fetchRequest)
-//                var recentSearchStrings: [String] = []
-//                for recentSearch in recentSearches {
-//                    let recentSearch = recentSearch.recentSearch
-//                    recentSearchStrings.append(recentSearch!)
-//                }
-//                self.recentSearchesTableView.recentSearches = recentSearchStrings
-//                DispatchQueue.main.async {
-//                    self.recentSearchesTableView.clearButton.isHidden = self.recentSearchesTableView.recentSearches.count == 0
-//                    self.recentSearchesTableView.reloadData()
-//                }
-//            } catch let error {
-//                print("error: \(error.localizedDescription)")
-//            }
-//        }
-//    }
-    
     @objc func updateSearchResults() {
         let searchBarText = self.searchController.searchBar.text!
         guard previousSearch != searchBarText else { return }
         previousSearch = searchBarText
         
         DispatchQueue.global(qos: .userInitiated).async {
-            let dispatchGroup = DispatchGroup()
-            dispatchGroup.enter()
             MusicFetcher.shared.fetchYoutube(keywords: searchBarText) { (youtubeVideos) -> Void in
-                //                    DispatchQueue.main.async {
-                //                        self.musicTableView.showLoading()
-                //                    }
                 if let youtubeVideos = youtubeVideos {
                     self.musicTableView.musicArray = youtubeVideos
                     DispatchQueue.main.async {
                         self.musicTableView.setContentOffset(.zero, animated: false)
                         self.musicTableView.reloadData()
-                        dispatchGroup.leave()
                     }
                 }
             }
-            dispatchGroup.notify(queue: .main) {
-                //self.setCollectionBackground()
-            }
         }
-        
-        //recentSearchesTableView.addSearch(searchBarText)
     }
     
 }

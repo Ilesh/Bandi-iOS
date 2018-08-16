@@ -57,7 +57,6 @@ class AddSongToTableView: UITableView {
     
     let numberOfRowsInSection = [
         2,
-        
     ]
     
     func getSelectedPlaylists() -> Set<Playlist> {

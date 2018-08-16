@@ -282,6 +282,8 @@ extension PlaylistDetailsController {
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
+        if indexPath.section != 1 { return nil }
+        
         guard let song = playlist?.getSongNode(at: indexPath.row)?.song else { return nil }
 
         let add = UIContextualAction(style: .normal, title: "ADD", handler: { (action, view, completion) in

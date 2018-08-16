@@ -21,13 +21,11 @@ class PlaylistsController: UITableViewController {
             navigationItem.hidesSearchBarWhenScrolling = false
         }
         
-        view.backgroundColor = .green
-        
         title = "Playlists"
         
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: sideLength + 30, bottom: 0, right: 0)
-        tableView.tableFooterView = UIView()
-        tableView.tableFooterView?.backgroundColor = .yellow
+        tableView.separatorStyle = .none
+        //bottomBorderView.frame = CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1)
+        //tableView.tableFooterView = bottomBorderView
         tableView.allowsSelection = true
         tableView.register(AddPlaylistTableViewCell.self, forCellReuseIdentifier: addPlaylistCellId)
         tableView.register(PlaylistPreviewTableViewCell.self, forCellReuseIdentifier: playlistCellId)
@@ -63,6 +61,10 @@ class PlaylistsController: UITableViewController {
     private let addPlaylistCellId = "addPlaylistCellId"
     private let playlistCellId = "playlistCellId"
     var filteredPlaylists: [Playlist] = []
+    var playlists: [Playlist] {
+        guard let playlists = fetchedResultsController.fetchedObjects else { return [Playlist]() }
+        return playlists
+    }
     
     lazy var searchController: SearchController = {
         let sc = SearchController(searchResultsController: nil)
@@ -100,13 +102,10 @@ class PlaylistsController: UITableViewController {
     
     func setupViews() {
         tableView.addSubview(topBorderView)
-        tableView.addSubview(bottomBorderView)
-        bottomBorderView.backgroundColor = .red
-        topBorderView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1)
+        topBorderView.frame = CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1)
     }
     
     func filterContentForSearchText(_ searchText: String) {
-        guard let playlists = fetchedResultsController.fetchedObjects else { return }
         filteredPlaylists = playlists.filter({ (playlist: Playlist) -> Bool in
             if !searchBarIsEmpty() {
                 return playlist.title!.lowercased().contains(searchText.lowercased())
@@ -171,6 +170,9 @@ extension PlaylistsController {
         let playlist = isFiltering() ? filteredPlaylists[indexPath.row] : fetchedResultsController.object(at: indexPath)
         cell.playlist = playlist
         cell.accessoryType = .disclosureIndicator
+        let view = UIView(frame: CGRect(x: sideLength + 30, y: cell.frame.height, width: tableView.frame.width, height: 0.5))
+        view.backgroundColor = AppThemeProvider.shared.currentTheme.tableSeparatorColor
+        cell.addSubview(view)
     }
     
 }
@@ -183,10 +185,18 @@ extension PlaylistsController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0//60
+        return 0
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView()
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }
     
@@ -199,7 +209,7 @@ extension PlaylistsController {
     }
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .normal, title: "REMOVE", handler: { (action, view, completion) in
+        let delete = UIContextualAction(style: .normal, title: "DELETE", handler: { (action, view, completion) in
             let playlistDeleteAlert = DeleteAlertController(message: "Are you sure you want to delete this playlist?", actionName: "Delete Playlist")
             playlistDeleteAlert.deletePressed = {
                 let playlist = self.fetchedResultsController.object(at: indexPath)
