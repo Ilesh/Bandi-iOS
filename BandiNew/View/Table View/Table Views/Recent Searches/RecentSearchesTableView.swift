@@ -25,9 +25,6 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
     
     private let recentSearchCellId = "recentSearchCellId"
     private let sectionHeaders = ["Recent"]
-    var rowSelected: ((String)->())?
-    
-    private var persistentContainer = CoreDataHelper.shared.getPersistentContainer()
     private lazy var context = CoreDataHelper.shared.getContext()
     
     let fetchRequest: NSFetchRequest<RecentSearch> = RecentSearch.fetchRequest()
@@ -43,16 +40,26 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
         return searches.count > 0
     }
     
+    var rowSelected: ((String)->())?
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
+// MARK: - Table View Delegate
+extension RecentSearchesTableView {
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 55
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        rowSelected?(searches[indexPath.row].searchText!)
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 65
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // TODO: Make header without clear button
         let recentSearchesHeader = RecentSearchesSectionHeader()
         recentSearchesHeader.clearButton.isHidden = !hasSearches
         recentSearchesHeader.label.isHidden = !hasSearches
@@ -64,12 +71,8 @@ class RecentSearchesTableView: UITableView, UITableViewDelegate {
         return recentSearchesHeader
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 65
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        rowSelected?(searches[indexPath.row].searchText!)
     }
     
 }

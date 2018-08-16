@@ -52,18 +52,13 @@ final class CoreDataHelper {
     
     func initialCoreDataSetup() {
         
-        let playlistsFetchRequest: NSFetchRequest<Playlist> = Playlist.fetchRequest()
-        
         do {
+            let playlistsFetchRequest: NSFetchRequest<Playlist> = Playlist.fetchRequest()
             let playlists = try self.context.fetch(playlistsFetchRequest)
             for playlist in playlists {
                 if playlist.type == "queue" {
-                    if self.queue == nil {
-                        self.queue = playlist
-                        print("queue found")
-                    } else {
-                        print("duplicate queue")
-                    }
+                    self.queue = playlist
+                    break
                 }
             }
         } catch {
@@ -90,7 +85,7 @@ final class CoreDataHelper {
         
     }
     
-    func createSongToPlaylist(song: Song, playlist: Playlist) -> SongToPlaylist {
+    func createSongToPlaylist(song: Song, playlist: Playlist) -> SongToPlaylist? {
         var songToPlaylist: SongToPlaylist?
         context.performAndWait({
             songToPlaylist = SongToPlaylist(context: self.context)
@@ -99,7 +94,7 @@ final class CoreDataHelper {
             songToPlaylist.playlist = playlist
             songToPlaylist.dateModified = Date()
         })
-        return songToPlaylist!
+        return songToPlaylist
     }
     
     // MARK: - Recent Search

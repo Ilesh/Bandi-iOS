@@ -24,7 +24,6 @@ class SearchYoutubeController: UITableViewController {
         
         title = "Search"
         
-        // TODO: this has to do with recent table view disaapering when searching for video?
         definesPresentationContext = true
         
         tableView = recentSearchesTableView

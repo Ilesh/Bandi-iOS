@@ -8,6 +8,28 @@
 
 import UIKit
 
+// MARK: Notification.Name
+extension Notification.Name {
+    static let newUpNextPlaylist = Notification.Name("newUpNextPlaylist")
+    static let songFinished = Notification.Name("songFinished")
+    static let currentlyPlayingIndexChanged = Notification.Name("currentlyPlayingIndexChanged")
+    static let currentlyPlayingPlaylistChanged = Notification.Name("currentlyPlayingPlaylistChanged")
+}
+
+// MARK: UImage
+extension UIImage {
+    
+    static func imageWithImage(image:UIImage, scaledToSize newSize:CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
+        image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+    
+}
+
+
 // MARK: Array rearrange
 extension Array {
     mutating func rearrange(from: Int, to: Int) {
@@ -18,13 +40,11 @@ extension Array {
 
 // MARK: shuffling
 extension MutableCollection {
-    /// Shuffles the contents of this collection.
     mutating func shuffle() {
         let c = count
         guard c > 1 else { return }
         
         for (firstUnshuffled, unshuffledCount) in zip(indices, stride(from: c, to: 1, by: -1)) {
-            // Change `Int` in the next line to `IndexDistance` in < Swift 4.1
             let d: Int = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
             let i = index(firstUnshuffled, offsetBy: d)
             swapAt(firstUnshuffled, i)
@@ -33,20 +53,11 @@ extension MutableCollection {
 }
 
 extension Sequence {
-    /// Returns an array with the contents of this sequence, shuffled.
     func shuffled() -> [Element] {
         var result = Array(self)
         result.shuffle()
         return result
     }
-}
-
-// MARK: Notification.Name
-extension Notification.Name {
-    static let newUpNextPlaylist = Notification.Name("newUpNextPlaylist")
-    static let songFinished = Notification.Name("songFinished")
-    static let currentlyPlayingIndexChanged = Notification.Name("currentlyPlayingIndexChanged")
-    static let currentlyPlayingPlaylistChanged = Notification.Name("currentlyPlayingPlaylistChanged")
 }
 
 extension UITableView {
@@ -64,7 +75,6 @@ extension UITableView {
     
     func scrollToFirstRow(animated: Bool) {
         if numberOfRows(inSection: 0) > 0 {
-            let indexPath = IndexPath(row: 0, section: 0)
             DispatchQueue.main.async {
                 self.setContentOffset(CGPoint(x: 0, y: -self.contentInset.top), animated: animated)
                 //self.scrollToRow(at: indexPath, at: .top, animated: animated)
@@ -124,15 +134,6 @@ extension String {
     }
 }
 
-extension NSCoder {
-    class func empty() -> NSCoder {
-        let data = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWith: data)
-        archiver.finishEncoding()
-        return NSKeyedUnarchiver(forReadingWith: data as Data)
-    }
-}
-
 extension UINavigationBar {
     func shouldRemoveShadow(_ value: Bool) -> Void {
         if value {
@@ -140,29 +141,6 @@ extension UINavigationBar {
         } else {
             self.setValue(false, forKey: "hidesShadow")
         }
-    }
-}
-
-extension UIView
-{
-    func searchVisualEffectsSubview() -> UIVisualEffectView?
-    {
-        if let visualEffectView = self as? UIVisualEffectView
-        {
-            return visualEffectView
-        }
-        else
-        {
-            for subview in subviews
-            {
-                if let found = subview.searchVisualEffectsSubview()
-                {
-                    return found
-                }
-            }
-        }
-        
-        return nil
     }
 }
 
@@ -186,56 +164,6 @@ extension UIScrollView {
         }
     }
     
-}
-
-extension UIAlertController {
-    
-    private struct AssociatedKeys {
-        static var blurStyleKey = "UIAlertController.blurStyleKey"
-    }
-    
-    public var blurStyle: UIBlurEffectStyle {
-        get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.blurStyleKey) as? UIBlurEffectStyle ?? .extraLight
-        } set (style) {
-            objc_setAssociatedObject(self, &AssociatedKeys.blurStyleKey, style, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            
-            view.setNeedsLayout()
-            view.layoutIfNeeded()
-        }
-    }
-    
-    public var cancelButtonColor: UIColor? {
-        return blurStyle == .dark ? UIColor(red: 28.0/255.0, green: 28.0/255.0, blue: 28.0/255.0, alpha: 1) : nil
-    }
-    
-    private var visualEffectView: UIVisualEffectView? {
-        if let presentationController = presentationController, presentationController.responds(to: Selector(("popoverView"))), let view = presentationController.value(forKey: "popoverView") as? UIView
-        {
-            return view.recursiveSubviews.compactMap({$0 as? UIVisualEffectView}).first
-        }
-        
-        return view.recursiveSubviews.compactMap({$0 as? UIVisualEffectView}).first
-    }
-    private var cancelActionView: UIView? {
-        return view.recursiveSubviews.compactMap({
-            $0 as? UILabel}
-            ).first(where: {
-                $0.text == actions.first(where: { $0.style == .cancel })?.title
-            })?.superview?.superview
-    }
-    
-    public convenience init(title: String?, message: String?, preferredStyle: UIAlertControllerStyle, blurStyle: UIBlurEffectStyle) {
-        self.init(title: title, message: message, preferredStyle: preferredStyle)
-        self.blurStyle = blurStyle
-    }
-    
-    open override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        visualEffectView?.effect = UIBlurEffect(style: blurStyle)
-        cancelActionView?.backgroundColor = cancelButtonColor
-    }
 }
 
 extension UIView {

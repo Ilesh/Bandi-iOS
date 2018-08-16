@@ -22,6 +22,8 @@ extension Playlist {
         return songs
     }
     
+    // MARK: Linked List implementation for storing playlist songs
+    
     func getSongNode(at index: Int) -> SongToPlaylist? {
         
         if firstSong == nil { return nil }
@@ -51,7 +53,7 @@ extension Playlist {
     
     func insertSongAtStart(song: Song) {
         
-        let songToInsert = CoreDataHelper.shared.createSongToPlaylist(song: song, playlist: self)
+        guard let songToInsert = CoreDataHelper.shared.createSongToPlaylist(song: song, playlist: self) else { return }
         songToInsert.previousSong = nil
         
         if firstSong == nil {
@@ -68,7 +70,7 @@ extension Playlist {
     
     func insertSongAtEnd(song: Song) {
         
-        let songToInsert = CoreDataHelper.shared.createSongToPlaylist(song: song, playlist: self)
+        guard let songToInsert = CoreDataHelper.shared.createSongToPlaylist(song: song, playlist: self) else { return }
         songToInsert.nextSong = nil
         
         if firstSong == nil {
@@ -94,7 +96,7 @@ extension Playlist {
             return
         }
         
-        let songToInsert = CoreDataHelper.shared.createSongToPlaylist(song: song, playlist: self)
+        guard let songToInsert = CoreDataHelper.shared.createSongToPlaylist(song: song, playlist: self) else { return }
 
         guard let tempSongNode = getSongNode(at: index - 1) else { return }
         songToInsert.nextSong = tempSongNode.nextSong
@@ -151,10 +153,6 @@ extension Playlist {
         while self.size > 0 {
             self.removeSongAtStart()
         }
-    }
-    
-    func setSongs(songs: [Song]) {
-        
     }
     
     func removeSong(song: Song) {
