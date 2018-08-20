@@ -27,7 +27,9 @@ class UpNextTableView: MusicTableView {
         get {
             return UpNextWrapper.shared.getUpNextSongs()
         }
-        set { }
+        set (songs) {
+            UpNextWrapper.shared.setUpNextSongs(songs: songs)
+        }
     }
     
     var upNextIndex: Int {
@@ -60,7 +62,7 @@ class UpNextTableView: MusicTableView {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return musicArray.count == 0 ? 1 : 2
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -95,6 +97,11 @@ class UpNextTableView: MusicTableView {
         }
     }
     
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if indexPath.section == 0 { return nil }
+        return indexPath
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow?(indexPath.row + upNextIndex)
     }
@@ -111,21 +118,22 @@ class UpNextTableView: MusicTableView {
         return .none
     }
     
-    //    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-    //        let remove = UIContextualAction(style: .destructive, title: "REMOVE", handler: { (action, view, completion) in
-    //            guard let playlist = self.playlist else { return }
-    //            CoreDataHelper.shared.getContext().performAndWait({
-    //                playlist.removeSong(at: indexPath.row)
-    //            })
-    //            CoreDataHelper.shared.appDelegate.saveContext()
-    //            tableView.performBatchUpdates({
-    //                tableView.deleteRows(at: [indexPath], with: .none)
-    //            }, completion: nil)
-    //            self.recalculateFrame?()
-    //            completion(true)
-    //        })
-    //        return UISwipeActionsConfiguration(actions: [remove])
-    //    }
+        func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+            let remove = UIContextualAction(style: .destructive, title: "REMOVE", handler: { (action, view, completion) in
+                //guard let playlist = self.playlist else { return }
+                print(1234)
+//                CoreDataHelper.shared.getContext().performAndWait({
+//                    playlist.removeSong(at: indexPath.row)
+//                })
+//                CoreDataHelper.shared.appDelegate.saveContext()
+//                tableView.performBatchUpdates({
+//                    tableView.deleteRows(at: [indexPath], with: .none)
+//                }, completion: nil)
+                self.recalculateFrame?()
+                completion(true)
+            })
+            return UISwipeActionsConfiguration(actions: [remove])
+        }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let removeAction = UITableViewRowAction(style: .destructive, title: "REMOVE", handler: { (action, indexPath) in
@@ -138,22 +146,18 @@ class UpNextTableView: MusicTableView {
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 1 {
-            return true
-        }
-        return false
+        return indexPath.section == 1
     }
     
     func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        if (proposedDestinationIndexPath.section != sourceIndexPath.section) {
-            return sourceIndexPath
-        }
-        return proposedDestinationIndexPath
+        return proposedDestinationIndexPath.row != sourceIndexPath.row ? proposedDestinationIndexPath : sourceIndexPath
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if destinationIndexPath.section == 1 {
-            musicArray.rearrange(from: sourceIndexPath.row, to: destinationIndexPath.row)
+            if sourceIndexPath.row == destinationIndexPath.row { return }
+            musicArray.rearrange(from: sourceIndexPath.row + upNextIndex, to: destinationIndexPath.row + upNextIndex)
+            UpNextWrapper.shared.setUpNextSongs(songs: musicArray)
         }
     }
     

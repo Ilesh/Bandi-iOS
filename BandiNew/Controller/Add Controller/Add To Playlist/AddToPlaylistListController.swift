@@ -18,7 +18,7 @@ class AddToPlaylistListController: PlaylistsController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.prompt = SessionData.AddToPlaylist.songsAddedString
+        navigationItem.prompt = SessionData.addToPlaylist.songsAddedString
         navigationItem.largeTitleDisplayMode = .never
         guard let nav = navigationController else { return }
         nav.navigationBar.prefersLargeTitles = false
@@ -28,7 +28,7 @@ class AddToPlaylistListController: PlaylistsController {
     override var playlists: [Playlist] {
         var playlists = CoreDataHelper.shared.userPlaylists
         for i in 0..<playlists.count {
-            if playlists[i] == SessionData.AddToPlaylist.playlist {
+            if playlists[i] == SessionData.addToPlaylist.playlist {
                 disabledIndexPath = IndexPath(row: i, section: 0)
                 break
             }

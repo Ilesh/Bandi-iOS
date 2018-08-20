@@ -10,56 +10,79 @@
 
 #import <LayoutKitObjC/LayoutKitObjC-Swift.h>
 
+@interface LOKInsetLayoutBuilder()
+
+@property (nonatomic, nullable) LOKAlignment *privateAlignment;
+@property (nonatomic, nullable) LOKFlexibility *privateFlexibility;
+@property (nonatomic, nullable) NSString *privateViewReuseId;
+@property (nonatomic, nullable) Class privateViewClass;
+
+@property (nonatomic) LOKEdgeInsets privateInsets;
+@property (nonatomic, nonnull) id<LOKLayout> privateSublayout;
+@property (nonatomic, nullable) void (^ privateConfigure)(LOKView * _Nonnull);
+
+@end
+
 @implementation LOKInsetLayoutBuilder
 
-+ (nonnull instancetype)withInsets:(EdgeInsets)insets around:(nonnull id<LOKLayout>)sublayout {
-    LOKInsetLayoutBuilder *builder = [[self alloc] init];
-    builder.insets = insets;
-    builder.sublayout = sublayout;
-    return builder;
+- (instancetype)initWithInsets:(LOKEdgeInsets)insets around:(id<LOKLayout>)sublayout {
+    self = [super init];
+    _privateInsets = insets;
+    _privateSublayout = sublayout;
+    return self;
 }
 
-- (nonnull LOKInsetLayout *)build {
-    return [[LOKInsetLayout alloc] initWithInsets:self.insets
-                                        alignment:self.alignment
-                                      viewReuseId:self.viewReuseId
-                                        viewClass:self.viewClass
-                                        sublayout:self.sublayout
-                                        configure:self.configure];
++ (nonnull instancetype)withInsets:(LOKEdgeInsets)insets around:(nonnull id<LOKLayout>)sublayout {
+    return [[self alloc] initWithInsets:insets around:sublayout];
 }
 
-- (LOKInsetLayoutBuilder * _Nonnull (^)(LOKAlignment * _Nonnull))withAlignment {
+- (nonnull LOKInsetLayout *)layout {
+    return [[LOKInsetLayout alloc] initWithInsets:self.privateInsets
+                                        alignment:self.privateAlignment
+                                      viewReuseId:self.privateViewReuseId
+                                        viewClass:self.privateViewClass
+                                        sublayout:self.privateSublayout
+                                        configure:self.privateConfigure];
+}
+
+- (LOKInsetLayoutBuilder * _Nonnull (^)(LOKAlignment * _Nonnull))alignment {
     return ^LOKInsetLayoutBuilder *(LOKAlignment * alignment){
-        self.alignment = alignment;
+        self.privateAlignment = alignment;
         return self;
     };
 }
 
-- (LOKInsetLayoutBuilder * _Nonnull (^)(LOKFlexibility * _Nonnull))withFlexibility {
+- (LOKInsetLayoutBuilder * _Nonnull (^)(LOKFlexibility * _Nonnull))flexibility {
     return ^LOKInsetLayoutBuilder *(LOKFlexibility * flexibility){
-        self.flexibility = flexibility;
+        self.privateFlexibility = flexibility;
         return self;
     };
 }
 
-- (LOKInsetLayoutBuilder * _Nonnull (^)(NSString * _Nonnull))withViewReuseId {
+- (LOKInsetLayoutBuilder * _Nonnull (^)(NSString * _Nonnull))viewReuseId {
     return ^LOKInsetLayoutBuilder *(NSString * viewReuseId){
-        self.viewReuseId = viewReuseId;
+        self.privateViewReuseId = viewReuseId;
         return self;
     };
 }
 
-- (LOKInsetLayoutBuilder * _Nonnull (^)(Class _Nonnull))withViewClass {
+- (LOKInsetLayoutBuilder * _Nonnull (^)(Class _Nonnull))viewClass {
     return ^LOKInsetLayoutBuilder *(Class viewClass){
-        self.viewClass = viewClass;
+        self.privateViewClass = viewClass;
         return self;
     };
 }
 
-- (LOKInsetLayoutBuilder * _Nonnull (^)(void(^ _Nonnull)(View *_Nonnull)))withConfig {
-    return ^LOKInsetLayoutBuilder *(void(^ _Nonnull config)(View *_Nonnull)){
-        self.configure = config;
+- (LOKInsetLayoutBuilder * _Nonnull (^)(void(^ _Nullable)(LOKView *_Nonnull)))config {
+    return ^LOKInsetLayoutBuilder *(void(^ _Nullable config)(LOKView *_Nonnull)){
+        self.privateConfigure = config;
         return self;
+    };
+}
+
+- (LOKInsetLayoutBuilder * _Nonnull (^)(LOKEdgeInsets))insets {
+    return ^LOKInsetLayoutBuilder *(LOKEdgeInsets insets){
+        return [LOKInsetLayoutBuilder withInsets:insets around:self.layout];
     };
 }
 

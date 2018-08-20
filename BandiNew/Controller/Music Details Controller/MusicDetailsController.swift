@@ -30,6 +30,23 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         setUpTheming()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        redrawUpNext()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.youtubePlayerFrame.frame = videoContainer.bounds
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if AppThemeProvider.shared.currentTheme.themeName == "light" {
+            return .default
+        } else {
+            return .lightContent
+        }
+    }
+    
     @objc func updateSong(_ notification: Notification) {
         redrawUpNext()
         showLoading()
@@ -42,7 +59,37 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         recalculateUpNextFrame()
     }
     
+    var stopPulse = false
+    
+    func pulseVideoImage() {
+        UIView.animate(withDuration: 1, delay: 0, options: [.repeat, .autoreverse], animations: {
+            self.videoImage.layer.cornerRadius = 35
+            self.videoImage.transform = CGAffineTransform(scaleX: 0.90, y: 0.88)
+        }, completion: { completion in
+            if !self.stopPulse { self.pulseVideoImage() }
+        })
+    }
+    
     func playVideo(video: Song) {
+        
+        stopPulse = false
+        
+        let imageId = "\(video.id!)-wide"
+        videoImage.image = SessionData.imagesCache.object(forKey: imageId as NSString)
+        videoImage.clipsToBounds = true
+        videoImage.layer.shadowColor = UIColor.black.cgColor
+        videoImage.layer.shadowOpacity = 1
+        videoImage.layer.shadowOffset = CGSize(width: -5, height: 5)
+        videoImage.layer.shadowRadius = 5
+        videoImage.alpha = 0
+        UIView.animate(withDuration: 0.5, animations: {
+            self.videoImage.alpha = 0.75
+            self.videoImage.layer.cornerRadius = 43
+            self.videoImage.transform = CGAffineTransform(scaleX: 0.85, y: 0.82)
+        })
+        
+        pulseVideoImage()
+        
         guard let videoId = video.id else { return }
         MusicFetcher.shared.fetchYoutubeVideoUrl(videoID: videoId, quality: "CHANGE THIS", handler: { (videoURL) in
             if videoURL == nil {
@@ -54,21 +101,17 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
                     self.playingMusic = video
                     self.updateVideo(videoURLString: trimmedURL)
                     self.play()
+                    
+                    self.stopPulse = true
+                    UIView.animate(withDuration: 0.25, animations: {
+                        self.videoImage.alpha = 0
+                        self.videoImage.layer.cornerRadius = 0
+                        self.videoImage.transform = CGAffineTransform(scaleX: 1, y: 1)
+                    })
                 }
             }
         })
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        if AppThemeProvider.shared.currentTheme.themeName == "light" {
-            return .default
-        } else {
-            return .lightContent
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        redrawUpNext()
+        
     }
     
     func recalculateUpNextFrame() {
@@ -76,15 +119,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: calculatedHeight)
         mainScrollView.contentSize = contentView.frame.size
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.youtubePlayerFrame.frame = videoContainer.bounds
-    }
-
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
-//    }
     
     var playingMusic: Song? {
         didSet {
@@ -100,6 +134,12 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             popupItem.progress = 0
         }
     }
+    
+    let avp: AVPlayer = {
+        let url = URL(string: "https://r5---sn-ab5szn7s.googlevideo.com/videoplayback?ip=104.236.232.152&mime=video%2Fmp4&pl=21&source=youtube&dur=228.275&mv=m&ms=au%2Crdu&mm=31%2C29&ipbits=0&c=WEB&expire=1525396385&fexp=23724337&id=o-APfq_i_sz7lvXQIbuBLzT8hP0RCWJDhWuPrBPzjAJ9ar&key=yt6&fvip=5&initcwndbps=191250&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&requiressl=yes&lmt=1516777979804090&itag=22&mn=sn-ab5szn7s%2Csn-ab5l6ndr&ratebypass=yes&ei=QV_rWr-6M8v48gSeh5iACg&mt=1525374657&signature=A04E23B1C5781690159603F448A305A3BAFD208F.A5FC7831A44D6B1CC1C5387D189D8E90455FC814")
+        let av = AVPlayer(url: url!)
+        return av
+    }()
     
     lazy var youtubePlayerFrame: AVPlayerLayer = {
         let avpLayer = AVPlayerLayer(player: avp)
@@ -119,6 +159,14 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         let view = UIView()
         view.backgroundColor = .clear
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    lazy var videoImage: UIImageView = {
+        let view = UIImageView()
+        view.backgroundColor = .green
+        view.contentMode = UIViewContentMode.scaleAspectFit
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return view
     }()
     
@@ -212,12 +260,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         return slider
     }()
     
-    let avp: AVPlayer = {
-        let url = URL(string: "https://r5---sn-ab5szn7s.googlevideo.com/videoplayback?ip=104.236.232.152&mime=video%2Fmp4&pl=21&source=youtube&dur=228.275&mv=m&ms=au%2Crdu&mm=31%2C29&ipbits=0&c=WEB&expire=1525396385&fexp=23724337&id=o-APfq_i_sz7lvXQIbuBLzT8hP0RCWJDhWuPrBPzjAJ9ar&key=yt6&fvip=5&initcwndbps=191250&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&requiressl=yes&lmt=1516777979804090&itag=22&mn=sn-ab5szn7s%2Csn-ab5l6ndr&ratebypass=yes&ei=QV_rWr-6M8v48gSeh5iACg&mt=1525374657&signature=A04E23B1C5781690159603F448A305A3BAFD208F.A5FC7831A44D6B1CC1C5387D189D8E90455FC814")
-        let av = AVPlayer(url: url!)
-        return av
-    }()
-    
     lazy var upNextTableView: UpNextTableView = {
         let playlist = CoreDataHelper.shared.queue
         let tv = UpNextTableView(frame: .zero, style: .plain, playlist: playlist)
@@ -231,12 +273,14 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             //self.mainScrollView.scrollToView(view: self.videoContainer, animated: true)
             UpNextWrapper.shared.setCurrentlyPlayingIndex(index: index)
         }
+        tv.scrollsToTop = false
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
     
     let mainScrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
+        view.scrollsToTop = true
         view.alwaysBounceVertical = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -282,6 +326,7 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         
         videoContainer.layer.addSublayer(youtubePlayerFrame)
         screenContainer.addSubview(videoContainer)
+        screenContainer.addSubview(videoImage)
         screenContainer.addSubview(trackSlider)
         screenContainer.addSubview(currentTimeLabel)
         screenContainer.addSubview(remainingTimeLabel)
@@ -375,13 +420,12 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
             upNextTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             ])
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didPlayToEnd), name: .AVPlayerItemDidPlayToEndTime, object: nil)
+        
         avp.addObserver(self, forKeyPath: "rate", options: .new, context: nil)
         avp.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: .new, context: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didPlayToEnd), name: .AVPlayerItemDidPlayToEndTime, object: nil)
         avp.addObserver(self, forKeyPath: "playerDidFinishPlaying", options: .new, context: nil)
-        
-        let interval = CMTime(value: 1, timescale: 2)
-        avp.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main, using: { (progressTime) in
+        avp.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 2), queue: DispatchQueue.main, using: { (progressTime) in
             let seconds = CMTimeGetSeconds(progressTime)
             let secondsInt = Int(seconds.truncatingRemainder(dividingBy: 60))
             let minutesInt = Int(seconds / 60)
@@ -410,13 +454,15 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         })
         
         trackSlider.addTarget(self, action: #selector(handleSliderChange), for: .valueChanged)
-        
-        setPlayBarButton()
-        
         playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
         pauseButton.addTarget(self, action: #selector(pause), for: .touchUpInside)
         forwardButton.addTarget(self, action: #selector(forward), for: .touchUpInside)
         rewindButton.addTarget(self, action: #selector(back), for: .touchUpInside)
+        
+        setActivePopupButton(button: playBarButton, forwardEnabled: false)
+        setRewindForwardEnabled(enabled: false)
+        pauseButton.isHidden = true
+    
     }
     
     @objc func handleSliderChange() {
@@ -430,19 +476,16 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
                     
                 })
             }
-            
         }
     }
     
     @objc func didPlayToEnd() {
         NotificationCenter.default.post(name: .songFinished, object: nil)
-        print("SONG FINISHED")
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "rate" {
             if avp.rate > 0 {
-                //print(avp.rate)
                 hideLoading()
             }
         }
@@ -463,29 +506,39 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         avp.replaceCurrentItem(with: AVPlayerItem(url: url!))
     }
     
-    var playBarButton: UIBarButtonItem?
-    var pauseBarButton: UIBarButtonItem?
+    lazy var playBarButton = UIBarButtonItem(image: UIImage(named: "play-mini"), style: .plain, target: self, action: #selector(play))
+    lazy var pauseBarButton = UIBarButtonItem(image: UIImage(named: "pause-mini"), style: .plain, target: self, action: #selector(pause))
+    lazy var forwardBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "forward-96"), style: .plain, target: self, action: #selector(forward))
     
-    func setPlayBarButton() {
-        playBarButton = UIBarButtonItem(image: UIImage(named: "play-mini"), style: .plain, target: self, action: #selector(play))
-        popupItem.rightBarButtonItems = [playBarButton!]
+    func setActivePopupButton(button: UIBarButtonItem, forwardEnabled: Bool) {
+        popupItem.rightBarButtonItems = [button, forwardBarButton]
+        forwardBarButton.isEnabled = forwardEnabled
     }
     
-    func setPauseBarButton() {
-        pauseBarButton = UIBarButtonItem(image: UIImage(named: "pause-mini"), style: .plain, target: self, action: #selector(pause))
-        popupItem.rightBarButtonItems = [pauseBarButton!]
+    func setRewindForwardEnabled(enabled: Bool) {
+        rewindButton.isEnabled = enabled
+        forwardButton.isEnabled = enabled
     }
     
     @objc func play() {
+        
+        if UpNextWrapper.shared.getUpNextSongs().count == 0 {
+            UpNextWrapper.shared.setUpNextSongs(songs: CoreDataHelper.shared.allSongs)
+            UpNextWrapper.shared.setCurrentlyPlayingIndex(index: 0)
+        }
+        
         self.avp.play()
-        setPauseBarButton()
+        setActivePopupButton(button: pauseBarButton, forwardEnabled: true)
+        setRewindForwardEnabled(enabled: true)
         playButton.isHidden = true
         pauseButton.isHidden = false
+        
     }
     
     @objc func pause() {
         self.avp.pause()
-        setPlayBarButton()
+        setActivePopupButton(button: playBarButton, forwardEnabled: true)
+        setRewindForwardEnabled(enabled: true)
         playButton.isHidden = false
         pauseButton.isHidden = true
     }
@@ -498,12 +551,6 @@ class MusicDetailsController: UIViewController, AVPlayerViewControllerDelegate {
         UpNextWrapper.shared.decrementCurrentIndex()
     }
     
-    func modelIdentifier() -> String {
-        if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] { return simulatorModelIdentifier }
-        var sysinfo = utsname()
-        uname(&sysinfo) // ignore return value
-        return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
-    }
 }
 
 extension MusicDetailsController: Themed {

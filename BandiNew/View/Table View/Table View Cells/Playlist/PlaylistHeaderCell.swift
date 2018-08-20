@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PlaylistHeaderCell: UITableViewCell {
+class PlaylistHeaderCell: BaseTableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -23,6 +23,7 @@ class PlaylistHeaderCell: UITableViewCell {
         didSet {
             guard let playlist = playlist else { return }
             playlistName.text = playlist.title!
+            trackCount.text = "\(playlist.size) Track\(playlist.size > 1 ? "s" : "")"
         }
     }
     
@@ -35,6 +36,13 @@ class PlaylistHeaderCell: UITableViewCell {
     let playlistName: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let trackCount: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -54,6 +62,7 @@ class PlaylistHeaderCell: UITableViewCell {
     func setupViews() {
         addSubview(playlistImageContainer)
         addSubview(playlistName)
+        addSubview(trackCount)
         addSubview(editButton)
         
         NSLayoutConstraint.activate([
@@ -65,7 +74,12 @@ class PlaylistHeaderCell: UITableViewCell {
             playlistName.topAnchor.constraint(equalTo: topAnchor, constant: 15),
             playlistName.leadingAnchor.constraint(equalTo: playlistImageContainer.trailingAnchor, constant: 15),
             playlistName.trailingAnchor.constraint(equalTo: trailingAnchor),
-            playlistName.heightAnchor.constraint(equalToConstant: 15),
+            playlistName.heightAnchor.constraint(equalToConstant: 25),
+            
+            trackCount.topAnchor.constraint(equalTo: playlistName.bottomAnchor),
+            trackCount.leadingAnchor.constraint(equalTo: playlistName.leadingAnchor),
+            trackCount.trailingAnchor.constraint(equalTo: playlistName.trailingAnchor),
+            trackCount.heightAnchor.constraint(equalToConstant: 25),
             
             editButton.heightAnchor.constraint(equalToConstant: 30),
             editButton.widthAnchor.constraint(equalToConstant: 30),
@@ -80,14 +94,25 @@ class PlaylistHeaderCell: UITableViewCell {
         editButtonTapped?()
     }
     
+    override func setDisabled(disabled: Bool) {
+        super.setDisabled(disabled: disabled)
+        if disabled {
+            playlistName.layer.opacity = 0.15
+            playlistImageContainer.layer.opacity = 0.15
+        } else {
+            playlistName.layer.opacity = 1
+            playlistImageContainer.layer.opacity = 1
+        }
+    }
+    
+    override func applyTheme(_ theme: AppTheme) {
+        super.applyTheme(theme)
+        playlistName.textColor = theme.textColor
+        trackCount.textColor = theme.subTextColor
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-}
-
-extension PlaylistHeaderCell: Themed {
-    func applyTheme(_ theme: AppTheme) {
-        playlistName.textColor = theme.textColor
-    }
 }

@@ -11,6 +11,7 @@ import UIKit
 class PlaylistEditAlertController: UIAlertController {
     
     var playlist: Playlist?
+    var playlistDeleted: (()->())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,7 @@ class PlaylistEditAlertController: UIAlertController {
             let context = CoreDataHelper.shared.getContext()
             context.delete(playlist)
             CoreDataHelper.shared.appDelegate.saveContext()
+            self.playlistDeleted?()
         })
         let shareLinkAction = UIAlertAction(title: "Share Playlist", style: .default, handler: { action in
             print("New link requested")

@@ -16,16 +16,28 @@ final class CoreDataHelper {
     
     static let shared = CoreDataHelper()
     
-    private let MAX_RECENT_SEARCHES = 4
-    
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     private lazy var persistentContainer = appDelegate.persistentContainer
     private lazy var context = appDelegate.persistentContainer.viewContext
     
     private let recentSearchesFetchRequest: NSFetchRequest<RecentSearch> = RecentSearch.fetchRequest()
+    private let MAX_RECENT_SEARCHES = 4
     
     public var queue: Playlist?
-    public var allSongs: Playlist?
+    public var allSongs: [Song] {
+        do {
+            return try context.fetch(allSongsFetch)
+        } catch {
+            return [Song]()
+        }
+    }
+    public var userPlaylists: [Playlist] {
+        do {
+            return try context.fetch(userPlaylistsFetch)
+        } catch {
+            return [Playlist]()
+        }
+    }
     
     func getPersistentContainer() -> NSPersistentContainer {
         return persistentContainer
@@ -35,19 +47,23 @@ final class CoreDataHelper {
         return context
     }
     
-    lazy var playlistFetchedResultsController: NSFetchedResultsController<Playlist> = {
+    fileprivate lazy var userPlaylistsFetch: NSFetchRequest<Playlist> = {
         let fetchRequest: NSFetchRequest<Playlist> = Playlist.fetchRequest()
         let onlyUserPlaylists = NSPredicate(format: "%K == %@", "orderRank", "0")
         let onlySavedPlaylists = NSPredicate(format: "%K == %@", "saved", NSNumber(value: true))
         let predicate = NSCompoundPredicate(type: .and, subpredicates: [onlyUserPlaylists, onlySavedPlaylists])
         fetchRequest.sortDescriptors = []
         fetchRequest.predicate = predicate
-        
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: context,
-                                                                  sectionNameKeyPath: nil,
-                                                                  cacheName: nil)
-        return fetchedResultsController
+        return fetchRequest
+    }()
+    
+    fileprivate lazy var allSongsFetch: NSFetchRequest<Song> = {
+        let fetchRequest: NSFetchRequest<Song> = Song.fetchRequest()
+        let alphabeticalSort = NSSortDescriptor(key: "title", ascending: true)
+        let isSaved = NSPredicate(format: "%K == %@", "saved", NSNumber(value: true))
+        fetchRequest.sortDescriptors = [alphabeticalSort]
+        fetchRequest.predicate = isSaved
+        return fetchRequest
     }()
     
     func initialCoreDataSetup() {

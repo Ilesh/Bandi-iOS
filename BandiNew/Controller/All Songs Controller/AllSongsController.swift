@@ -7,30 +7,27 @@
 //
 
 import UIKit
-import CoreData
 
 class AllSongsController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        title = "All Songs"
         
         if #available(iOS 11.0, *) {
             navigationItem.hidesSearchBarWhenScrolling = false
         }
-        
+    
         definesPresentationContext = true
-        
-        title = "All Songs"
+        navigationItem.searchController = searchController
         
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         tableView.register(QueueMusicTableViewCell.self, forCellReuseIdentifier: songCellId)
         tableView.register(PlaylistControlsTableViewCell.self, forCellReuseIdentifier: controlsCellId)
         
-        navigationItem.searchController = searchController
-        
         setUpTheming()
-        fetchSongs()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,8 +64,7 @@ class AllSongsController: UITableViewController {
     
     var songs: [Song] {
         get {
-            guard let fetchedSongs = fetchedResultsController.fetchedObjects else { return [] }
-            return fetchedSongs
+            return CoreDataHelper.shared.allSongs
         }
         set { }
     }
@@ -86,46 +82,25 @@ class AllSongsController: UITableViewController {
     
     private var persistentContainer = CoreDataHelper.shared.getPersistentContainer()
     private lazy var context = CoreDataHelper.shared.getContext()
-    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<Song> = {
-        let fetchRequest: NSFetchRequest<Song> = Song.fetchRequest()
-        let alphabeticalSort = NSSortDescriptor(key: "title", ascending: true)
-        let isSaved = NSPredicate(format: "%K == %@", "saved", NSNumber(value: true))
-        fetchRequest.sortDescriptors = [alphabeticalSort]
-        fetchRequest.predicate = isSaved
 
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: context,
-                                                                  sectionNameKeyPath: nil,
-                                                                  cacheName: nil)
-        fetchedResultsController.delegate = self
-        return fetchedResultsController
-    }()
     
-    private func fetchSongs() {
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            print("error: \(error)")
-        }
+    var searchBarIsEmpty: Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
     }
     
     func filterContentForSearchText(_ searchText: String) {
         filteredSongs = songs.filter({ (song: Song) -> Bool in
-            if !searchBarIsEmpty() {
+            if !searchBarIsEmpty {
                 return song.title!.lowercased().contains(searchText.lowercased())
             } else {
                 return true
             }
         })
         tableView.reloadData()
-    }
-    
-    func searchBarIsEmpty() -> Bool {
-        return searchController.searchBar.text?.isEmpty ?? true
-    }
-    
-    func isFiltering() -> Bool {
-        return searchController.isActive && !searchBarIsEmpty()
     }
     
 }
@@ -156,11 +131,10 @@ extension AllSongsController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltering() {
+        if isFiltering {
             return filteredSongs.count
         }
-        guard let fetchedSongs = fetchedResultsController.fetchedObjects else { return 0 }
-        return fetchedSongs.count
+        return songs.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -188,7 +162,7 @@ extension AllSongsController {
     }
     
     func configure(_ cell: QueueMusicTableViewCell, at indexPath: IndexPath) {
-        let song = isFiltering() ? filteredSongs[indexPath.row] : songs[indexPath.row]
+        let song = isFiltering ? filteredSongs[indexPath.row] : songs[indexPath.row]
         cell.music = song
         let view = UIView(frame: CGRect(x: 90, y: cell.frame.height, width: tableView.frame.width, height: 0.5))
         view.backgroundColor = AppThemeProvider.shared.currentTheme.tableSeparatorColor
@@ -243,42 +217,19 @@ extension AllSongsController {
         add.backgroundColor = Constants.Colors().primaryColor
         
         let delete = UIContextualAction(style: .normal, title: "DELETE", handler: { (action, view, completion) in
-            let songDeleteAlert = DeleteAlertController(message: "Deleting a song also deletes it from all playlists", actionName: "Delete Song")
+            let songDeleteAlert = DeleteAlertController(message: "Deleting a song also removes it from all playlists", actionName: "Delete Song")
             songDeleteAlert.deletePressed = {
-                let context = CoreDataHelper.shared.getContext()
-                
-                
-                let playlistFetchedResultsController: NSFetchedResultsController<Playlist> = {
-                    let fetchRequest: NSFetchRequest<Playlist> = Playlist.fetchRequest()
-                    let onlyUserPlaylists = NSPredicate(format: "%K == %@", "orderRank", "0")
-                    let onlySavedPlaylists = NSPredicate(format: "%K == %@", "saved", NSNumber(value: true))
-                    let predicate = NSCompoundPredicate(type: .and, subpredicates: [onlyUserPlaylists, onlySavedPlaylists])
-                    fetchRequest.sortDescriptors = []
-                    fetchRequest.predicate = predicate
-                    
-                    let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                              managedObjectContext: context,
-                                                                              sectionNameKeyPath: nil,
-                                                                              cacheName: nil)
-                    return fetchedResultsController
-                }()
-                
-                do {
-                    try playlistFetchedResultsController.performFetch()
-                } catch {
-                    print(error)
-                }
-                
-                
-                guard let playlists = playlistFetchedResultsController.fetchedObjects else { return }
-                context.performAndWait {
+                let playlists = CoreDataHelper.shared.userPlaylists
+                CoreDataHelper.shared.getContext().performAndWait {
                     song.setSaved(saved: false, retain: false)
                     for playlist in playlists {
                         playlist.removeSong(song: song)
                     }
                     CoreDataHelper.shared.appDelegate.saveContext()
                 }
-                
+                tableView.performBatchUpdates({
+                    tableView.deleteRows(at: [indexPath], with: .left)
+                }, completion: nil)
             }
             songDeleteAlert.willDisappear = {
                 completion(true)
@@ -299,44 +250,6 @@ extension AllSongsController {
         nav.present(addPlaylistNav, animated: true, completion: nil)
     }
     
-}
-
-// MARK: - Fetched Results Controller Delegate
-extension AllSongsController: NSFetchedResultsControllerDelegate {
-
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch (type) {
-        case .insert:
-            if let indexPath = newIndexPath {
-                tableView.insertRows(at: [indexPath], with: .fade)
-            }
-        case .delete:
-            if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-        case .update:
-            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? QueueMusicTableViewCell {
-                configure(cell, at: indexPath)
-            }
-        case .move:
-            if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-
-            if let newIndexPath = newIndexPath {
-                tableView.insertRows(at: [newIndexPath], with: .fade)
-            }
-        }
-    }
-
 }
 
 // MARK: - Theme

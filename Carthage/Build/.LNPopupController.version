@@ -8,11 +8,11 @@
   "tvOS" : [
 
   ],
-  "commitish" : "2.5.16",
+  "commitish" : "2.5.24",
   "iOS" : [
     {
       "name" : "LNPopupController",
-      "hash" : "c3c27d218f9a6ffea21bcfb97ff15b7fa3b84cc2ed98d11ca31871e3caa507e2"
+      "hash" : "1212c2ed5886e48459b534e4da64d46c80826b6911bfc4ab8c1c69a8c2eeed71"
     }
   ]
 }

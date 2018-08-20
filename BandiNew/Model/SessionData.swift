@@ -11,6 +11,54 @@ import UIKit
 final class SessionData {
     public static let songsCache = NSCache<NSString, Song>()
     public static let imagesCache = NSCache<NSString, UIImage>()
+    public static let addToPlaylist = AddToPlaylist.shared
+    
+    final class AddToPlaylist {
+        
+        static let shared = AddToPlaylist()
+        
+        public var playlist: Playlist?
+        public var songs: [Song] = []
+        private var nProposedAdds = 0
+        
+        func addSongsToPlaylist() {
+            CoreDataHelper.shared.getContext().performAndWait {
+                self.playlist?.addSongs(songs: self.songs)
+                CoreDataHelper.shared.appDelegate.saveContext()
+            }
+            resetAddToPlaylist()
+        }
+        
+        func resetAddToPlaylist() {
+            playlist = nil
+            songs.removeAll()
+            nProposedAdds = 0
+        }
+        
+        func getProposedAdds() -> Int {
+            return nProposedAdds
+        }
+        
+        func updateProposedAdds(updateBy: Int) {
+            nProposedAdds = nProposedAdds + updateBy
+            NotificationCenter.default.post(name: .addToPlaylistSongsNumberChanged, object: nil)
+        }
+        
+        func setProposedAdds(adds: Int) {
+            nProposedAdds = adds
+            NotificationCenter.default.post(name: .addToPlaylistSongsNumberChanged, object: nil)
+        }
+        
+        var songsAddedString: String {
+            guard let playlist = playlist else { return "" }
+            let proposedCount = songs.count + nProposedAdds
+            if proposedCount == 0 {
+                return "Add Songs to \"\(playlist.title!)\""
+            } else {
+                return "Add \(proposedCount) Song\(proposedCount != 1 ? "s" : "") to \"\(playlist.title!)\""
+            }
+        }
+    }
 }
 
 class UpNextWrapper {
@@ -37,6 +85,7 @@ class UpNextWrapper {
     }
     
     func setCurrentlyPlayingIndex(index: Int) {
+        if index >= upNextSongs.count { return }
         self.currentlyPlayingIndex = index
         NotificationCenter.default.post(name: .currentlyPlayingIndexChanged, object: nil)
     }

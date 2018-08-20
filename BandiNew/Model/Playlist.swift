@@ -10,6 +10,10 @@ import Foundation
 
 extension Playlist {
 
+    func getSize() -> Int {
+        return Int(self.size)
+    }
+    
     func getSongsArray() -> [Song] {
         var songs: [Song] = []
         var currentSongNode = firstSong
@@ -147,6 +151,12 @@ extension Playlist {
         
         size = size - 1
         
+    }
+    
+    func addSongs(songs: [Song]) {
+        for song in songs {
+            insertSongAtEnd(song: song)
+        }
     }
     
     func removeAllSongs() {

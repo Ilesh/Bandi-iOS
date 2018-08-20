@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class AddSongToTableView: UITableView {
     
@@ -21,7 +20,6 @@ class AddSongToTableView: UITableView {
         tableFooterView = UIView()
         register(BaseTableViewCell.self, forCellReuseIdentifier: imageCellId)
         register(PlaylistPreviewTableViewCell.self, forCellReuseIdentifier: playlistCellId)
-        performPlaylistsFetch()
         
         selectedIndexPaths.insert(IndexPath(row: 0, section: 0))
         reloadData()
@@ -42,24 +40,11 @@ class AddSongToTableView: UITableView {
     
     private var selectedIndexPaths = Set<IndexPath>()
     
-    let playlistsFetchRequest: NSFetchRequest<Playlist> = {
-        let fr: NSFetchRequest<Playlist> = Playlist.fetchRequest()
-        let alphabetical = NSSortDescriptor(key: "title", ascending: true)
-        let onlyUserPlaylists = NSPredicate(format: "%K == %@", "orderRank", "0")
-        let isSaved = NSPredicate(format: "%K == %@", "saved", NSNumber(value: true))
-        let predicate = NSCompoundPredicate(type: .and, subpredicates: [onlyUserPlaylists, isSaved])
-        fr.sortDescriptors = [alphabetical]
-        fr.predicate = predicate
-        return fr
-    }()
-    let context = CoreDataHelper.shared.getContext()
-    private var playlists: [Playlist] = []
+    private var playlists: [Playlist] {
+        return CoreDataHelper.shared.userPlaylists
+    }
     
-    let numberOfRowsInSection = [
-        2,
-    ]
-    
-    func getSelectedPlaylists() -> Set<Playlist> {
+    var selectedPlaylists: Set<Playlist> {
         var playlists = Set<Playlist>()
         // do stuff in same context or it goes missing
         CoreDataHelper.shared.getContext().performAndWait({
@@ -70,19 +55,6 @@ class AddSongToTableView: UITableView {
             })
         })
         return playlists
-    }
-    
-    func performPlaylistsFetch() {
-        do {
-            playlists = try self.context.fetch(playlistsFetchRequest)
-        } catch {
-            print(error)
-        }
-    }
-    
-    override func reloadData() {
-        performPlaylistsFetch()
-        super.reloadData()
     }
  
 }

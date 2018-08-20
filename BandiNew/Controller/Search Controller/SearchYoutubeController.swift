@@ -13,18 +13,15 @@ class SearchYoutubeController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Search"
+        definesPresentationContext = true
         if let nav = navigationController {
             nav.extendedLayoutIncludesOpaqueBars = true
         }
-        
         navigationItem.searchController = searchController
         if #available(iOS 11.0, *) {
             navigationItem.hidesSearchBarWhenScrolling = false
         }
-        
-        title = "Search"
-        
-        definesPresentationContext = true
         
         tableView = recentSearchesTableView
     }
@@ -101,6 +98,8 @@ class SearchYoutubeController: UITableViewController {
                 UpNextWrapper.shared.setUpNextSongs(songs: [song])
                 UpNextWrapper.shared.setCurrentlyPlayingIndex(index: 0)
             }
+            let appDelegate = CoreDataHelper.shared.appDelegate
+            appDelegate.mainTabBarController.openVideoPopup(completion: nil)
         }
         tv.handleScroll = { isUp in
             self.searchController.searchBar.endEditing(true)

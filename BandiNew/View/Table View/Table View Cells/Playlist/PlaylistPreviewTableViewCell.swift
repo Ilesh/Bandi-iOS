@@ -19,13 +19,18 @@ class PlaylistPreviewTableViewCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        setHighlighted(false, animated: false)
+    }
+    
     let sideLength = UIScreen.main.bounds.width * 0.25
     
     var playlist: Playlist? {
         didSet {
             guard let playlist = playlist else { return }
             titleLabel.text = playlist.title
-            sizeLabel.text = "\(playlist.size)" + (playlist.size == 1 ? " Track" : " Tracks")
+            trackCount.text = "\(playlist.size) Track" + (playlist.size != 1 ? "s" : "")
         }
     }
     
@@ -35,7 +40,7 @@ class PlaylistPreviewTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    let sizeLabel: UILabel = {
+    let trackCount: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +57,7 @@ class PlaylistPreviewTableViewCell: BaseTableViewCell {
     func setupViews() {
         contentView.addSubview(playlistArt)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(sizeLabel)
+        contentView.addSubview(trackCount)
         
         NSLayoutConstraint.activate([
             playlistArt.heightAnchor.constraint(equalToConstant: sideLength),
@@ -61,20 +66,33 @@ class PlaylistPreviewTableViewCell: BaseTableViewCell {
             playlistArt.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
             titleLabel.leadingAnchor.constraint(equalTo: playlistArt.trailingAnchor, constant: 15),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -10),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -12),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
-            sizeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0),
-            sizeLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            sizeLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
+            trackCount.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3),
+            trackCount.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            trackCount.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
             ])
+    }
+    
+    override func setDisabled(disabled: Bool) {
+        super.setDisabled(disabled: disabled)
+        if disabled {
+            titleLabel.layer.opacity = 0.15
+            trackCount.layer.opacity = 0.15
+            playlistArt.layer.opacity = 0.15
+        } else {
+            titleLabel.layer.opacity = 1
+            trackCount.layer.opacity = 1
+            playlistArt.layer.opacity = 1
+        }
     }
     
     // MARK: theme
     override func applyTheme(_ theme: AppTheme) {
         super.applyTheme(theme)
         titleLabel.textColor = theme.textColor
-        sizeLabel.textColor = theme.subTextColor
+        trackCount.textColor = theme.subTextColor
     }
     
 }

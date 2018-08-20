@@ -6,28 +6,28 @@
 // software distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-#import "LOKBaseLayoutBuilder.h"
+#import <Foundation/Foundation.h>
+
+#import "LOKLayoutBuilder.h"
 
 @class LOKOverlayLayout;
 
-@interface LOKOverlayLayoutBuilder : LOKBaseLayoutBuilder
+@interface LOKOverlayLayoutBuilder: NSObject<LOKLayoutBuilder>
 
+- (nonnull instancetype)initWithPrimaryLayout:(nonnull id<LOKLayout>)primaryLayout;
 + (nonnull instancetype)withPrimaryLayout:(nonnull id<LOKLayout>)primaryLayout;
 
-@property (nonatomic, nonnull) id<LOKLayout> primary;
-@property (nonatomic, nonnull) NSArray< id<LOKLayout> > *overlay;
-@property (nonatomic, nonnull) NSArray< id<LOKLayout> > *background;
+@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^overlay)(NSArray< id<LOKLayout> > * _Nullable);
+@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^background)(NSArray< id<LOKLayout> > * _Nullable);
 
-@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^withOverlay)(NSArray< id<LOKLayout> > * _Nullable);
-@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^withBackground)(NSArray< id<LOKLayout> > * _Nullable);
+@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^alignment)(LOKAlignment * _Nullable);
+@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^flexibility)(LOKFlexibility * _Nullable);
+@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^viewReuseId)(NSString * _Nullable);
+@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^viewClass)(Class _Nullable);
 
-@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^withAlignment)(LOKAlignment * _Nonnull);
-@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^withFlexibility)(LOKFlexibility * _Nonnull);
-@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^withViewReuseId)(NSString * _Nonnull);
-@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^withViewClass)(Class _Nonnull);
+@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^config)( void(^ _Nullable)(LOKView *_Nonnull));
+@property (nonatomic, nonnull, readonly) LOKInsetLayoutBuilder * _Nonnull(^insets)(LOKEdgeInsets);
 
-@property (nonatomic, nonnull, readonly) LOKOverlayLayoutBuilder * _Nonnull(^withConfig)( void(^ _Nonnull)(View *_Nonnull));
-
-- (nonnull LOKOverlayLayout *)build;
+@property (nonatomic, nonnull, readonly) LOKOverlayLayout *layout;
 
 @end

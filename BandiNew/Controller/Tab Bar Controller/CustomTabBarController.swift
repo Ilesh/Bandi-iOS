@@ -63,6 +63,12 @@ class CustomTabBarController: UITabBarController {
         popupBar.progressViewStyle = .top
     }
     
+    func openVideoPopup(completion: (()->())?) {
+        presentPopupBar(withContentViewController: musicDetailsController, openPopup: true, animated: true, completion: {
+            completion?()
+        })
+    }
+    
 }
 
 // MARK: - Theme

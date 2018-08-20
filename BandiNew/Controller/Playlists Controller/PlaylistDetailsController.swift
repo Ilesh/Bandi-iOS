@@ -14,52 +14,31 @@ class PlaylistDetailsController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.rightBarButtonItem = self.editButtonItem
         navigationItem.titleView = titleLabelView
+        navigationItem.rightBarButtonItem = self.editButtonItem
         
-        tableView.delegate = self
-        tableView.dataSource = self
         tableView.tableFooterView = UIView()
         tableView.allowsSelection = true
-        tableView.alwaysBounceVertical = false
-        tableView.allowsMultipleSelection = true
-        
+        tableView.allowsSelectionDuringEditing = true
         tableView.register(PlaylistHeaderCell.self, forCellReuseIdentifier: detailsCellId)
         tableView.register(PlaylistControlsTableViewCell.self, forCellReuseIdentifier: controlsCellId)
         tableView.register(AddMusicTableViewCell.self, forCellReuseIdentifier: addMusicCellId)
         tableView.register(QueueMusicTableViewCell.self, forCellReuseIdentifier: songCellId)
+        
         setUpTheming()
     }
     
-    @objc func test() {
-        setEditing(true, animated: true)
-        tableView.setEditing(true, animated: true)
-    }
-    
-    // TODO: fix large title appearance when going back and forth swiping nav
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
-        if let nav = navigationController {
-            nav.navigationBar.prefersLargeTitles = false
-        }
         if playlist!.size > 0 {
             tableView.tableFooterView = UIView()
         } else {
             tableView.tableFooterView = backgroundView
         }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if let nav = navigationController {
-            nav.navigationBar.prefersLargeTitles = true
-        }
-        navigationController?.view.layoutSubviews()
-    }
-    
-    var playlistSize: Int {
-        return Int(playlist!.size)
+        navigationItem.largeTitleDisplayMode = .never
+        guard let nav = navigationController else { return }
+        nav.navigationBar.prefersLargeTitles = false
     }
     
     let backgroundView: AddSongsView = {
@@ -99,7 +78,7 @@ class PlaylistDetailsController: UITableViewController {
     
     var numberOfRowsInSection: [Int] {
         guard let playlist = playlist else { return [2, 0] }
-        let playlistSize = Int(exactly: NSNumber(value: playlist.size))!
+        let playlistSize = Int(exactly: playlist.getSize())!
         return [2, playlistSize]
     }
     var heightForRowAt: [Any] = [
@@ -123,7 +102,9 @@ class PlaylistDetailsController: UITableViewController {
         CoreDataHelper.shared.appDelegate.saveContext()
         self.tableView.performBatchUpdates({
             self.tableView.deleteRows(at: [indexPath], with: .left)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
         }, completion: nil)
+        self.updateFooterView()
     })
     lazy var editActionsForRowAt: [Any] = [
         [],
@@ -136,21 +117,27 @@ class PlaylistDetailsController: UITableViewController {
     ]
     
     override func setEditing(_ editing: Bool, animated: Bool) {
-        if playlistSize > 0 && !swipeIsActive {
+        guard let playlist = playlist else { return }
+        if !swipeIsActive {
             super.setEditing(editing, animated: true)
             if editing {
                 let insertIndexPath = [IndexPath(row: 1, section: 0)]
                 tableView.performBatchUpdates({
-                    tableView.deleteRows(at: insertIndexPath, with: .fade)
+                    if playlist.getSize() > 0 {
+                        tableView.deleteRows(at: insertIndexPath, with: .fade)
+                    }
                     tableView.insertRows(at: insertIndexPath, with: .fade)
                 }, completion: nil)
             } else {
                 let insertIndexPath = [IndexPath(row: 1, section: 0)]
                 tableView.performBatchUpdates({
                     tableView.deleteRows(at: insertIndexPath, with: .fade)
-                    tableView.insertRows(at: insertIndexPath, with: .fade)
+                    if playlist.getSize() > 0 {
+                        tableView.insertRows(at: insertIndexPath, with: .fade)
+                    }
                 }, completion: nil)
             }
+            updateFooterView()
         } else {
             super.setEditing(false, animated: false)
         }
@@ -169,6 +156,17 @@ class PlaylistDetailsController: UITableViewController {
         UpNextWrapper.shared.setCurrentlyPlayingIndex(index: 0)
     }
     
+    func updateFooterView() {
+        guard let playlist = playlist else { return }
+        if isEditing {
+            tableView.tableFooterView = UIView()
+        } else if playlist.getSize() == 0 {
+            tableView.tableFooterView = backgroundView
+        } else {
+            tableView.tableFooterView = UIView()
+        }
+    }
+    
 }
 
 // MARK: - Table View Data Source
@@ -180,9 +178,8 @@ extension PlaylistDetailsController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            if playlist!.size > 0 {
-                return 2
-            }
+            if isEditing { return 2 }
+            if playlist!.size > 0 { return 2 }
             return 1
         } else {
             return Int(playlist!.size)
@@ -228,6 +225,9 @@ extension PlaylistDetailsController {
         cell.editButtonTapped = {
             let playlistEditAlert = PlaylistEditAlertController()
             playlistEditAlert.playlist = self.playlist
+            playlistEditAlert.playlistDeleted = {
+                self.navigationController?.popViewController(animated: true)
+            }
             self.present(playlistEditAlert, animated: true, completion: nil)
         }
         cell.playlist = playlist
@@ -252,16 +252,26 @@ extension PlaylistDetailsController {
 extension PlaylistDetailsController {
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if indexPath.section == 1 {
-            return indexPath
-        }
+        if indexPath.section == 1 { return indexPath }
+        if tableView.cellForRow(at: indexPath) is AddMusicTableViewCell { return indexPath }
         return nil
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let playlist = playlist else { return }
-        UpNextWrapper.shared.setUpNextSongs(songs: playlist.getSongsArray())
-        UpNextWrapper.shared.setCurrentlyPlayingIndex(index: indexPath.row)
+        if tableView.cellForRow(at: indexPath) is AddMusicTableViewCell {
+            guard let nav = self.navigationController else { return }
+            let addToPlaylistController = AddToPlaylistLibraryController(style: .plain)
+            SessionData.addToPlaylist.playlist = playlist
+            let addToPlaylistNav = CustomNavigationController(rootViewController: addToPlaylistController)
+            nav.present(addToPlaylistNav, animated: true, completion: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
+        if !tableView.isEditing {
+            guard let playlist = playlist else { return }
+            UpNextWrapper.shared.setUpNextSongs(songs: playlist.getSongsArray())
+            UpNextWrapper.shared.setCurrentlyPlayingIndex(index: indexPath.row)
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -310,6 +320,7 @@ extension PlaylistDetailsController {
             })
             CoreDataHelper.shared.appDelegate.saveContext()
             tableView.reloadData()
+            self.updateFooterView()
             completion(true)
         })
         delete.backgroundColor = .red

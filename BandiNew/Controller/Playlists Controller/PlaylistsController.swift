@@ -14,6 +14,8 @@ class PlaylistsController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Playlists"
+        definesPresentationContext = true
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addPlaylist))
         navigationItem.rightBarButtonItem = addBarButton
         navigationItem.searchController = searchController
@@ -21,27 +23,21 @@ class PlaylistsController: UITableViewController {
             navigationItem.hidesSearchBarWhenScrolling = false
         }
         
-        title = "Playlists"
-        
         tableView.separatorStyle = .none
-        //bottomBorderView.frame = CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1)
-        //tableView.tableFooterView = bottomBorderView
         tableView.allowsSelection = true
         tableView.register(AddPlaylistTableViewCell.self, forCellReuseIdentifier: addPlaylistCellId)
         tableView.register(PlaylistPreviewTableViewCell.self, forCellReuseIdentifier: playlistCellId)
         
         setupViews()
         setUpTheming()
-        fetchPlaylists()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchPlaylists()
         tableView.reloadData()
-        if let navBar = navigationController {
-            navBar.navigationBar.prefersLargeTitles = true
-        }
+        navigationItem.largeTitleDisplayMode = .always
+        guard let nav = navigationController else { return }
+        nav.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -62,8 +58,7 @@ class PlaylistsController: UITableViewController {
     private let playlistCellId = "playlistCellId"
     var filteredPlaylists: [Playlist] = []
     var playlists: [Playlist] {
-        guard let playlists = fetchedResultsController.fetchedObjects else { return [Playlist]() }
-        return playlists
+        return CoreDataHelper.shared.userPlaylists
     }
     
     lazy var searchController: SearchController = {
@@ -74,31 +69,6 @@ class PlaylistsController: UITableViewController {
         sc.searchBar.placeholder = "Search Playlists"
         return sc
     }()
-    
-    private lazy var context = CoreDataHelper.shared.getContext()
-    fileprivate lazy var fetchedResultsController: NSFetchedResultsController<Playlist> = {
-        let fetchRequest: NSFetchRequest<Playlist> = Playlist.fetchRequest()
-        let onlyUserPlaylists = NSPredicate(format: "%K == %@", "orderRank", "0")
-        let onlySavedPlaylists = NSPredicate(format: "%K == %@", "saved", NSNumber(value: true))
-        let predicate = NSCompoundPredicate(type: .and, subpredicates: [onlyUserPlaylists, onlySavedPlaylists])
-        fetchRequest.sortDescriptors = []
-        fetchRequest.predicate = predicate
-        
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: context,
-                                                                  sectionNameKeyPath: nil,
-                                                                  cacheName: nil)
-        fetchedResultsController.delegate = self
-        return fetchedResultsController
-    }()
-    
-    private func fetchPlaylists() {
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            print("error: \(error)")
-        }
-    }
     
     func setupViews() {
         tableView.addSubview(topBorderView)
@@ -148,16 +118,14 @@ extension PlaylistsController: UISearchResultsUpdating {
 extension PlaylistsController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        guard let sections = fetchedResultsController.sections else { return 0 }
-        return sections.count
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFiltering() {
             return filteredPlaylists.count
         }
-        guard let section = fetchedResultsController.sections?[section] else { return 0 }
-        return section.numberOfObjects
+        return playlists.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -167,7 +135,7 @@ extension PlaylistsController {
     }
     
     func configure(_ cell: PlaylistPreviewTableViewCell, at indexPath: IndexPath) {
-        let playlist = isFiltering() ? filteredPlaylists[indexPath.row] : fetchedResultsController.object(at: indexPath)
+        let playlist = isFiltering() ? filteredPlaylists[indexPath.row] : playlists[indexPath.row]
         cell.playlist = playlist
         cell.accessoryType = .disclosureIndicator
         let view = UIView(frame: CGRect(x: sideLength + 30, y: cell.frame.height, width: tableView.frame.width, height: 0.5))
@@ -201,21 +169,24 @@ extension PlaylistsController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let fetchedPlaylist = fetchedResultsController.object(at: indexPath)
+        let playlist = playlists[indexPath.row]
         guard let nav = navigationController else { return }
         let playlistDetailsController = PlaylistDetailsController(style: .plain)
-        playlistDetailsController.playlist = fetchedPlaylist
+        playlistDetailsController.playlist = playlist
         nav.pushViewController(playlistDetailsController, animated: true)
+        searchController.isActive = false
     }
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .normal, title: "DELETE", handler: { (action, view, completion) in
             let playlistDeleteAlert = DeleteAlertController(message: "Are you sure you want to delete this playlist?", actionName: "Delete Playlist")
             playlistDeleteAlert.deletePressed = {
-                let playlist = self.fetchedResultsController.object(at: indexPath)
-                self.context.delete(playlist)
+                let playlist = self.playlists[indexPath.row]
+                CoreDataHelper.shared.getContext().delete(playlist)
                 CoreDataHelper.shared.appDelegate.saveContext()
-                tableView.reloadData()
+                tableView.performBatchUpdates({
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                }, completion: nil)
             }
             playlistDeleteAlert.willDisappear = {
                 completion(true)
@@ -235,44 +206,6 @@ extension PlaylistsController {
         let addPlaylistController = AddPlaylistController(style: .plain)
         let addPlaylistNav = CustomNavigationController(rootViewController: addPlaylistController)
         nav.present(addPlaylistNav, animated: true, completion: nil)
-    }
-    
-}
-
-// MARK: - Fetched Results Controller Delegate
-extension PlaylistsController: NSFetchedResultsControllerDelegate {
-    
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch (type) {
-        case .insert:
-            if let indexPath = newIndexPath {
-                tableView.insertRows(at: [indexPath], with: .fade)
-            }
-        case .delete:
-            if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-        case .update:
-            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? PlaylistPreviewTableViewCell {
-                configure(cell, at: indexPath)
-            }
-        case .move:
-            if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
-            
-            if let newIndexPath = newIndexPath {
-                tableView.insertRows(at: [newIndexPath], with: .fade)
-            }
-        }
     }
     
 }

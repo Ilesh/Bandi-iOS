@@ -8,12 +8,45 @@
 
 import UIKit
 
+// MARK: Set view anchorpoint
+extension UIView {
+    func setAnchorPoint(_ point: CGPoint) {
+        var newPoint = CGPoint(x: bounds.size.width * point.x, y: bounds.size.height * point.y)
+        var oldPoint = CGPoint(x: bounds.size.width * layer.anchorPoint.x, y: bounds.size.height * layer.anchorPoint.y);
+        
+        newPoint = newPoint.applying(transform)
+        oldPoint = oldPoint.applying(transform)
+        
+        var position = layer.position
+        
+        position.x -= oldPoint.x
+        position.x += newPoint.x
+        
+        position.y -= oldPoint.y
+        position.y += newPoint.y
+        
+        layer.position = position
+        layer.anchorPoint = point
+    }
+}
+
+// MARK: Model of device
+extension NSObject {
+    func modelIdentifier() -> String {
+        if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] { return simulatorModelIdentifier }
+        var sysinfo = utsname()
+        uname(&sysinfo) // ignore return value
+        return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+    }
+}
+
 // MARK: Notification.Name
 extension Notification.Name {
     static let newUpNextPlaylist = Notification.Name("newUpNextPlaylist")
     static let songFinished = Notification.Name("songFinished")
     static let currentlyPlayingIndexChanged = Notification.Name("currentlyPlayingIndexChanged")
     static let currentlyPlayingPlaylistChanged = Notification.Name("currentlyPlayingPlaylistChanged")
+    static let addToPlaylistSongsNumberChanged = Notification.Name("addToPlaylistSongsNumberChanged")
 }
 
 // MARK: UImage
@@ -32,9 +65,18 @@ extension UIImage {
 
 // MARK: Array rearrange
 extension Array {
-    mutating func rearrange(from: Int, to: Int) {
-        precondition(from != to && indices.contains(from) && indices.contains(to), "invalid indexes")
+    mutating func rearrange(from: Int, to: Int){
+        if from == to { return }
         insert(remove(at: from), at: to)
+//        if from == to { return }
+//        else if from > to {
+//            let element = self.remove(at: from)
+//            self.insert(element, at: to)
+//        } else {
+//            self.insert(self[from], at: to)
+//            self.remove(at: from)
+//        }
+        
     }
 }
 
@@ -112,23 +154,74 @@ extension String {
         return String(self[idx1..<idx2])
     }
     
-    func decodeYoutubeTime() -> String {
-        let trimmedTime = self[2..<self.count]
+//    func parseVideoDurationOfYoutubeAPI(videoDuration: String?) -> String {
+//
+//        var videoDurationString = videoDuration! as NSString
+//
+//        var days: Int = 0
+//        var hours: Int = 0
+//        var minutes: Int = 0
+//        var seconds: Int = 0
+//        let timeRange = videoDurationString.replacingOccurrences(of: "P", with: "").replacingOccurrences(of: "T", with: "")
+//
+//        videoDurationString = timeRange as NSString
+//        while videoDurationString.length > 1 {
+//
+//            videoDurationString = videoDurationString.substring(from: 1) as NSString
+//
+//            let scanner = Scanner(string: videoDurationString as String) as Scanner
+//            var part: NSString?
+//
+//            scanner.scanCharacters(from: NSCharacterSet.decimalDigits, into: &part)
+//
+//            let partRange: NSRange = videoDurationString.range(of: part! as String)
+//
+//            videoDurationString = videoDurationString.substring(from: partRange.location + partRange.length) as NSString
+//            let timeUnit: String = videoDurationString.substring(to: 1)
+//
+//
+//            if (timeUnit == "H") {
+//                hours = Int(part! as String)!
+//            }
+//            else if (timeUnit == "M") {
+//                minutes = Int(part! as String)!
+//            }
+//            else if (timeUnit == "S") {
+//                seconds   = Int(part! as String)!
+//            }
+//            else if (timeUnit == "D"){
+//                days = Int(part! as String)!
+//            }
+//
+//        }
+//
+//        return String(format: "%02d:%02d:%02d:%02d", days, hours, minutes, seconds)
+//    }
+    
+    func decodedYoutubeTime() -> String {
+        let trimmedTime = self.replacingOccurrences(of: "P", with: "").replacingOccurrences(of: "T", with: "")
+        
         var timeComponents = trimmedTime.components(separatedBy: CharacterSet(charactersIn: "DHMS"))
-        timeComponents.remove(at: timeComponents.count - 1)
+        if timeComponents[timeComponents.count - 1] == "" {
+            timeComponents.remove(at: timeComponents.count - 1)
+        }
+        timeComponents = timeComponents.reversed()
         var time = ""
         for i in 0..<timeComponents.count {
             var component = timeComponents[i]
-            if i != 0 && component.count < 2 && i <= 2 {
-                component = "0\(component)"
+            if i < timeComponents.count - 1 || (i == 0 && timeComponents.count == 1){
+                if component.count < 2 {
+                    component = "0\(component)"
+                }
+                component = ":\(component)"
             }
-            time.append(component)
-            if i != timeComponents.count - 1 {
-                time.append(":")
+            if timeComponents.count - 1 <= i + 1 && component == "" {
+                component = ":00"
             }
+            time = component + time
         }
         if timeComponents.count == 1 {
-            time = "0:\(time)"
+            time = "0\(time)"
         }
         return time
     }
@@ -171,6 +264,10 @@ extension UIView {
         var subviews = self.subviews.compactMap({$0})
         subviews.forEach { subviews.append(contentsOf: $0.recursiveSubviews) }
         return subviews
+    }
+    
+    func removeSubviews() {
+        self.subviews.forEach { $0.removeFromSuperview() }
     }
 }
 

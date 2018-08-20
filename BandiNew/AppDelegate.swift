@@ -25,14 +25,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
+        window?.backgroundColor = AppTheme.dark.tableBackgroundColor
         
         let savedThemeName = UserDefaults.standard.getSavedTheme()
         if savedThemeName == nil {
-            UserDefaults.standard.setSavedTheme(value: "light")
+            UserDefaults.standard.setSavedTheme(value: "dark")
+            AppThemeProvider.shared.nextTheme()
         } else {
-            if savedThemeName == "dark" {
-                AppThemeProvider.shared.nextTheme()
-            }
+            if savedThemeName == "dark" { AppThemeProvider.shared.nextTheme() }
         }
         setUpTheming()
         
@@ -129,7 +129,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 // MARK: - Theme
 extension AppDelegate: Themed {
     func applyTheme(_ theme: AppTheme) {
-        window?.backgroundColor = theme.tableBackgroundColor
         window?.tintColor = theme.tintColor
     }
 }

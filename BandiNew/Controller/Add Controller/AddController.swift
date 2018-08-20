@@ -116,7 +116,7 @@ class AddController: UIViewController {
     }
     
     @objc func addToPlaylists() {
-        let playlists = addToTableView.getSelectedPlaylists()
+        let playlists = addToTableView.selectedPlaylists
         CoreDataHelper.shared.getContext().performAndWait({
             playlists.forEach({ playlist in
                 playlist.insertSongAtEnd(song: self.song!)

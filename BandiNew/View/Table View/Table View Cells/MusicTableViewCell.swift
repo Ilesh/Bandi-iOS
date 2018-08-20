@@ -29,7 +29,7 @@ class MusicTableViewCell: BaseTableViewCell {
                 print("LIVE VIDEO FOUND")
                 self.durationLabel.text = "LIVE"
             } else {
-                self.durationLabel.text = self.music?.length?.decodeYoutubeTime()
+                self.durationLabel.text = self.music?.length?.decodedYoutubeTime()
             }
             let currentReuseId = reuseId
             music?.fetchAThumbnail(requestedImageType: "wide", completion: { image in
@@ -90,6 +90,19 @@ class MusicTableViewCell: BaseTableViewCell {
     }()
     
     func setupViews(){ }
+    
+    override func setDisabled(disabled: Bool) {
+        super.setDisabled(disabled: disabled)
+        if disabled {
+            titleLabel.layer.opacity = 0.15
+            artistLabel.layer.opacity = 0.15
+            thumbnailImageView.layer.opacity = 0.15
+        } else {
+            titleLabel.layer.opacity = 1
+            artistLabel.layer.opacity = 1
+            thumbnailImageView.layer.opacity = 1
+        }
+    }
     
     override func applyTheme(_ theme: AppTheme) {
         super.applyTheme(theme)

@@ -14,6 +14,11 @@ class QueueMusicTableViewCell: MusicTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        setDisabled(disabled: false)
+    }
+    
     override func setupViews() {
         super.setupViews()
         

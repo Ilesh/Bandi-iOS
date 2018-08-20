@@ -42,4 +42,6 @@ class BaseTableViewCell: UITableViewCell, Themed {
         }
     }
     
+    func setDisabled(disabled: Bool) {}
+    
 }
