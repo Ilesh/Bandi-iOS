@@ -143,6 +143,23 @@ extension AllSongsController {
         return cell
     }
     
+    func configure(_ cell: QueueMusicTableViewCell, at indexPath: IndexPath) {
+        let song = isFiltering ? filteredSongs[indexPath.row] : songs[indexPath.row]
+        cell.music = song
+        let view = UIView(frame: CGRect(x: 90, y: cell.frame.height, width: tableView.frame.width, height: 0.5))
+        view.backgroundColor = AppThemeProvider.shared.currentTheme.tableSeparatorColor
+        cell.addSubview(view)
+    }
+    
+}
+
+// MARK: - Table View Delegate
+extension AllSongsController {
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: controlsCellId) as! PlaylistControlsTableViewCell
         cell.play = {
@@ -159,23 +176,6 @@ extension AllSongsController {
         view.backgroundColor = AppThemeProvider.shared.currentTheme.tableSeparatorColor
         cell.addSubview(view)
         return cell
-    }
-    
-    func configure(_ cell: QueueMusicTableViewCell, at indexPath: IndexPath) {
-        let song = isFiltering ? filteredSongs[indexPath.row] : songs[indexPath.row]
-        cell.music = song
-        let view = UIView(frame: CGRect(x: 90, y: cell.frame.height, width: tableView.frame.width, height: 0.5))
-        view.backgroundColor = AppThemeProvider.shared.currentTheme.tableSeparatorColor
-        cell.addSubview(view)
-    }
-    
-}
-
-// MARK: - Table View Delegate
-extension AllSongsController {
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -227,9 +227,7 @@ extension AllSongsController {
                     }
                     CoreDataHelper.shared.appDelegate.saveContext()
                 }
-                tableView.performBatchUpdates({
-                    tableView.deleteRows(at: [indexPath], with: .left)
-                }, completion: nil)
+                tableView.reloadData()
             }
             songDeleteAlert.willDisappear = {
                 completion(true)

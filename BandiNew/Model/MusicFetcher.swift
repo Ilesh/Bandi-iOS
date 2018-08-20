@@ -290,6 +290,7 @@ final class MusicFetcher {
         let requestURL = URL(string: requestString)
         URLSession.shared.dataTask(with: requestURL!, completionHandler: { (data, response, error) -> Void in
             do {
+                // TODO: handle data nil
                 guard let jsonResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String : Any] else { return }
                 let directVideoURL = jsonResult["url"] as? String
                 if directVideoURL == nil {
