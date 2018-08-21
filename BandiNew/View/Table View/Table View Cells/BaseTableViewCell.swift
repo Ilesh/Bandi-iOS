@@ -20,6 +20,7 @@ class BaseTableViewCell: UITableViewCell, Themed {
     let selectedBackground = UIView()
     var baseTintColor: UIColor = .blue
     var baseBackgroundColor: UIColor = .clear
+    var isDisabled = false
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -42,6 +43,9 @@ class BaseTableViewCell: UITableViewCell, Themed {
         }
     }
     
-    func setDisabled(disabled: Bool) {}
+    func setDisabled(disabled: Bool) {
+        isDisabled = disabled
+        textLabel?.layer.opacity = 0.15
+    }
     
 }

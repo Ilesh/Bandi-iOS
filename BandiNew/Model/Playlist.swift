@@ -175,4 +175,18 @@ extension Playlist {
         }
     }
     
+    func contains(song: Song) -> Bool {
+        
+        if firstSong == nil { return false }
+        
+        var tempSongNode: SongToPlaylist? = firstSong
+        while tempSongNode?.nextSong != nil {
+            if tempSongNode?.song == song { return true }
+            tempSongNode = tempSongNode?.nextSong
+        }
+        
+        return false
+        
+    }
+    
 }

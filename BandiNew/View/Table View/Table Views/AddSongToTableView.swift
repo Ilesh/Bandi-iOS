@@ -10,8 +10,9 @@ import UIKit
 
 class AddSongToTableView: UITableView {
     
-    override init(frame: CGRect, style: UITableViewStyle) {
-        super.init(frame: frame, style: style)
+    init(song: Song) {
+        super.init(frame: .zero, style: .plain)
+        
         dataSource = self
         delegate = self
         alwaysBounceVertical = true
@@ -20,6 +21,16 @@ class AddSongToTableView: UITableView {
         tableFooterView = UIView()
         register(BaseTableViewCell.self, forCellReuseIdentifier: imageCellId)
         register(PlaylistPreviewTableViewCell.self, forCellReuseIdentifier: playlistCellId)
+        
+        var indexPath = IndexPath(row: 0, section: 1)
+        for i in 0..<playlists.count {
+            let playlist = playlists[i]
+            if playlist.contains(song: song) {
+                indexPath.row = i
+                disabledIndexPaths.insert(indexPath)
+            }
+        }
+        if song.saved { disabledIndexPaths.insert(IndexPath(row: 0, section: 0)) }
         
         selectedIndexPaths.insert(IndexPath(row: 0, section: 0))
         reloadData()
@@ -31,30 +42,31 @@ class AddSongToTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var librarySelected: ((Bool)->())?
-    var addPlaylist: (()->())?
-    var scrolled: ((CGFloat)->())?
     let imageCellId = "imageCellId"
     let playlistCellId = "playlistCellId"
     let sideLength = UIScreen.main.bounds.width * 0.25
-    
+    var song: Song?
+    var librarySelected: ((Bool)->())?
+    var addPlaylist: (()->())?
+    var scrolled: ((CGFloat)->())?
+    private var disabledIndexPaths = Set<IndexPath>()
     private var selectedIndexPaths = Set<IndexPath>()
-    
     private var playlists: [Playlist] {
         return CoreDataHelper.shared.userPlaylists
     }
-    
-    var selectedPlaylists: Set<Playlist> {
-        var playlists = Set<Playlist>()
-        // do stuff in same context or it goes missing
+    private var selectedPlaylists: Set<Playlist> {
+        var selected = Set<Playlist>()
         CoreDataHelper.shared.getContext().performAndWait({
             self.selectedIndexPaths.forEach({ indexPath in
-                if let cell = self.cellForRow(at: indexPath) as? PlaylistPreviewTableViewCell, let playlist = cell.playlist {
-                    playlists.insert(playlist)
-                }
+                let playlist = playlists[indexPath.row]
+                selected.insert(playlist)
             })
         })
-        return playlists
+        return selected
+    }
+    
+    func getSelectedPlaylists() -> Set<Playlist> {
+        return selectedPlaylists
     }
  
 }
@@ -79,7 +91,12 @@ extension AddSongToTableView: UITableViewDataSource {
         if indexPath.section == 0 {
             let cell = dequeueReusableCell(withIdentifier: imageCellId, for: indexPath) as! BaseTableViewCell
             if indexPath.row == 0 {
-                cell.textLabel?.text = "Library"
+                cell.textLabel?.text = "Library"                
+                if disabledIndexPaths.contains(indexPath) {
+                    cell.setDisabled(disabled: true)
+                    cell.configureSelected(true)
+                    return cell
+                }
                 cell.accessoryType = .checkmark
             } else {
                 cell.textLabel?.text = "Add Playlist"
@@ -91,6 +108,11 @@ extension AddSongToTableView: UITableViewDataSource {
             let cell = dequeueReusableCell(withIdentifier: playlistCellId, for: indexPath) as! PlaylistPreviewTableViewCell
             cell.playlist = playlists[indexPath.row]
             cell.separatorInset = UIEdgeInsets(top: 0, left: sideLength + 30, bottom: 0, right: 0)
+            if disabledIndexPaths.contains(indexPath) {
+                cell.setDisabled(disabled: true)
+                cell.accessoryType = .none
+                return cell
+            }
             cell.accessoryType = .checkmark
             cell.configureSelected(selected)
             return cell
@@ -117,6 +139,11 @@ extension AddSongToTableView: UITableViewDelegate {
         if distanceFromBottom >= height {
             scrolled?(scrollView.contentOffset.y)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if disabledIndexPaths.contains(indexPath) { return nil }
+        return indexPath
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

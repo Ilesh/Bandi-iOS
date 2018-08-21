@@ -36,7 +36,7 @@ class AddController: UIViewController {
     }()
     
     lazy var addToTableView: AddSongToTableView = {
-        let tv = AddSongToTableView(frame: .zero, style: .plain)
+        let tv = AddSongToTableView(song: song!)
         tv.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 55, right: 0)
         tv.librarySelected = { isSelected in
             self.showDone(isSelected)
@@ -116,7 +116,7 @@ class AddController: UIViewController {
     }
     
     @objc func addToPlaylists() {
-        let playlists = addToTableView.selectedPlaylists
+        let playlists = addToTableView.getSelectedPlaylists()
         CoreDataHelper.shared.getContext().performAndWait({
             playlists.forEach({ playlist in
                 playlist.insertSongAtEnd(song: self.song!)
