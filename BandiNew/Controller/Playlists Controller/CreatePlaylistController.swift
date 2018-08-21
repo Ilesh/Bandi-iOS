@@ -24,40 +24,37 @@ class CreatePlaylistController: UITableViewController {
         
         tableView.tableFooterView = UIView()
         tableView.isEditing = true
+        tableView.allowsSelection = true
+        tableView.allowsSelectionDuringEditing = true
         tableView.register(CreatePlaylistHeaderTableViewCell.self, forCellReuseIdentifier: playlistHeaderCellId)
         tableView.register(BaseTableViewCell.self, forCellReuseIdentifier: createPlaylistCellId)
         tableView.register(UpNextTableViewCell.self, forCellReuseIdentifier: cellId)
+        
+        let context = CoreDataHelper.shared.getContext()
+        if self.playlist == nil {
+            self.playlist = Playlist(context: context)
+            self.playlist?.size = 0
+        }
+        self.playlist?.saved = false
+        self.playlist?.type = "user"
+        self.playlist?.orderRank = 0
+        let currentDate = Date()
+        self.playlist?.dateCreated = currentDate
+        self.playlist?.dateModified = currentDate
+        self.playlist?.id = ""
+        self.playlist?.title = self.playlistTitle
+        self.playlist?.playlistDescription = "TODO"
+        for song in self.playlist!.getSongsArray() {
+            song.setSaved(saved: true, retain: true)
+        }
+        CoreDataHelper.shared.appDelegate.saveContext()
+        
         setUpTheming()
     }
     
-    let playlistHeaderCellId = "playlistHeaderCellId"
-    let createPlaylistCellId = "createPlaylistCellId"
-    let cellId = "cellId"
-    var playlist: Playlist?
-    var playlistTitle: String = "Untitled"
-    
-    @objc func completePlaylistCreation() {
-        let context = CoreDataHelper.shared.getContext()
-        context.perform({
-            if self.playlist == nil {
-                self.playlist = Playlist(context: context)
-                self.playlist?.size = 0
-            }
-            self.playlist?.saved = true
-            self.playlist?.type = "user"
-            self.playlist?.orderRank = 0
-            let currentDate = Date()
-            self.playlist?.dateCreated = currentDate
-            self.playlist?.dateModified = currentDate
-            self.playlist?.id = ""
-            self.playlist?.title = self.playlistTitle
-            self.playlist?.playlistDescription = "TODO"
-            for song in self.playlist!.getSongsArray() {
-                song.setSaved(saved: true, retain: true)
-            }
-            CoreDataHelper.shared.appDelegate.saveContext()
-        })
-        dismiss(animated: true, completion: nil)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -70,43 +67,56 @@ class CreatePlaylistController: UITableViewController {
         }
     }
     
+    let playlistHeaderCellId = "playlistHeaderCellId"
+    let createPlaylistCellId = "createPlaylistCellId"
+    let cellId = "cellId"
+    var playlist: Playlist?
+    var playlistTitle: String = "Untitled"
+    
+    @objc func completePlaylistCreation() {
+        let context = CoreDataHelper.shared.getContext()
+        context.perform({
+            self.playlist?.saved = true
+            CoreDataHelper.shared.appDelegate.saveContext()
+        })
+        dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 // MARK: - Table View Data Source
 extension CreatePlaylistController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 1
-        } else if section == 1 {
-            return 1
+            return 2
         } else {
-            if playlist != nil {
-                return Int(playlist!.size)
-            } else {
-                return 0
-            }
+            guard let playlist = playlist else { return 0 }
+            return playlist.getSize()
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: playlistHeaderCellId, for: indexPath) as! CreatePlaylistHeaderTableViewCell
-            if playlist != nil {
-                cell.setPlaylistTitle(title: playlist!.title!)
+            if indexPath.row == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: playlistHeaderCellId, for: indexPath) as! CreatePlaylistHeaderTableViewCell
+                if playlist != nil {
+                    cell.setPlaylistTitle(title: playlist!.title!)
+                }
+                cell.playlistNameUpdated = { title in
+                    self.playlistTitle = title
+                }
+                return cell
             }
-            cell.playlistNameUpdated = { title in
-                self.playlistTitle = title
+            else if indexPath.row == 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: createPlaylistCellId, for: indexPath)
+                cell.textLabel?.text = "Add Music"
+                return cell
             }
-            return cell
-        } else if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: createPlaylistCellId, for: indexPath)
-            cell.textLabel?.text = "Add Music"
-            return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UpNextTableViewCell
         cell.music = playlist?.getSongNode(at: indexPath.row)?.song
@@ -137,26 +147,31 @@ extension CreatePlaylistController {
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         if indexPath.section == 0 {
-            return .none
-        } else if indexPath.section == 1 {
-            return .insert
+            if indexPath.row == 0 { return .none }
+            else if indexPath.row == 1 { return .insert }
         }
         return .delete
     }
     
+    override func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "REMOVE"
+    }
+    
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        if indexPath.section != 2 { return nil }
-        let removeAction = UITableViewRowAction(style: .destructive, title: "REMOVE", handler: { (action, indexPath) in
-            guard let playlist = self.playlist else { return }
-            CoreDataHelper.shared.getContext().performAndWait({
-                playlist.removeSong(at: indexPath.row)
+        if indexPath.section == 1 {
+            let removeAction = UITableViewRowAction(style: .destructive, title: "REMOVE", handler: { (action, indexPath) in
+                guard let playlist = self.playlist else { return }
+                CoreDataHelper.shared.getContext().performAndWait({
+                    playlist.removeSong(at: indexPath.row)
+                })
+                CoreDataHelper.shared.appDelegate.saveContext()
+                self.tableView.performBatchUpdates({
+                    self.tableView.deleteRows(at: [indexPath], with: .left)
+                }, completion: nil)
             })
-            CoreDataHelper.shared.appDelegate.saveContext()
-            self.tableView.performBatchUpdates({
-                self.tableView.deleteRows(at: [indexPath], with: .left)
-            }, completion: nil)
-        })
-        return [removeAction]
+            return [removeAction]
+        }
+        return nil
     }
     
     override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
@@ -170,15 +185,28 @@ extension CreatePlaylistController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            if indexPath.row == 0 {
-                return UIScreen.main.bounds.width * 0.373 + 30
-            }
+            if indexPath.row == 0 { return UIScreen.main.bounds.width * 0.373 + 30 }
+            else { return 74 }
         }
         return 60
     }
     
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if indexPath.section == 0 && indexPath.row == 1 { return indexPath }
+        if indexPath.section == 1 { return indexPath }
+        return nil
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+        if indexPath.section == 0 && indexPath.row == 1 {
+            print(1234)
+            let addToPlaylistController = AddToPlaylistLibraryController(style: .plain)
+            SessionData.addToPlaylist.playlist = playlist
+            let addToPlaylistNav = CustomNavigationController(rootViewController: addToPlaylistController)
+            present(addToPlaylistNav, animated: true, completion: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
     }
     
 //    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
